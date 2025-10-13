@@ -2,9 +2,9 @@ Shader "Custom/Glitch"
 {
     Properties
     {
-        _MainTex ("Albedo (RGB)", 2D) = "white" {}
-        _Glossiness ("Smoothness", Range(0,1)) = 0.5
-        _Metallic ("Metallic", Range(0,1)) = 0.0
+        _MainTex ("MaintTex", 2D) = "white" {}
+        _Indensity("Indensity",Float)=1.0
+        _TimeX("TimeX",Float)=1.0
     }
     SubShader
     {
@@ -14,41 +14,40 @@ Shader "Custom/Glitch"
         }
         Pass
         {
-            Tags{"LightMode"="UniversalForward"}
-            HLSLPROGRAM
 
-            #pragma vertex Vertex
-            #pragma fragment Pixel
-​
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl"
-​
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
             CBUFFER_START(UnityPerMaterial)
                 float4 _MainTex_ST;
             CBUFFER_END
+            float _Indensity;
+            float _TimeX;
 
             struct Attributes 
             {
-            float4 vertex : POSITION;
-            float4 texcoord : TEXCOORD0;
+                float4 vertex : POSITION;
+                float2 texcoord : TEXCOORD0;
             };
 
             struct Varyings 
             {
-            float4 pos : SV_POSITION;
-            float3 worldPos : TEXCOORD0;
-            float4 uv : TEXCOORD4;
+                float4 pos : SV_POSITION;
+                float3 worldPos : TEXCOORD0;
+                float2 uv : TEXCOORD4;
             };
             Varyings vert(Attributes i) 
             {
-            Varyings output;
-            output.worldPos = TransformObjectToWorld(i.vertex.xyz);
-            output.pos = TransformWorldToHClip(output.worldPos);
-            output.uv = TRANSFORM_TEX(i.uv,_MainTex);
-            return output;
+                Varyings output;
+                output.worldPos = TransformObjectToWorld(i.vertex.xyz);
+                output.pos = TransformWorldToHClip(output.worldPos);
+                output.uv = TRANSFORM_TEX(i.texcoord,_MainTex);
+                return output;
             }
 
             float randomNoise(float x, float y)
