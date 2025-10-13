@@ -58,7 +58,7 @@ Shader "Custom/Glitch"
             half4 frag(Varyings i) : SV_Target
             {
                 float splitAmount = _Indensity * randomNoise(_TimeX, 2);
-
+                
                 half4 ColorR = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, float2(i.uv.x + splitAmount, i.uv.y));
                 half4 ColorG = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 half4 ColorB = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, float2(i.uv.x - splitAmount, i.uv.y));
