@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Glitch
-  m_Shader: {fileID: 4800000, guid: e58717edc3aa10d4b8985183eb922328, type: 3}
+  m_Name: Pixel
+  m_Shader: {fileID: 4800000, guid: b98519c3727ff004db5b0c0c35d8f09e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -42,8 +42,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _Indensity: 0.14
-    - _TimeX: 0.1
+    - _Glossiness: 0.5
+    - _Indensity: 1
+    - _Metallic: 0
+    - _PixelInterval: 0.046
+    - _PixelItensity: 1
+    - _PixelRatio: 0.76
+    - _PixelScale: 0.76
+    - _PixelSize: 0.65
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
