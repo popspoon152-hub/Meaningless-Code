@@ -3,8 +3,10 @@ Shader "Custom/Glitch"
     Properties
     {
         _MainTex ("MaintTex", 2D) = "white" {}
-        _Indensity("Indensity",Float)=1.0
-        _TimeX("TimeX",Float)=1.0
+        _BlockSize("BlockSize",Float)=4.0
+        _Speed("Speed",Float)=40.0
+        _MaxRGBSplitX("MaxRGBSplitX",Float)=2.0
+        _MaxRGBSplitY("MaxRGBSplitY",Float)=2.0
     }
     SubShader
     {
@@ -26,8 +28,10 @@ Shader "Custom/Glitch"
             CBUFFER_START(UnityPerMaterial)
                 float4 _MainTex_ST;
             CBUFFER_END
-            float _Indensity;
-            float _TimeX;
+            float _BlockSize;
+            float _Speed;
+            float _MaxRGBSplitX;
+            float _MaxRGBSplitY;
 
             struct Attributes 
             {
@@ -50,20 +54,36 @@ Shader "Custom/Glitch"
                 return output;
             }
 
-            float randomNoise(float x, float y)
+            //抖动
+            inline float randomNoise(float2 seed)
             {
-                return frac(sin(dot(float2(x, y), float2(12.9898, 78.233))) * 43758.5453);
+                return frac(sin(dot(seed * floor(_Time.y * _Speed), float2(17.13, 3.71))) * 43758.5453123);
+            }
+
+            inline float randomNoise(float seed)
+            {
+                return randomNoise(float2(seed, 1.0));
             }
 
             half4 frag(Varyings i) : SV_Target
             {
-                float splitAmount = _Indensity * randomNoise(_TimeX, 2);
-                
-                half4 ColorR = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, float2(i.uv.x + splitAmount, i.uv.y));
-                half4 ColorG = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                half4 ColorB = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, float2(i.uv.x - splitAmount, i.uv.y));
+                half2 block = randomNoise(floor(i.uv * _BlockSize));//切分生成随机区块
 
-                return half4(ColorR.r, ColorG.g, ColorB.b, 1);
+                float displaceNoise = pow(block.x, 8.0) * pow(block.x, 3.0);//二次筛选
+                float splitRGBNoise = pow(randomNoise(7.2341), 17.0);//分离RGB
+
+                float offsetX = displaceNoise - splitRGBNoise * _MaxRGBSplitX;
+                float offsetY = displaceNoise - splitRGBNoise * _MaxRGBSplitY;
+
+                float noiseX = 0.05 * randomNoise(13.0);
+                float noiseY = 0.05 * randomNoise(7.0);
+                float2 offset = float2(offsetX * noiseX, offsetY* noiseY);
+
+                half4 colorR = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                half4 colorG = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + offset);
+                half4 colorB = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv - offset);
+
+                return half4(colorR.r , colorG.g, colorB.z, (colorR.a + colorG.a + colorB.a));
             }
             ENDHLSL
         }
