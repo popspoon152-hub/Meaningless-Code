@@ -758,8 +758,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveStats: {fileID: 11400000, guid: e600c43351cb48a409959e955a463373, type: 2}
+  AttackStats: {fileID: 11400000, guid: ac1446050e69e6f4a8b0c5bf5aa20dee, type: 2}
   _feetColl: {fileID: 1875444659}
   _bodyColl: {fileID: 1766016117}
+  _attackColl: {fileID: 0}
+  Anim: {fileID: 0}
 --- !u!50 &2110223240
 Rigidbody2D:
   serializedVersion: 4
