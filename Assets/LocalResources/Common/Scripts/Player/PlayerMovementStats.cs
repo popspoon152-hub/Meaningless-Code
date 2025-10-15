@@ -53,6 +53,7 @@ public class PlayerMovementStats : ScriptableObject
     [Header("JumpVisualization Tool")]
     public bool ShowWalkJumpArc = false;
     public bool ShowRunJumpArc = false;
+    public bool ShowDashJumpArc = false;
     public bool StopOnCollision = true;
     public bool DrawRight = true;
     [Range(5, 100)] public int ArcSolution = 20;
@@ -79,5 +80,8 @@ public class PlayerMovementStats : ScriptableObject
         IntialJumpVelocity = Mathf.Abs(Gravity) * TimeTillJumpApex;
     }
 
-    [Header("≥Â¥Ãœ‡πÿ")]
+    [Header("≥Â¥Ã")]
+    [Range(1f, 20f)] public float MaxDashLength = 5f;                           // ≥Â¥Ãæ‡¿Î
+    [Range(0f, 10f)] public float DashCooldown = 1.0f;                          // ≥Â¥Ã¿‰»¥ ±º‰
+    [Range(0f, 1f)] public float DashDuration = 0.2f;                           // ≥Â¥Ã≥÷–¯ ±º‰
 }

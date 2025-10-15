@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector.Editor.Examples;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,6 +45,14 @@ public class PlayerMovement : MonoBehaviour
     //coyote time
     private float _coyoteTimer;
 
+    //冲刺相关
+    private bool _isDashing = false;
+    private float _dashTime;
+    private Vector2 _dashDirection;
+    private float _dashSpeed;
+    private float _dashCooldownTimer;
+
+
     #region LifeCycle
     private void Awake()
     {
@@ -56,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
     {
         CountTimers();
         JumpChecks();
+        DashChecks();
     }
 
     private void FixedUpdate()
@@ -63,13 +73,20 @@ public class PlayerMovement : MonoBehaviour
         CollisionChecks();
         Jump();
 
-        if (_isGrounded)
+        if (_isDashing)
         {
-            Move(MoveStats.GroundAccleration, MoveStats.GroundDeceleration, InputManager.Movement);
+            Dash();
         }
         else
         {
-            Move(MoveStats.AirAccleration, MoveStats.AirDeceleration, InputManager.Movement);
+            if (_isGrounded)
+            {
+                Move(MoveStats.GroundAccleration, MoveStats.GroundDeceleration, InputManager.Movement);
+            }
+            else
+            {
+                Move(MoveStats.AirAccleration, MoveStats.AirDeceleration, InputManager.Movement);
+            }
         }
     }
 
@@ -84,6 +101,10 @@ public class PlayerMovement : MonoBehaviour
             if (MoveStats.ShowRunJumpArc)
             {
                 DrawJumpArc(MoveStats.MaxRunSpeed, Color.red);
+            }
+            if(MoveStats.ShowDashJumpArc)
+            {
+                DrawDashArc();
             }
         }
     }
@@ -408,6 +429,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void CountTimers()
     {
+        //jump
         _jumpBufferTimer -= Time.deltaTime;
 
         if (!_isGrounded)
@@ -415,6 +437,43 @@ public class PlayerMovement : MonoBehaviour
             _coyoteTimer -= Time.deltaTime;
         }
         else { _coyoteTimer = MoveStats.JumpCoyoteTime; }
+
+    }
+
+    #endregion
+
+    #region Dash
+
+    private void DashChecks()
+    {
+        if (_dashCooldownTimer > 0f)
+            _dashCooldownTimer -= Time.deltaTime;
+
+        if (InputManager.DashWasPressed && !_isDashing && _dashCooldownTimer <= 0f)
+        {
+            StartDash();
+        }
+    }
+
+    private void StartDash()
+    {
+        _isDashing = true;
+        _dashTime = 0f;
+        _dashDirection = _isFacingRight ? Vector2.right : Vector2.left;
+        _dashSpeed = MoveStats.MaxDashLength / MoveStats.DashDuration; // 速度=距离/时间
+        _rb.velocity = new Vector2(_dashDirection.x * _dashSpeed, 0f);
+    }
+
+    private void Dash()
+    {
+        _dashTime += Time.fixedDeltaTime;
+        _rb.velocity = new Vector2(_dashDirection.x * _dashSpeed, 0f);
+
+        if (_dashTime >= MoveStats.DashDuration)
+        {
+            _isDashing = false;
+            _rb.velocity = Vector2.zero;
+        }
     }
 
     #endregion
@@ -478,5 +537,18 @@ public class PlayerMovement : MonoBehaviour
             previousPostion = drawPoint;
         }
     }
+
+    private void DrawDashArc()
+    {
+        if (_isFacingRight)
+        {
+            Gizmos.DrawLine(transform.position, new Vector2(transform.position.x + MoveStats.MaxDashLength, transform.position.y));
+        }
+        else
+        {
+            Gizmos.DrawLine(new Vector2(transform.position.x - MoveStats.MaxDashLength, transform.position.y), transform.position);
+        }
+    }
+
     #endregion
 }

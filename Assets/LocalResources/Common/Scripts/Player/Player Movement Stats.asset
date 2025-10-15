@@ -39,7 +39,11 @@ MonoBehaviour:
   DebugShowHeadBumpBox: 0
   ShowWalkJumpArc: 1
   ShowRunJumpArc: 1
+  ShowDashJumpArc: 1
   StopOnCollision: 1
   DrawRight: 1
   ArcSolution: 20
   VisualizationSteps: 90
+  MaxDashLength: 5
+  DashCooldown: 0.2
+  DashDuration: 0.2
