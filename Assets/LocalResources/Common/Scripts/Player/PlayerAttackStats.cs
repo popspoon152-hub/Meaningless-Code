@@ -16,7 +16,7 @@ public class PlayerAttackStats : ScriptableObject
 
     [Header("Attack Postion")]
     public Transform AttackPoint;                                                       //¹¥»÷µã
-    [Range(1f, 10f)] public float[] AttackRange = { 3f, 4f, 5f };                       //¹¥»÷·¶Î§
+    [Range(0.1f, 10f)] public float[] AttackRange = { 3f, 4f, 5f };                       //¹¥»÷·¶Î§
     [Range(0f, 3f)] public float[] AttackLittleDash = { 0.1f, 0.1f, 0.1f };             //Ã¿¶Î¹¥»÷µÄÐ¡³å´Ì¾àÀë
 
     [Header("Attack Layer")]

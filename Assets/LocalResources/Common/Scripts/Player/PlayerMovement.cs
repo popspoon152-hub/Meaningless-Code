@@ -60,11 +60,6 @@ public class PlayerMovement : MonoBehaviour
     private float _lastAttackTime;
     private bool _isAttacking = false;
     private Coroutine _attackCoroutine;
-    private bool _bufferedAttack = false;
-    private float _attackBufferTimer;
-    private float _currentDamage;
-    private float _currentKnockback;
-    private HashSet<GameObject> _alreadyHit = new HashSet<GameObject>();
 
 
     #region LifeCycle
@@ -122,6 +117,10 @@ public class PlayerMovement : MonoBehaviour
             if(MoveStats.ShowDashJumpArc)
             {
                 DrawDashArc();
+            }
+            if (AttackStats.ShowAttackRangeArc)
+            {
+                DrawAttackArc();
             }
         }
     }
@@ -500,13 +499,15 @@ public class PlayerMovement : MonoBehaviour
     private void AttackCheck()
     {
         //°´¹¥»÷¼ü
-        if (InputManager.AttackWasPressed && !_isAttacking && _isGrounded)
+        if (InputManager.AttackWasPressed && !_isAttacking)
         {
             StartAttack();
+            Debug.Log("Attack");
         }
         else if(_isAttacking && InputManager.AttackWasPressed && CanCombo())
         {
             ContinueCombo();
+            Debug.Log("Combo");
         }
     }
 
@@ -543,7 +544,15 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator AttackCoroutine()
     {
-        float attackRange = AttackStats.AttackRange[(int)_currentCombo - 1];
+        float attackRange;
+        if (_currentCombo == 0)
+        {
+            attackRange = AttackStats.AttackRange[0];
+        }
+        else
+        {
+            attackRange = AttackStats.AttackRange[(int)_currentCombo - 1];
+        }
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackStats.AttackPoint.position, attackRange, AttackStats.EnemyLayer);
 
         yield return new WaitForSeconds(AttackStats.AttackDuration[(int)_currentCombo - 1]);
@@ -648,5 +657,19 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void DrawAttackArc()
+    {
+        float attackRange;
+        if (_currentCombo == 0)
+        {
+            attackRange = AttackStats.AttackRange[0];
+        }
+        else
+        {
+            attackRange = AttackStats.AttackRange[(int)_currentCombo - 1];
+        }
+
+        Gizmos.DrawWireSphere(AttackStats.AttackPoint.position, attackRange);
+    }
     #endregion
 }
