@@ -4,7 +4,6 @@ Shader "Custom/ScanLine"
     {
         _MainTex ("MaintTex", 2D) = "white" {}
         _Frequency("Frequency",Float)=0
-        _ScanLineDensity("ScanLineDensity",Float)=0
         _Threshold("Threshold",Float)=0
         _Amount("Amount",Range(0,1.0))=0.5
     }
