@@ -1,18 +1,105 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
+{    
+    [Header("Health Num")]
+    [Range(50f, 150f)] public readonly float PlayerMaxHealth = 100f;                                     //玩家最大生命值
+
+    [Header("Health Decline")]
+    [Range(0.1f,1f)] public readonly float ExtraHealthDeclineRate = 0.5f;                                //虚血条占扣血的比例
+    [Range(0f, 10f)] public readonly float ExtraHealthDeclineNumDeltaTime = 5f;                          //虚血条每秒下降数值
+
+
+    private float _currentHealth;                                                                        //当前生命值
+    private float _currentExtraHealth;                                                                   //当前虚血值
+    private bool _isHealthDeclining;                                                                     //是否正在扣血
+    
+    public float CurrentHealth
     {
-        
+        get {  return _currentHealth; }
+        set 
+        {
+            if (value <= PlayerMaxHealth)
+            {
+                _currentHealth = value;
+            }
+            else
+            {
+                _currentHealth = PlayerMaxHealth;
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public float CurrentExtraHealth
     {
-        
+        get { return _currentExtraHealth; }
+        set 
+        {
+            if (value <= CurrentHealth)
+            {
+                _currentExtraHealth = value;
+            }
+            else
+            {
+                _currentExtraHealth = CurrentHealth;
+            }
+        }
+    }
+
+
+    private static PlayerHealth Ins;
+
+    #region Lifecycle
+
+    private void Awake()
+    {
+        if (Ins == null)
+        {
+            Ins = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        _isHealthDeclining = false; 
+    }
+
+
+    private void Update()
+    {
+        if(_isHealthDeclining)
+        {
+            CurrentExtraHealth -= ExtraHealthDeclineNumDeltaTime * Time.deltaTime;
+            if (CurrentExtraHealth <= CurrentHealth)
+            {
+                CurrentExtraHealth = CurrentHealth;
+                _isHealthDeclining = false;
+            }
+        }
+    }
+    #endregion
+
+
+    public void TakeDamage(float damage)
+    {
+        if (damage <= 0) return;
+
+        CurrentHealth -= damage;
+        CurrentExtraHealth -= damage * ExtraHealthDeclineRate;
+
+        if (CurrentHealth < 0)
+        {
+            CurrentHealth = 0;
+
+            //向player传_isDead
+        }
+        _isHealthDeclining = true;
     }
 }
