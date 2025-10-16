@@ -4,14 +4,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
     public PlayerMovementStats MoveStats;
+    public PlayerAttackStats AttackStats;
     [SerializeField] private Collider2D _feetColl;
     [SerializeField] private Collider2D _bodyColl;
-
+    [SerializeField] private Collider2D _attackColl;
+    [SerializeField] private Animator Anim;
     private Rigidbody2D _rb;
 
     //移动相关
@@ -52,6 +55,12 @@ public class PlayerMovement : MonoBehaviour
     private float _dashSpeed;
     private float _dashCooldownTimer;
 
+    //攻击相关
+    private float _currentCombo;
+    private float _lastAttackTime;
+    private bool _isAttacking = false;
+    private Coroutine _attackCoroutine;
+
 
     #region LifeCycle
     private void Awake()
@@ -59,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
         _isFacingRight = true;
         _rb = GetComponent<Rigidbody2D>();
         MoveStats.CalculateValues();
+        _attackColl.enabled = false;
     }
 
     private void Update()
@@ -66,6 +76,8 @@ public class PlayerMovement : MonoBehaviour
         CountTimers();
         JumpChecks();
         DashChecks();
+        AttackCheck();
+        CheckComboReset();
     }
 
     private void FixedUpdate()
@@ -105,6 +117,10 @@ public class PlayerMovement : MonoBehaviour
             if(MoveStats.ShowDashJumpArc)
             {
                 DrawDashArc();
+            }
+            if (AttackStats.ShowAttackRangeArc)
+            {
+                DrawAttackArc();
             }
         }
     }
@@ -478,6 +494,97 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
+    #region Attack
+
+    private void AttackCheck()
+    {
+        //按攻击键
+        if (InputManager.AttackWasPressed && !_isAttacking)
+        {
+            StartAttack();
+            Debug.Log("Attack");
+        }
+        else if(_isAttacking && InputManager.AttackWasPressed && CanCombo())
+        {
+            ContinueCombo();
+            Debug.Log("Combo");
+        }
+    }
+
+    private void StartAttack()
+    {
+        _isAttacking = true;
+        _currentCombo = 1;
+        _lastAttackTime = Time.time;
+
+        //设置动画trigger
+
+
+
+        if (_attackCoroutine != null) StopCoroutine(_attackCoroutine);
+        _attackCoroutine = StartCoroutine(AttackCoroutine());
+    }
+
+
+    private void ContinueCombo()
+    {
+        _currentCombo++;
+        _lastAttackTime = Time.time;
+
+        //停止携程
+        if(_attackCoroutine != null) StopCoroutine(_attackCoroutine);
+
+        //更新动画
+
+
+
+        //开始新携程
+        _attackCoroutine = StartCoroutine(AttackCoroutine());
+    }
+
+    private IEnumerator AttackCoroutine()
+    {
+        float attackRange;
+        if (_currentCombo == 0)
+        {
+            attackRange = AttackStats.AttackRange[0];
+        }
+        else
+        {
+            attackRange = AttackStats.AttackRange[(int)_currentCombo - 1];
+        }
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackStats.AttackPoint.position, attackRange, AttackStats.EnemyLayer);
+
+        yield return new WaitForSeconds(AttackStats.AttackDuration[(int)_currentCombo - 1]);
+
+        foreach (var enemy in hitEnemies)
+        {
+            //触发扣血
+        }
+    }
+
+    private bool CanCombo()
+    {
+        return _currentCombo < AttackStats.AttackNumberCount && Time.time - _lastAttackTime <= AttackStats.AttackComboWindow;
+    }
+
+    private void CheckComboReset()
+    {
+        if (_isAttacking && Time.time - _lastAttackTime > AttackStats.AttackComboWindow)
+        {
+            ResetAttack();
+        }
+    }
+
+    private void ResetAttack()
+    {
+        _isAttacking = false;
+        _currentCombo = 0;
+        //animator.SetInteger(comboIndex, 0);
+    }
+
+    #endregion
+
     #region Gizmos
     private void DrawJumpArc(float moveSpeed, Color gizmoColor)
     {
@@ -550,5 +657,19 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void DrawAttackArc()
+    {
+        float attackRange;
+        if (_currentCombo == 0)
+        {
+            attackRange = AttackStats.AttackRange[0];
+        }
+        else
+        {
+            attackRange = AttackStats.AttackRange[(int)_currentCombo - 1];
+        }
+
+        Gizmos.DrawWireSphere(AttackStats.AttackPoint.position, attackRange);
+    }
     #endregion
 }
