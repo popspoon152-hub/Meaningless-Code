@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Glitch
-  m_Shader: {fileID: 4800000, guid: e58717edc3aa10d4b8985183eb922328, type: 3}
+  m_Name: EdgeDetection
+  m_Shader: {fileID: 4800000, guid: 24da8e1c00e125a44b53d94d94bafe98, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -41,15 +41,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BlockSize: 4
+    - _BackgroundFade: 1
+    - _EdgeWidth: 1
     - _EnableExternalAlpha: 0
-    - _Indensity: 0.14
-    - _MaxRGBSplitX: 10
-    - _MaxRGBSplitY: 10
-    - _Speed: 40
-    - _TimeX: 0.1
     m_Colors:
+    - _BackgroundColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EdgeColor: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

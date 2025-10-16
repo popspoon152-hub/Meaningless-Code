@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-[Serializable, VolumeComponentMenu("Custom_Processing/Pixelate")]
+[Serializable, VolumeComponentMenu("PostProcessing/Pixelate")]
 public class Pixelate : VolumeComponent, IPostProcessComponent
 {
     [Tooltip("是否启用效果")] public BoolParameter enable = new BoolParameter(false);

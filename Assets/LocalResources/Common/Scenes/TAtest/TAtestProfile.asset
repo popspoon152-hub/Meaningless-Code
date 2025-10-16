@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: Main Camera Profile
+  m_Name: TAtestProfile
   m_EditorClassIdentifier: 
   components:
   - {fileID: 1843418159410630073}
+  - {fileID: 2993237492462140064}
 --- !u!114 &1843418159410630073
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -33,3 +34,31 @@ MonoBehaviour:
   intervalCount:
     m_OverrideState: 1
     m_Value: 172
+--- !u!114 &2993237492462140064
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47674e49a3c4eee488ddfab8f9ec1e79, type: 3}
+  m_Name: EdgeDetectionEditor
+  m_EditorClassIdentifier: 
+  active: 1
+  enable:
+    m_OverrideState: 1
+    m_Value: 1
+  EdgeColor:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+  EdgeWidth:
+    m_OverrideState: 1
+    m_Value: 0.07
+  BackgroundFade:
+    m_OverrideState: 1
+    m_Value: 1
+  BackgroundColor:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
