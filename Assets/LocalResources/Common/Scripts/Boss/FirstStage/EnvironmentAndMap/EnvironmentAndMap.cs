@@ -18,6 +18,10 @@ public class EnvironmentAndMap : MonoBehaviour
 
     private int _BeansInstantiateThisTime;
 
+    private bool _isWaitingForNextMap = false;
+
+    private Coroutine _waitCoroutine;
+
     #region LifeCycle
     private void Start()
     {
@@ -33,9 +37,15 @@ public class EnvironmentAndMap : MonoBehaviour
 
     private void Update()
     {
-        if(CurrentBeansCount == 0)
+        if(CurrentBeansCount == 0 && !_isWaitingForNextMap)
         {
             CheckBeans();
+        }
+
+        //如果boss没血了
+        if(_isWaitingForNextMap /*&& boss没血了*/)
+        {
+            CancelNextMapSwitch();
         }
     }
 
@@ -44,6 +54,7 @@ public class EnvironmentAndMap : MonoBehaviour
     #region LoadBeansAndMap
     private void LoadMap(int currentMapIndex)
     {
+
         _currentMap = MapStats.Maps[currentMapIndex];
         _currentBeansPositions = _currentMap.BeansPositions;
         _currentBeansInstantiatedTime = _currentMap.BeansInstantiateTimes;
@@ -68,7 +79,7 @@ public class EnvironmentAndMap : MonoBehaviour
         _BeansInstantiateThisTime = UnityEngine.Random.Range(_currentMap.MinBeansInstantiatePerTime, _currentMap.MaxBeansInstantiatePerTime + 1);
 
         //选择点
-        Vector2[] choosePoints = GetRandomSequence3(_currentBeansPositions, _BeansInstantiateThisTime);
+        Vector2[] choosePoints = GetRandomSequence(_currentBeansPositions, _BeansInstantiateThisTime);
 
         for(int i = 0; i < choosePoints.Length; i++)
         {
@@ -78,7 +89,7 @@ public class EnvironmentAndMap : MonoBehaviour
         CurrentBeansCount = _BeansInstantiateThisTime;
     }
 
-    public static Vector2[] GetRandomSequence3(Vector2[] array, int count)
+    public static Vector2[] GetRandomSequence(Vector2[] array, int count)
     {
         Vector2[] output = new Vector2[count];
 
@@ -95,8 +106,8 @@ public class EnvironmentAndMap : MonoBehaviour
 
     #endregion
 
-    #region Check
-    
+    #region CheckBeans
+
     private void CheckBeans()
     {
         if(_currentBeansInstantiatedTime > 0)
@@ -106,24 +117,40 @@ public class EnvironmentAndMap : MonoBehaviour
         }
         else
         {
+            _isWaitingForNextMap = true;
             //进入战斗环节
-            StartCoroutine(WaitForBattleEnd());
-
-            //加载下一个地图
-            _currentMapIndex++;
-            if(_currentMapIndex >= MapStats.Maps.Length - 1)
-            {
-                _currentMapIndex = 0;
-            }
-            LoadMap(_currentMapIndex);
+            _waitCoroutine = StartCoroutine(WaitForBattleEnd());
         }
     }
 
     private IEnumerator WaitForBattleEnd()
     {
         yield return new WaitForSeconds(_currentMap.MapStayTime);
+
+        _waitCoroutine = null;
+        _isWaitingForNextMap = false;
+
+        //加载下一个地图
+        _currentMapIndex++;
+        if (_currentMapIndex >= MapStats.Maps.Length - 1)
+        {
+            _currentMapIndex = 0;
+        }
+        LoadMap(_currentMapIndex);
     }
 
+    private void CancelNextMapSwitch()
+    {
+        if (!_isWaitingForNextMap) return;
+
+        // 停止协程，重置状态
+        if (_waitCoroutine != null)
+        {
+            StopCoroutine(_waitCoroutine);
+            _waitCoroutine = null;
+        }
+        _isWaitingForNextMap = false;
+    }
 
     #endregion
 
