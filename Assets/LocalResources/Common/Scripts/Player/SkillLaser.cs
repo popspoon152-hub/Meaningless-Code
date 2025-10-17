@@ -37,7 +37,7 @@ public class ShootLaser : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         PlayerInputControls = new PlayerInputControls();
-        PlayerInputControls.Player.ShootLaser.started += OnShootLaser;
+        PlayerInputControls.Player.Shoot.started += OnShootLaser;
         moveScript = GetComponent<PlayerMovement>(); // 自动检测你的移动脚本
     }
 

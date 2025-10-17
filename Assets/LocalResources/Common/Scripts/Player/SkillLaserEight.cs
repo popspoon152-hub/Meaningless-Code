@@ -32,7 +32,7 @@ public class LaserSkillEightWay : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         PlayerInputControls = new PlayerInputControls();
-        PlayerInputControls.Player.ShootLaser.started += OnShoot;
+        PlayerInputControls.Player.Shoot.started += OnShoot;
     }
 
     private void OnEnable() => PlayerInputControls.Enable();
