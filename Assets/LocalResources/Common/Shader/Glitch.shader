@@ -3,10 +3,10 @@ Shader "Custom/Glitch"
     Properties
     {
         _MainTex ("MaintTex", 2D) = "white" {}
-        _BlockSize("BlockSize",Float)=4.0
-        _Speed("Speed",Float)=40.0
-        _MaxRGBSplitX("MaxRGBSplitX",Float)=2.0
-        _MaxRGBSplitY("MaxRGBSplitY",Float)=2.0
+        _BlockSize("BlockSize",Float)=4.0//区块大小
+        _Speed("Speed",Float)=40.0//抖动速度
+        _MaxRGBSplitX("MaxRGBSplitX",Float)=2.0//X最大抖动
+        _MaxRGBSplitY("MaxRGBSplitY",Float)=2.0//Y最大抖动
     }
     SubShader
     {
