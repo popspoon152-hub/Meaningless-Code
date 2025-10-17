@@ -1,5 +1,52 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6443500302119238617
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Pixelate
+  m_EditorClassIdentifier: Assembly-CSharp::Pixelate
+  active: 1
+  "\u5F00\u5173":
+    m_OverrideState: 0
+    m_Value: 0
+  "\u50CF\u7D20\u683C\u6570":
+    m_OverrideState: 0
+    m_Value: 10
+--- !u!114 &-3411009020971224432
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c03d7f077abb0914e8c359f3a07104df, type: 3}
+  m_Name: EdgeDetecteion
+  m_EditorClassIdentifier: 
+  active: 1
+  enable:
+    m_OverrideState: 0
+    m_Value: 0
+  EdgeColor:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  EdgeWidth:
+    m_OverrideState: 0
+    m_Value: 0
+  BackgroundFade:
+    m_OverrideState: 0
+    m_Value: 0
+  BackgroundColor:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13,8 +60,8 @@ MonoBehaviour:
   m_Name: TAtestProfile
   m_EditorClassIdentifier: 
   components:
-  - {fileID: 1843418159410630073}
-  - {fileID: 2993237492462140064}
+  - {fileID: -3411009020971224432}
+  - {fileID: -6443500302119238617}
 --- !u!114 &1843418159410630073
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -28,37 +75,10 @@ MonoBehaviour:
   m_Name: Pixelate
   m_EditorClassIdentifier: 
   active: 1
+  <displayName>k__BackingField: 
   enable:
     m_OverrideState: 1
     m_Value: 1
   intervalCount:
     m_OverrideState: 1
     m_Value: 172
---- !u!114 &2993237492462140064
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47674e49a3c4eee488ddfab8f9ec1e79, type: 3}
-  m_Name: EdgeDetectionEditor
-  m_EditorClassIdentifier: 
-  active: 1
-  enable:
-    m_OverrideState: 1
-    m_Value: 1
-  EdgeColor:
-    m_OverrideState: 1
-    m_Value: {r: 0, g: 0, b: 0, a: 1}
-  EdgeWidth:
-    m_OverrideState: 1
-    m_Value: 0.07
-  BackgroundFade:
-    m_OverrideState: 1
-    m_Value: 1
-  BackgroundColor:
-    m_OverrideState: 1
-    m_Value: {r: 1, g: 1, b: 1, a: 1}

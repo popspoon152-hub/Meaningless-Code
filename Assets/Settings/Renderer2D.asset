@@ -12,10 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37a9ebadae796a6468dd6b0f5debc2f4, type: 3}
   m_Name: PixelateFeature
   m_EditorClassIdentifier: 
+  m_Active: 0
+  setting: {myMaterial: {fileID: 2100000, guid: 8dc77ec38b8368942a03fcb4f9bdeede, type: 2}, injectPoint: 500}
+--- !u!114 &-3319008979190010363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27b0fcfa2f6e4fe409993b0cc4dfa3f9, type: 3}
+  m_Name: PostProcessingRendererFeature
+  m_EditorClassIdentifier: 
   m_Active: 1
-  setting:
-    myMaterial: {fileID: 2100000, guid: 8dc77ec38b8368942a03fcb4f9bdeede, type: 2}
-    injectPoint: 500
+  settings:
+    renderPassEvent: 550
+    shader: {fileID: 4800000, guid: 24da8e1c00e125a44b53d94d94bafe98, type: 3}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32,9 +46,8 @@ MonoBehaviour:
     debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7, type: 3}
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
-  - {fileID: -7894089820728166976}
-  - {fileID: 988177039060183228}
-  m_RendererFeatureMap: c07578fa218f7292bc28610cc8b5b60d
+  - {fileID: -3319008979190010363}
+  m_RendererFeatureMap: 052e0c15eb82f0d1
   m_UseNativeRenderPass: 0
   m_TransparencySortMode: 0
   m_TransparencySortAxis: {x: 0, y: 1, z: 0}
@@ -93,5 +106,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    renderPassEvent: 300
-    shader: {fileID: 0}
+    enable:
+      m_OverrideState: 0
+      m_Value: 0
+    EdgeColor:
+      m_OverrideState: 0
+      m_Value: {r: 1, g: 1, b: 1, a: 1}
+    EdgeWidth:
+      m_OverrideState: 0
+      m_Value: 0
+    BackgroundFade:
+      m_OverrideState: 0
+      m_Value: 0
+    BackgroundColor:
+      m_OverrideState: 0
+      m_Value: {r: 1, g: 1, b: 1, a: 1}
+  shader: {fileID: 4800000, guid: 24da8e1c00e125a44b53d94d94bafe98, type: 3}
