@@ -8,15 +8,19 @@ using static System.TimeZoneInfo;
 
 public enum Scenes
 {
-    HomePage,
-    CharacterPage,
-    SchedulePage
+    StartPage,
+    FirstStagePage,
+    GalPage,
+    SecondStagePage,
+    ThirdStagePage,
+    SettingsPage,
+    VideoPage
 }
 
 public class PageJumpBtn : MonoBehaviour
 {
     public Scenes scene;
-    private Button _btn;
+    private MyButton _btn;
 
     [Header("¹ý³¡¶¯»­")]
     public Animator transition;
@@ -25,8 +29,8 @@ public class PageJumpBtn : MonoBehaviour
 
     private void Start()
     {
-        _btn = GetComponent<Button>();
-        _btn.onClick.AddListener(HandleBtnClick);
+        _btn = GetComponent<MyButton>();
+        _btn.OnDoubleClick.AddListener(HandleBtnClick);
     }
 
     private void HandleBtnClick()

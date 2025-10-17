@@ -9,7 +9,8 @@ public class PlayerHealth : MonoBehaviour
     [Range(50f, 150f)] public readonly float PlayerMaxHealth = 100f;                                     //玩家最大生命值
 
     [Header("Health Decline")]
-    [Range(0.1f,1f)] public readonly float ExtraHealthDeclineRate = 0.5f;                                //虚血条占扣血的比例
+    [Range(0.1f, 1f)] public readonly float ExtraHealthDeclineRateByPlayer = 0.8f;                       //被玩家自己打中虚血条占扣血的比例
+    [Range(0.1f, 1f)] public readonly float ExtraHealthDeclineRateByEnemy = 0.5f;                        //被敌人打中虚血条占扣血的比例
     [Range(0f, 10f)] public readonly float ExtraHealthDeclineNumDeltaTime = 5f;                          //虚血条每秒下降数值
 
 
@@ -87,12 +88,11 @@ public class PlayerHealth : MonoBehaviour
     #endregion
 
 
-    public void TakeDamage(float damage)
+    public void TakeDamageByEnemy(float damage)
     {
         if (damage <= 0) return;
 
         CurrentHealth -= damage;
-        CurrentExtraHealth -= damage * ExtraHealthDeclineRate;
 
         if (CurrentHealth < 0)
         {
@@ -100,6 +100,34 @@ public class PlayerHealth : MonoBehaviour
 
             //向player传_isDead
         }
+
+        if (!_isHealthDeclining)
+        {
+            CurrentExtraHealth -= damage * ExtraHealthDeclineRateByEnemy;
+        }
+
+
         _isHealthDeclining = true;
+    }
+
+    public void TakeDamageByPlayer(float damage)
+    {
+        if (damage <= 0) return;
+
+        if(damage >= CurrentHealth)
+        {
+            damage = CurrentHealth - 1;
+            CurrentHealth -= damage;
+        }
+        else
+        {
+            CurrentHealth -= damage;
+
+            if (!_isHealthDeclining)
+            {
+                CurrentExtraHealth -= damage * ExtraHealthDeclineRateByEnemy;
+            }
+            _isHealthDeclining = true;
+        }
     }
 }
