@@ -107,7 +107,8 @@ public class PixelatePass : PostProcessingUniversalRenderPass<Pixelate>
         var camera = cameraData.camera;
         var src = cameraData.renderer.cameraColorTargetHandle;
         int dest = TempBufferId1;
-            
+        
+        //shader自定义接口
         material.SetFloat("_Interval", volumeComponent.像素格数.value);
 
         cmd.GetTemporaryRT(dest, camera.scaledPixelWidth, camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);

@@ -12,6 +12,8 @@ public class PostProcessingRendererFeature : ScriptableRendererFeature
     }
 
     public Settings settings = new Settings();
+
+    //自定义你的Pass
     EdgeDetecteionPass EdgeDetecteion;
     PixelatePass Pixelate;
 
@@ -20,11 +22,12 @@ public class PostProcessingRendererFeature : ScriptableRendererFeature
         this.name = "PostProcessingRendererFeature";
         EdgeDetecteion = new EdgeDetecteionPass(settings.renderPassEvent, settings.shader);
         Pixelate = new PixelatePass(settings.renderPassEvent, settings.shader);
-
+        //
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
+        //
         renderer.EnqueuePass(EdgeDetecteion);
         renderer.EnqueuePass(Pixelate);
     }

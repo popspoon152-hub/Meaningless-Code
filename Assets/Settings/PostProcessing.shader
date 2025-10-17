@@ -96,6 +96,11 @@ Shader "PostProcessing"
 	        }
             ENDHLSL
         }
+
+
+
+
+
         Pass
         {
             Name "Pixelate"
@@ -106,8 +111,8 @@ Shader "PostProcessing"
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-            TEXTURE2D(_BlitTexture);
-            SAMPLER(sampler_BlitTexture);
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
             // float _Columns;
             // float _Rows;
             float _Interval;
@@ -144,10 +149,11 @@ Shader "PostProcessing"
                 // float2 uv = float2(round(i.uv.x * _Columns) / _Columns, round(i.uv.y * _Rows) / _Rows);
                 float screenRatio = _ScreenParams.x / _ScreenParams.y;
                 float2 uv = float2(round(i.uv.x * _Interval * screenRatio) / (_Interval * screenRatio),round(i.uv.y * _Interval) / _Interval);
-                float4 col = SAMPLE_TEXTURE2D(_BlitTexture, sampler_BlitTexture, uv);
+                float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
                 return col;
             }
             ENDHLSL
         }
+        //续写你的后处理shader(统一定义_MainTex
     }
 }
