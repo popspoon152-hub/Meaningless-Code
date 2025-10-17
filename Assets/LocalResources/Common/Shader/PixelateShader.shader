@@ -1,10 +1,10 @@
-Shader "Custom/Pixelate"
+Shader "Custom/PixelShader"
 {
-   Properties
+    Properties
     {
         _MainTex ("MaintTex", 2D) = "white" {}
-        _PixelInterval("PixelInterval",Range(0.000001,1.0))=1.0
-        _Indensity("Indensity",Range(0,1))=1.0
+        _PixelInterval("PixelInterval",Range(0.000001,1.0))=1.0//像素化强度
+        _Indensity("Indensity",Range(0,1))=1.0 //影响强度
     }
     SubShader
     {
@@ -12,7 +12,8 @@ Shader "Custom/Pixelate"
             "RenderType"="Opaque"
             "RenderPipeline"="UniversalRenderPipeline"
         }
-        Pass{
+        Pass
+        {
 
             HLSLPROGRAM
             #pragma vertex vert
@@ -20,14 +21,13 @@ Shader "Custom/Pixelate"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl"
-            
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
             CBUFFER_START(UnityPerMaterial)
                 float4 _MainTex_ST;
             CBUFFER_END
             float _PixelInterval;
-            float _Indensity; 
+            float _PixelItensity;
 
             struct Attributes 
             {
@@ -39,7 +39,7 @@ Shader "Custom/Pixelate"
             {
                 float4 pos : SV_POSITION;
                 float3 worldPos : TEXCOORD0;
-                float2 uv : TEXCOORD1;
+                float2 uv : TEXCOORD4;
             };
             Varyings vert(Attributes i) 
             {
@@ -50,15 +50,15 @@ Shader "Custom/Pixelate"
                 return output;
             }
 
-            half4 frag(Varyings i):SV_Target
+            half4 frag(Varyings i) : SV_Target
             {
-                float2 pixelAmount = 1/_PixelInterval;
-                float2 pixelAmount_Int = pixelAmount - frac(pixelAmount);//得到像素格数
-                float2 pixelatedUV = floor(i.uv*pixelAmount_Int)/pixelAmount_Int;
-                float2 use_uv = lerp(i.uv, pixelatedUV, _Indensity);
-                half4 Pixelate = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex,use_uv);
-
-                return Pixelate;
+                float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                float2 pixelAmount = i.uv / _PixelInterval;
+                float2 pixelAmount_int = pixelAmount - frac(pixelAmount);
+                pixelAmount_int *= _PixelInterval;
+                float2 uv = lerp(i.uv, pixelAmount_int,_PixelItensity); 
+                col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
+                return col;
             }
             ENDHLSL
         }
