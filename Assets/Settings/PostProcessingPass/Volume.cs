@@ -20,6 +20,20 @@ public class EdgeDetecteion : VolumeComponent, IPostProcessComponent
     public bool IsTileCompatible() => false;
 }
 
+[Serializable, VolumeComponentMenu("PostProcessing/Nosie")]
+public class Nosie : VolumeComponent, IPostProcessComponent
+{
+    [Tooltip("是否启用效果")] public BoolParameter enable = new BoolParameter(false);
+
+    [Tooltip("抖动速度")] public FloatParameter speed = new FloatParameter(0f);
+    [Tooltip("强度")] public FloatParameter strength = new FloatParameter(0f);
+
+
+    public bool IsActive() => enable.value;
+
+    public bool IsTileCompatible() => false;
+}
+
 [Serializable, VolumeComponentMenu("PostProcessing/Pixelate")]
 public class Pixelate : VolumeComponent, IPostProcessComponent
 {

@@ -1,11 +1,9 @@
-Shader "Custom/ScanLine"
+Shader "Custom/Noise"
 {
     Properties
     {
         _MainTex ("MaintTex", 2D) = "white" {}
-        _Frequency("Frequency",Float)=0
-        _Threshold("Threshold",Range(0,1.0))=0
-        _Amount("Amount",Range(0,1.0))=0.5
+        _Speed("Speed",Float)=1.0
     }
     SubShader
     {
@@ -27,9 +25,7 @@ Shader "Custom/ScanLine"
             CBUFFER_START(UnityPerMaterial)
                 float4 _MainTex_ST;
             CBUFFER_END
-            float _Frequency;
-            float _Threshold;
-            float _Amount;
+            float _Speed;
 
             struct Attributes 
             {
@@ -41,9 +37,8 @@ Shader "Custom/ScanLine"
             {
                 float4 pos : SV_POSITION;
                 float3 worldPos : TEXCOORD0;
-                float2 uv : TEXCOORD4;
+                float2 uv : TEXCOORD1;
             };
-
             Varyings vert(Attributes i) 
             {
                 Varyings output;
@@ -53,29 +48,13 @@ Shader "Custom/ScanLine"
                 return output;
             }
 
-            float randomNoise(float x, float y)
-            {
-                return frac(sin(dot(float2(x, y), float2(12.9898, 78.233))) * 43758.5453);
-            }
-
             half4 frag(Varyings i) : SV_Target
             {
-                half strength = 0;
-		        #if USING_FREQUENCY_INFINITE
-			        strength = 1;
-		        #else
-			    strength = 0.5 + 0.5 * cos(_Time.y * _Frequency);
-		        #endif
-		
-		
-		        float jitter = randomNoise(i.uv.y, _Time.x) * 2 - 1;
-		        jitter *= step(_Threshold, abs(jitter)) * _Amount * strength;
-		
-		        half4 sceneColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, frac(i.uv + float2(jitter, 0)));
-		
-		        return sceneColor;
+                half4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                float time = _Time.y * _Speed;
+                float noise = max(frac(sin(dot(i.uv + time, float2(12.9898, 78.233))) * 43758.54531),0.5);
+                return col*noise;
             }
-
             ENDHLSL
         }
     }

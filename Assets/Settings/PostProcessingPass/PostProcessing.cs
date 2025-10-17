@@ -15,12 +15,14 @@ public class PostProcessingRendererFeature : ScriptableRendererFeature
 
     //自定义你的Pass
     EdgeDetecteionPass EdgeDetecteion;
+    NosiePass Nosie;
     PixelatePass Pixelate;
 
     public override void Create()
     {
         this.name = "PostProcessingRendererFeature";
         EdgeDetecteion = new EdgeDetecteionPass(settings.renderPassEvent, settings.shader);
+        Nosie = new NosiePass(settings.renderPassEvent, settings.shader);
         Pixelate = new PixelatePass(settings.renderPassEvent, settings.shader);
         //
     }
@@ -29,6 +31,7 @@ public class PostProcessingRendererFeature : ScriptableRendererFeature
     {
         //
         renderer.EnqueuePass(EdgeDetecteion);
+        renderer.EnqueuePass(Nosie);
         renderer.EnqueuePass(Pixelate);
     }
 }

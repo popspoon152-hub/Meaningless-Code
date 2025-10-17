@@ -21,7 +21,7 @@ public abstract class PostProcessingUniversalRenderPass<T> : ScriptableRenderPas
 
         if (shader == null)
         {
-            Debug.LogError("ScriptableRenderPass:" + RenderTag + "的Shader为空");
+            Debug.LogWarning("ScriptableRenderPass:" + RenderTag + "的Shader为空");
             return;
         }
 
@@ -34,7 +34,7 @@ public abstract class PostProcessingUniversalRenderPass<T> : ScriptableRenderPas
         //检查相机有效性
         if (!renderingData.cameraData.postProcessEnabled)
         {
-            Debug.LogWarning("ScriptableRenderPass:调用" + RenderTag + "的摄像机未开启后处理");
+            //Debug.LogWarning("ScriptableRenderPass:调用" + RenderTag + "的摄像机未开启后处理");
             return;
         }
         //获取 Volume 组件并检查是否启用
@@ -42,14 +42,14 @@ public abstract class PostProcessingUniversalRenderPass<T> : ScriptableRenderPas
         volumeComponent = stack.GetComponent<T>();
         if (volumeComponent == null || !volumeComponent.IsActive())
         {
-            if (volumeComponent == null) Debug.LogError("ScriptableRenderPass:" + RenderTag + "未获取到Volume组件");
-            else Debug.LogError("ScriptableRenderPass:" + RenderTag + "的Volume组件未激活");
+            if (volumeComponent == null) Debug.LogWarning("ScriptableRenderPass:" + RenderTag + "未获取到Volume组件");
+            else Debug.LogWarning("ScriptableRenderPass:" + RenderTag + "的Volume组件未激活");
             return;
         }
 
         if (material == null)
         {
-            Debug.LogError("ScriptableRenderPass:" + RenderTag + "的材质初始化失败");
+            Debug.LogWarning("ScriptableRenderPass:" + RenderTag + "的材质初始化失败");
             return;
         }
         //设置渲染命令缓冲区
@@ -95,6 +95,32 @@ public class EdgeDetecteionPass : PostProcessingUniversalRenderPass<EdgeDetectei
     } 
 }
 
+public class NosiePass : PostProcessingUniversalRenderPass<Nosie>
+{
+    protected override string RenderTag => "NosiePass";
+
+    public NosiePass(RenderPassEvent renderPassEvent, Shader shader) : base(renderPassEvent, shader) { }
+
+    protected override void RenderPostProcessingEffect(CommandBuffer cmd, ref RenderingData renderingData)
+    {
+        ref var cameraData = ref renderingData.cameraData;
+        var camera = cameraData.camera;
+        var src = cameraData.renderer.cameraColorTargetHandle;
+        int dest = TempBufferId1;
+
+        //shader自定义接口
+        material.SetFloat("_Speed", volumeComponent.speed.value);
+        material.SetFloat("_Strength", volumeComponent.strength.value);
+
+        cmd.GetTemporaryRT(dest, camera.scaledPixelWidth, camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
+        cmd.Blit(src, (RenderTargetIdentifier)dest);
+
+        if (volumeComponent.enable == false) cmd.Blit((RenderTargetIdentifier)dest, src);
+        else cmd.Blit((RenderTargetIdentifier)dest, src, material, 1);
+    }
+
+}
+
 public class PixelatePass : PostProcessingUniversalRenderPass<Pixelate>
 {
     protected override string RenderTag => "PixelatePass";
@@ -107,7 +133,7 @@ public class PixelatePass : PostProcessingUniversalRenderPass<Pixelate>
         var camera = cameraData.camera;
         var src = cameraData.renderer.cameraColorTargetHandle;
         int dest = TempBufferId1;
-        
+
         //shader自定义接口
         material.SetFloat("_Interval", volumeComponent.像素格数.value);
 
@@ -115,7 +141,7 @@ public class PixelatePass : PostProcessingUniversalRenderPass<Pixelate>
         cmd.Blit(src, (RenderTargetIdentifier)dest);
 
         if (volumeComponent.开关 == false) cmd.Blit((RenderTargetIdentifier)dest, src);
-        else cmd.Blit((RenderTargetIdentifier)dest, src, material, 1);
+        else cmd.Blit((RenderTargetIdentifier)dest, src, material, 2);
     }
 
 }

@@ -43,7 +43,7 @@ Shader "Custom/Glitch"
             {
                 float4 pos : SV_POSITION;
                 float3 worldPos : TEXCOORD0;
-                float2 uv : TEXCOORD4;
+                float2 uv : TEXCOORD1;
             };
             Varyings vert(Attributes i) 
             {
