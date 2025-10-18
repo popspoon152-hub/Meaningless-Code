@@ -128,7 +128,8 @@ public class BossEatBeansState_First : IBossStateFirstStage
 
             UnityEngine.Object.Destroy(_targetBean.gameObject);
             _targetBean = null;
-            SelectNextTarget();
+
+            _stateMachine.ChangeState(BossState.Grow);
         }
         
     }
