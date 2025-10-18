@@ -8,7 +8,7 @@ public class EnvironmentAndMap : MonoBehaviour
 {
     public int CurrentBeansCount;
 
-    [SerializeField] private EnvironmentAndMapStats MapStats;
+    public EnvironmentAndMapStats MapStats;
 
     private int _currentMapIndex;
 
@@ -54,7 +54,6 @@ public class EnvironmentAndMap : MonoBehaviour
     #region LoadBeansAndMap
     private void LoadMap(int currentMapIndex)
     {
-
         _currentMap = MapStats.Maps[currentMapIndex];
         _currentBeansPositions = _currentMap.BeansPositions;
         _currentBeansInstantiatedTime = _currentMap.BeansInstantiateTimes;

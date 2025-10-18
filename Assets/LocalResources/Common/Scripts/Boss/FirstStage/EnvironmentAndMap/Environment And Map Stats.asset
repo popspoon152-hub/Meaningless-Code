@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 137c0677c37fd734a8ad5ad8d985a849, type: 3}
   m_Name: Environment And Map Stats
   m_EditorClassIdentifier: 
-  BeansPrefabs: {fileID: 0}
+  BeansPrefabs: {fileID: 2214726139745622937, guid: a530cf054ad61bd41834d119369ac746, type: 3}
   Maps: []

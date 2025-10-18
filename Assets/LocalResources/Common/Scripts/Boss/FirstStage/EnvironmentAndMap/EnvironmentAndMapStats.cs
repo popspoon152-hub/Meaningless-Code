@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public struct Map
 {
-    //注意: BeansPositions数组中的位置是相对于MapsPrefabs数组中对应地图预制体的位置偏移
+    [Header("注意: BeansPositions数组中的位置是相对于MapsPrefabs数组中对应地图预制体的位置偏移")]
     public GameObject TileMap;                                                                      //地图数组
     public Vector2[] BeansPositions;                                                                //豆子生成点数组
 
