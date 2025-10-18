@@ -4,14 +4,15 @@ using UnityEngine;
 
 public enum BossState
 {
-    //移动类型状态
+    //吃豆环节状态
     EatBeans,            //吃豆
+    EatBeansRangedAttack, //吃豆环节远程攻击
 
     //攻击类型状态
     RangedAttack,       //远程攻击
     Teleport,           //传送
     DashAttack,         //冲锋攻击
-    AttackRandomMove,   //攻击类型的随机移动
+    AttackRandomMove,   //攻击类型的移动
 
     //通用类型状态
     Hurt,               //受伤
