@@ -1,0 +1,21 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public interface IBossState 
+{
+    // 进入状态时调用（初始化）
+    void EnterState(BossStateMachine stateMachine);
+
+    // 每帧更新
+    void UpdateState();
+
+    // 固定时间步长更新（物理相关）
+    void FixedUpdateState();
+
+    // 退出状态时调用（清理）
+    void ExitState();
+
+    // 处理动画事件
+    void OnAnimationEvent(string eventName);
+}
