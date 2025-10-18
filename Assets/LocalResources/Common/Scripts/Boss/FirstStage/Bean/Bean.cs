@@ -22,4 +22,6 @@ public class Bean : MonoBehaviour
     {
         BeanHealth -= damage;
     }
+
+    //被吃了的还没写
 }
