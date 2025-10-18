@@ -38,14 +38,17 @@ public class BossFirstStateMachine : MonoBehaviour
     [Header("蛇的节数配置")]
     [Range(1f, 20f)] public int StartSnakeSegments = 5;
     [Range(1f, 20f)] public int MaxSnakeSegments = 10;
-    private int _currentSnakeSegments;
 
     public Transform SegmentPrefab;
     [HideInInspector] public List<Transform> _segments = new List<Transform>();
     [HideInInspector] public bool IsMove = true;
 
     public BossState CurrentState => _currentState;
-
+    public float CurrentMoveSpeed
+    {
+        get { return _currentMoveSpeed; }
+        set {  _currentMoveSpeed = value; }
+    }
 
     // 状态字典
     private Dictionary<BossState, IBossStateFirstStage> _states;
@@ -79,13 +82,15 @@ public class BossFirstStateMachine : MonoBehaviour
             { BossState.Die, new BossDieState_First() },
             { BossState.Grow, new BossGrowState_First() },
         };
-
-        CurrentHealth = MaxHealth;
     }
 
     void Start()
     {
         _segments.Add(this.transform); // 添加头部作为第一节
+
+        CurrentHealth = MaxHealth;
+        CurrentMoveSpeed = EatBeanMoveSpeed;
+
 
         // 初始状态
         ChangeState(startingState);
@@ -135,7 +140,7 @@ public class BossFirstStateMachine : MonoBehaviour
     {
         if (_segments == null || _segments.Count < 2) return;
 
-        float step = _currentMoveSpeed * Time.fixedDeltaTime;
+        float step = CurrentMoveSpeed * Time.fixedDeltaTime;
 
         for (int i = _segments.Count - 1; i > 0; i--)
         {
