@@ -203,7 +203,7 @@ public class BossEatBeansState_First : IBossStateFirstStage
         }
         else
         {
-            _stateMachine.ChangeState(BossState.RandomMove);
+            _stateMachine.ChangeState(BossState.AttackRandomMove);
         }
     }
 

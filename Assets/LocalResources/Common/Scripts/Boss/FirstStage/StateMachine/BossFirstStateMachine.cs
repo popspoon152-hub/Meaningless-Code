@@ -6,7 +6,6 @@ public enum BossState
 {
     //移动类型状态
     EatBeans,            //吃豆
-    RandomMove,         //随机移动
 
     //攻击类型状态
     RangedAttack,       //远程攻击
@@ -73,7 +72,6 @@ public class BossFirstStateMachine : MonoBehaviour
         _states = new Dictionary<BossState, IBossStateFirstStage>
         {
             { BossState.EatBeans, new BossEatBeansState_First() },
-            { BossState.RandomMove, new BossRandomMoveState_First() },
             { BossState.RangedAttack, new BossRangedAttackState_First() },
             { BossState.Teleport, new BossTeleportState_First() },
             { BossState.DashAttack, new BossDashAttackState_First() },
