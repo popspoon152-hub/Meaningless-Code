@@ -24,13 +24,16 @@ public enum BossState
 
 public class BossFirstStateMachine : MonoBehaviour
 {
+    #region State Machine Config
     [Header("状态配置")]
-    public BossState startingState;
+    public BossState startingState = BossState.EatBeans;
 
     [Header("调试信息")]
     [SerializeField] private BossState _currentState;
     [SerializeField] private string _currentStateName;
+    #endregion
 
+    #region Boss属性
     [Header("属性配置")]
     [Range(10f, 1000f)] public float MaxHealth = 100f;
     [Range(1f, 20f)] public float EatBeanMoveSpeed = 3f;
@@ -40,14 +43,62 @@ public class BossFirstStateMachine : MonoBehaviour
     [Header("蛇的节数配置")]
     [Range(1f, 20f)] public int StartSnakeSegments = 5;
     [Range(1f, 20f)] public int MaxSnakeSegments = 10;
-
     public Transform SegmentPrefab;
     [HideInInspector] public List<Transform> _segments = new List<Transform>();
     [HideInInspector] public bool IsMove = true;
 
     [Header("受击配置")]
     [Range(0f, 1f)] public float HurtInvulnerableTime = 0.1f;       //受击后的短暂无敌时间(避免重复判定)
+    #endregion
 
+    #region Move
+    [Header("Pathfinding")]
+    public Pathfinding pathfinding;
+    #endregion
+
+    #region BossEatBeansRangedAttackState_First
+    [Header("BossEatBeansRangedAttackState_First的子弹")]
+    public GameObject BulletPrefab;
+    public Transform FirePoint;
+    [Range(1f, 14f)] public float BulletSpeed = 5f;
+
+    [Header("BossEatBeansRangedAttackState_First的Boss出招僵直时间")]
+    [Range(0f, 2f)] public float EatBeansRangedAttackInvulnerableTime;
+    #endregion
+
+    #region BossGrowState_First
+    [Header("BossGrowState_First")]
+    [Range(0f, 2f)] public float StateInvulnerableTime = 1f;
+    #endregion
+
+
+
+    #region BossEatBeansState_First
+    [Header("BossEatBeansState_First")]
+    [Range(0.5f, 2f)] public float RepathInterval = 0.5f;                  // 定期重算路径，防止障碍/豆子移动导致路径失效
+    [Range(0.1f, 3f)] public float EatDistance = 0.8f;                     // 到达此距离视为“吃掉”豆子
+    #endregion
+
+    #region BossAttackIdleState_First
+    [Header("BossAttackIdleState_First中Boss的位置设定")]
+    public Transform IdleLeftTransfrom;
+    public Transform IdleRightTransfrom;
+
+    [Header("BossAttackIdleState_First中Boss的僵直时间")]
+    [Range(1f, 5f)] public float IdleTime = 2f;
+    #endregion
+
+    #region BossRangedAttackState_First
+    [Header("BossRangedAttackState_First的子弹")]
+    public GameObject BulletPrefab_Attack;
+    public Transform FirePoint_Attack;
+    [Range(1f, 14f)] public float BulletSpeed_Attack = 5f;
+
+    [Header("BossRangedAttackState_First的Boss出招僵直时间")]
+    [Range(0f, 2f)] public float RangedAttackInvulnerableTime;
+    #endregion
+
+    #region private fields
     // 运行时字段
     private bool _isInvulnerable = false;
     private Coroutine _hurtCoroutine;
@@ -69,6 +120,7 @@ public class BossFirstStateMachine : MonoBehaviour
     public Rigidbody2D Rb { get; private set; }
 
     public float CurrentHealth { get; set; }
+    #endregion
 
     #region LifeCycle
     void Awake()
@@ -146,7 +198,7 @@ public class BossFirstStateMachine : MonoBehaviour
 
     #endregion
 
-    #region Boss Move
+    #region Boss Segments Move
 
     public void SegmentsMove()
     {
@@ -188,7 +240,7 @@ public class BossFirstStateMachine : MonoBehaviour
 
     #endregion
 
-    #region Player
+    #region Boss -> Player
 
     public bool IsPlayerInRange(float range)
     {
@@ -204,7 +256,9 @@ public class BossFirstStateMachine : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(direction);
         }
     }
+    #endregion
 
+    #region Player Take Damage
     // 被玩家攻击时调用
     public void TakeDamage(float damage)
     {
@@ -249,6 +303,10 @@ public class BossFirstStateMachine : MonoBehaviour
         _isInvulnerable = false;
         _hurtCoroutine = null;
     }
+
+    #endregion
+
+    #region Attack State Choose
 
     #endregion
 

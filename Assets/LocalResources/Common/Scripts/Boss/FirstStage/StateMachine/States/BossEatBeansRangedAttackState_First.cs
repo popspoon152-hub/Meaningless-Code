@@ -7,17 +7,9 @@ public class BossEatBeansRangedAttackState_First : IBossStateFirstStage
 {
     private BossFirstStateMachine _stateMachine;
 
-    [Header("子弹")]
-    public GameObject BulletPrefab;
-    public Transform FirePoint;
-    [Range(1f, 14f)] public float BulletSpeed = 5f;
-
-    [Header("Boss出招僵直时间")]
-    [Range(0f, 2f)] public float StateInvulnerableTime;
     private Coroutine _RangedAttack;
 
-    [Header("调试")]
-    [SerializeField] private Transform _playerPos;
+    private Transform _playerPos;
 
     // 进入状态时调用（初始化）
     public void EnterState(BossFirstStateMachine stateMachine)
@@ -36,36 +28,41 @@ public class BossEatBeansRangedAttackState_First : IBossStateFirstStage
         }
 
         _RangedAttack = _stateMachine.StartCoroutine(RangedAttack());
+
+        _stateMachine.IsMove = true;
     }
 
+    #region Attack
     private IEnumerator RangedAttack()
     {
-        if(BulletPrefab == null || FirePoint == null || _playerPos == null)
+        if(_stateMachine.BulletPrefab == null || _stateMachine.FirePoint == null || _playerPos == null)
         {
             Debug.LogWarning("Bullet Prefab, Fire Point, or Player Position is not assigned.");
 
             _stateMachine.ChangeState(BossState.EatBeans);
         }
-        else if(BulletPrefab != null && FirePoint != null && _playerPos != null)
+        else if(_stateMachine.BulletPrefab != null && _stateMachine.FirePoint != null && _playerPos != null)
         {
             _stateMachine.IsMove = false;
 
-            GameObject bullet = UnityEngine.Object.Instantiate(BulletPrefab, FirePoint.position, FirePoint.rotation);
+            GameObject bullet = UnityEngine.Object.Instantiate(_stateMachine.BulletPrefab, _stateMachine.FirePoint.position, _stateMachine.FirePoint.rotation);
 
-            Vector2 direction = (_playerPos.position - FirePoint.position).normalized;
+            Vector2 direction = (_playerPos.position - _stateMachine.FirePoint.position).normalized;
 
             if(bullet.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
             {
-                rb.velocity = direction * BulletSpeed;
+                rb.velocity = direction * _stateMachine.BulletSpeed;
             }
 
             _stateMachine.IsMove = true;
         }
 
-        yield return new WaitForSeconds(StateInvulnerableTime);
+        yield return new WaitForSeconds(_stateMachine.EatBeansRangedAttackInvulnerableTime);
 
         _stateMachine.ChangeState(BossState.EatBeans);
     }
+
+    #endregion
 
     // 固定时间步长更新（物理相关）
     public void FixedUpdateState()

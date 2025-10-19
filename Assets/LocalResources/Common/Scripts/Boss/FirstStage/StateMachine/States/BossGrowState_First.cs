@@ -7,8 +7,6 @@ public class BossGrowState_First : IBossStateFirstStage
 {
     private BossFirstStateMachine _stateMachine;
 
-    [Header("boss出招僵直")]
-    [Range(0f, 2f)] public float StateInvulnerableTime;
     private Coroutine _doGrowOnce;
     // 进入状态时调用（初始化）
     public void EnterState(BossFirstStateMachine stateMachine)
@@ -32,7 +30,7 @@ public class BossGrowState_First : IBossStateFirstStage
 
         _stateMachine._segments.Add(segment);
 
-        yield return new WaitForSeconds(StateInvulnerableTime);
+        yield return new WaitForSeconds(_stateMachine.StateInvulnerableTime);
 
         _stateMachine.IsMove = true;
 
