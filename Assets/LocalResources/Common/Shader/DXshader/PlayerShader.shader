@@ -37,6 +37,7 @@ Shader "Custom/PlayerShader"
             #pragma fragment frag
             #pragma shader_feature_local _ISBLEEDING_ON
             #pragma shader_feature_local _ISATTCKED_ON
+            #pragma shader_feature_local _ISRUSH_ON
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl"

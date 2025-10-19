@@ -74,7 +74,7 @@ MonoBehaviour:
     m_Value: 23.1
   amount:
     m_OverrideState: 1
-    m_Value: 0.8
+    m_Value: 0.9
   offset:
     m_OverrideState: 1
     m_Value: 0.48
@@ -108,7 +108,7 @@ MonoBehaviour:
     m_Value: 0
   BackgroundColor:
     m_OverrideState: 1
-    m_Value: {r: 0, g: 0.32430625, b: 0.94509804, a: 1}
+    m_Value: {r: 0, g: 0.3443985, b: 1, a: 1}
   _StencilRef:
     m_OverrideState: 1
     m_Value: 1
