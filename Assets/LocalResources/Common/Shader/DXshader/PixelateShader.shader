@@ -14,7 +14,6 @@ Shader "Custom/PixelShader"
         }
         Pass
         {
-
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag

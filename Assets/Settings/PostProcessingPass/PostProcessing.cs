@@ -1,8 +1,8 @@
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-
-public class PostProcessingRendererFeature : ScriptableRendererFeature
+public class PostProcessRendererFeature : ScriptableRendererFeature
 {
     [System.Serializable]
     public class Settings
@@ -10,28 +10,45 @@ public class PostProcessingRendererFeature : ScriptableRendererFeature
         public RenderPassEvent renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
         public Shader shader;
     }
-
+    
     public Settings settings = new Settings();
-
-    //自定义你的Pass
-    EdgeDetecteionPass EdgeDetecteion;
-    NosiePass Nosie;
-    PixelatePass Pixelate;
-
+    
+    private EdgeDetecteionPass edgeDetectionPass;
+    private NosiePass noisePass;
+    private LineBlockPass lineBlockPass;
+    private PixelatePass pixelatePass;
+    
     public override void Create()
     {
-        this.name = "PostProcessingRendererFeature";
-        EdgeDetecteion = new EdgeDetecteionPass(settings.renderPassEvent, settings.shader);
-        Nosie = new NosiePass(settings.renderPassEvent, settings.shader);
-        Pixelate = new PixelatePass(settings.renderPassEvent, settings.shader);
-        //
-    }
+        edgeDetectionPass = new EdgeDetecteionPass(
+            settings.renderPassEvent, 
+            settings.shader
+        );
 
+        noisePass = new NosiePass(
+            settings.renderPassEvent,
+            settings.shader
+        );
+
+        lineBlockPass = new LineBlockPass(
+            settings.renderPassEvent,
+            settings.shader
+        );
+
+        pixelatePass = new PixelatePass(
+            settings.renderPassEvent, 
+            settings.shader
+        );
+        
+        // 其他pass的初始化...
+    }
+    
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        //
-        renderer.EnqueuePass(EdgeDetecteion);
-        renderer.EnqueuePass(Nosie);
-        renderer.EnqueuePass(Pixelate);
+        renderer.EnqueuePass(edgeDetectionPass);
+        renderer.EnqueuePass(noisePass);
+        renderer.EnqueuePass(lineBlockPass);
+        renderer.EnqueuePass(pixelatePass);
+        // 添加其他pass...
     }
 }

@@ -301,7 +301,7 @@ GameObject:
   - component: {fileID: 124896755}
   - component: {fileID: 124896754}
   - component: {fileID: 124896753}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 3A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -349,7 +349,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 732b3b56abed00f44ac61154d5b0478e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -711,7 +711,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 9.270628
+  orthographic size: 17.95
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1444,7 +1444,7 @@ GameObject:
   - component: {fileID: 824201011}
   - component: {fileID: 824201010}
   - component: {fileID: 824201009}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Run
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1533,8 +1533,8 @@ Transform:
   m_GameObject: {fileID: 824201008}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.97, y: -0.78, z: 0.012367034}
-  m_LocalScale: {x: 0.26, y: 0.26, z: 0.26}
+  m_LocalPosition: {x: 3.9933, y: -0.78, z: 0.012367034}
+  m_LocalScale: {x: 0.263328, y: 0.26, z: 0.26}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -1572,7 +1572,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 4342eb15beecb5844ab393f3a8b8c01d, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 3b1812b9a9fd65b4b8dd2a120411f6ea, type: 2}
 --- !u!4 &832588875
 Transform:
   m_ObjectHideFlags: 0
@@ -2815,7 +2815,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1772910364}
   - component: {fileID: 1772910365}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}

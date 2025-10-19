@@ -9,7 +9,7 @@ Shader "PostProcessing"
         //_BackgroundColor("BackgroundColor",Color)=(1.0,1.0,1.0,1.0)
 
     }
-
+           
     SubShader
     {
         Tags
@@ -39,6 +39,8 @@ Shader "PostProcessing"
 	        half4 _BackgroundColor;
 	        float _EdgeWidth;
 	        float _BackgroundFade;
+
+            
 
             struct Attributes 
             {
@@ -146,6 +148,81 @@ Shader "PostProcessing"
             ENDHLSL
         }
 
+        Pass
+        {
+            Name"LineBlock"
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl"
+
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
+            CBUFFER_START(UnityPerMaterial)
+                float4 _MainTex_ST;
+            CBUFFER_END
+
+	        float _Frequency ;
+	        float _TimeX ;
+	        float _Offset ;
+	        float _LinesWidth ;
+	        float _Alpha ;
+            float _Amount;
+
+            struct Attributes 
+            {
+                float4 vertex : POSITION;
+                float2 texcoord : TEXCOORD0;
+            };
+
+            struct Varyings 
+            {
+                float4 pos : SV_POSITION;
+                float3 worldPos : TEXCOORD0;
+                float2 uv : TEXCOORD1;
+            };
+
+            Varyings vert(Attributes i) 
+            {
+                Varyings output;
+                output.worldPos = TransformObjectToWorld(i.vertex.xyz);
+                output.pos = TransformWorldToHClip(output.worldPos);
+                output.uv = TRANSFORM_TEX(i.texcoord,_MainTex);
+                return output;
+            }
+	
+	        float randomNoise(float2 c)
+	        {
+		        return frac(sin(dot(c.xy, float2(12.9898, 78.233))) * 43758.5453);
+	        }
+	
+	        float trunc(float x, float num_levels)
+	        {
+		        return floor(x * num_levels) / num_levels;
+	        }
+	
+	
+	        float4 frag(Varyings i): SV_Target
+	        {
+		        float2 uv = i.uv;
+		
+		        //随机强度梯度线条生成
+		        float truncTime = trunc(randomNoise(_TimeX), 2.0)*_Time.x;
+		        float uv_trunc = randomNoise(trunc(uv.yy, float2(8, 8)) + 100.0 * truncTime);
+                float uv_randomTrunc = 6.0 * trunc(_TimeX, 24.0 * uv_trunc);
+                float blockLine_random = 0.5 * randomNoise(trunc(uv.yy + uv_randomTrunc, float2(8 * _LinesWidth, 8 * _LinesWidth)));
+                blockLine_random += 0.5 * randomNoise(trunc(uv.yy + uv_randomTrunc, float2(7, 7)));
+                blockLine_random = blockLine_random * 2.0 - 1.0;   
+                blockLine_random = sign(blockLine_random) * saturate((abs(blockLine_random) - _Amount) / (0.4));
+
+		        half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                
+		        return color*(1-blockLine_random);//dot(color, half3(0.3, 0.59, 0.11))
+	        }
+            ENDHLSL
+        }
 
         Pass
         {

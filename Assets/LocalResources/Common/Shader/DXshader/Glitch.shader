@@ -45,6 +45,7 @@ Shader "Custom/Glitch"
                 float3 worldPos : TEXCOORD0;
                 float2 uv : TEXCOORD1;
             };
+            
             Varyings vert(Attributes i) 
             {
                 Varyings output;

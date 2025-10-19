@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 0
   setting: {myMaterial: {fileID: 2100000, guid: 8dc77ec38b8368942a03fcb4f9bdeede, type: 2}, injectPoint: 500}
---- !u!114 &-3319008979190010363
+--- !u!114 &-380295563535356288
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,8 +46,8 @@ MonoBehaviour:
     debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7, type: 3}
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
-  - {fileID: -3319008979190010363}
-  m_RendererFeatureMap: 052e0c15eb82f0d1
+  - {fileID: -380295563535356288}
+  m_RendererFeatureMap: 806ed12933ebb8fa
   m_UseNativeRenderPass: 0
   m_TransparencySortMode: 0
   m_TransparencySortAxis: {x: 0, y: 1, z: 0}

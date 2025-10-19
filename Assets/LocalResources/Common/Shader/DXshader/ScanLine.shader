@@ -41,7 +41,7 @@ Shader "Custom/ScanLine"
             {
                 float4 pos : SV_POSITION;
                 float3 worldPos : TEXCOORD0;
-                float2 uv : TEXCOORD4;
+                float2 uv : TEXCOORD1;
             };
 
             Varyings vert(Attributes i) 
@@ -66,14 +66,12 @@ Shader "Custom/ScanLine"
 		        #else
 			    strength = 0.5 + 0.5 * cos(_Time.y * _Frequency);
 		        #endif
-		
-		
 		        float jitter = randomNoise(i.uv.y, _Time.x) * 2 - 1;
 		        jitter *= step(_Threshold, abs(jitter)) * _Amount * strength;
 		
-		        half4 sceneColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, frac(i.uv + float2(jitter, 0)));
+		        half4 Color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, frac(i.uv + float2(jitter, 0)));
 		
-		        return sceneColor;
+		        return Color;
             }
 
             ENDHLSL
