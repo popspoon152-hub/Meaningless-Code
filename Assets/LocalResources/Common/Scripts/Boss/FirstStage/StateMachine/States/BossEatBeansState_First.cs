@@ -25,11 +25,13 @@ public class BossEatBeansState_First : IBossStateFirstStage
     // 进入状态时调用（初始化）
     public void EnterState(BossFirstStateMachine stateMachine)
     {
-        _stateMachine = stateMachine ?? throw new ArgumentNullException(nameof(stateMachine));
+        _stateMachine = stateMachine;
         _path = new NavMeshPath();
         _currentCornerIndex = 0;
         _repathTimer = 0f;
         _maxVerticalSpeed = _stateMachine.EatBeanMoveSpeed;
+        
+        _stateMachine.IsMove = true;
 
         SelectNextTarget();
     }
@@ -45,7 +47,7 @@ public class BossEatBeansState_First : IBossStateFirstStage
         }
 
         //如果被玩家或其他因素破坏,则重新选择目标
-        if(_targetBean == null || _targetBean.gameObject == null || !_targetBean.gameObject.activeInHierarchy)
+        if(_targetBean.gameObject == null || !_targetBean.gameObject.activeInHierarchy)
         {
             _targetBean = null;
             SelectNextTarget();
@@ -66,13 +68,14 @@ public class BossEatBeansState_First : IBossStateFirstStage
     {
         if (_stateMachine == null) return;
 
-        //跟随移动
-        _stateMachine.SegmentsMove();
+        if (_stateMachine.IsMove) _stateMachine.SegmentsMove();
 
-        if(_targetBean == null) return;
+        #region Move
 
-        //移动到目标豆子
-        Vector3 bossPos = _stateMachine.Rb.position;
+        if (_targetBean == null) return;
+
+        // 移动到目标豆子
+        Vector3 bossPos = _stateMachine.transform.position;
         Vector3 targetPos;
 
         if (_path != null && _path.status == NavMeshPathStatus.PathComplete && _path.corners != null && _currentCornerIndex < _path.corners.Length)
@@ -85,11 +88,14 @@ public class BossEatBeansState_First : IBossStateFirstStage
             targetPos = _targetBean.transform.position;
         }
 
+        // 限制竖直速度（保持 Y 轴平滑）
         float desiredY = Mathf.MoveTowards(bossPos.y, targetPos.y, _maxVerticalSpeed * Time.fixedDeltaTime);
         targetPos.y = desiredY;
 
-        Vector3 dir = targetPos - bossPos;
-        float sqrDist = dir.sqrMagnitude;
+        Vector3 dir3 = targetPos - bossPos;
+        // 只在 X/Y 平面判断 corner 到达（2D 游戏常用）
+        Vector2 dir2 = new Vector2(dir3.x, dir3.y);
+        float sqrDist = dir2.sqrMagnitude;
         if (sqrDist <= _reachCornerThreshold * _reachCornerThreshold)
         {
             // 到达当前 corner，推进到下一个 corner
@@ -99,29 +105,32 @@ public class BossEatBeansState_First : IBossStateFirstStage
             }
         }
 
-        //move(限制了速度)
-        if (dir.sqrMagnitude > 1e-6f)
+        //move(限制了速度) —— 使用 Rigidbody2D.MovePosition（接受 Vector2）
+        if (dir2.sqrMagnitude > 1e-6f)
         {
-            Vector3 moveDir = dir.normalized;
+            Vector3 moveDir3 = dir3.normalized;
+            Vector2 moveDir2 = new Vector2(moveDir3.x, moveDir3.y);
             float speed = _stateMachine.EatBeanMoveSpeed;
             _stateMachine.CurrentMoveSpeed = speed;
-            Vector3 newPos = bossPos + moveDir * speed * Time.fixedDeltaTime;
-            _stateMachine.Rb.MovePosition(newPos);
 
-            //朝向
-            Vector3 look = moveDir;
-            
-            if(look != Vector3.zero)
+            Vector3 newPos3 = bossPos + moveDir3 * speed * Time.fixedDeltaTime;
+            Vector2 newPos2 = new Vector2(newPos3.x, newPos3.y);
+
+            _stateMachine.Rb.MovePosition(newPos2);
+
+            // 2D 朝向：绕 Z 轴旋转（避免使用 LookRotation）
+            if (moveDir2 != Vector2.zero)
             {
-                Quaternion targetRot = Quaternion.LookRotation(look);
+                float angle = Mathf.Atan2(moveDir2.y, moveDir2.x) * Mathf.Rad2Deg;
+                Quaternion targetRot = Quaternion.Euler(0f, 0f, angle);
 
                 // 平滑旋转，避免瞬间俯仰
                 _stateMachine.transform.rotation = Quaternion.Slerp(_stateMachine.transform.rotation, targetRot, Mathf.Clamp01(8f * Time.fixedDeltaTime));
             }
         }
 
-        //检查吃豆条件
-        float distToBean = Vector3.Distance(bossPos, _targetBean.transform.position);
+        //检查吃豆条件（基于 2D 平面距离）
+        float distToBean = Vector2.Distance(new Vector2(bossPos.x, bossPos.y), new Vector2(_targetBean.transform.position.x, _targetBean.transform.position.y));
         if (distToBean <= EatDistance)
         {
             //没加动画
@@ -131,7 +140,9 @@ public class BossEatBeansState_First : IBossStateFirstStage
 
             _stateMachine.ChangeState(BossState.Grow);
         }
-        
+
+        #endregion
+
     }
 
     // 退出状态时调用（清理）

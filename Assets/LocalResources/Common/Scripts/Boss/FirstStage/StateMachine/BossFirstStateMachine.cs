@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ public enum BossState
     EatBeansRangedAttack, //吃豆环节远程攻击
 
     //攻击类型状态
+    AttackIdle,          //攻击待机
     RangedAttack,       //远程攻击
     Teleport,           //传送
     DashAttack,         //冲锋攻击
@@ -43,6 +45,13 @@ public class BossFirstStateMachine : MonoBehaviour
     [HideInInspector] public List<Transform> _segments = new List<Transform>();
     [HideInInspector] public bool IsMove = true;
 
+    [Header("受击配置")]
+    [Range(0f, 1f)] public float HurtInvulnerableTime = 0.1f;       //受击后的短暂无敌时间(避免重复判定)
+
+    // 运行时字段
+    private bool _isInvulnerable = false;
+    private Coroutine _hurtCoroutine;
+
     public BossState CurrentState => _currentState;
     public float CurrentMoveSpeed
     {
@@ -57,7 +66,7 @@ public class BossFirstStateMachine : MonoBehaviour
     // 组件引用（所有状态共享）
     public Animator Animator { get; private set; }
     public Transform Player { get; private set; }
-    public Rigidbody Rb { get; private set; }
+    public Rigidbody2D Rb { get; private set; }
 
     public float CurrentHealth { get; set; }
 
@@ -66,20 +75,24 @@ public class BossFirstStateMachine : MonoBehaviour
     {
         // 获取组件引用
         Animator = GetComponent<Animator>();
-        Rb = GetComponent<Rigidbody>();
+        Rb = GetComponent<Rigidbody2D>();
         Player = GameObject.FindGameObjectWithTag("Player").transform;
 
         // 初始化状态字典
         _states = new Dictionary<BossState, IBossStateFirstStage>
         {
             { BossState.EatBeans, new BossEatBeansState_First() },
+            { BossState.EatBeansRangedAttack, new BossEatBeansRangedAttackState_First() },
+            { BossState.Grow, new BossGrowState_First() },
+
+
+            { BossState.AttackIdle, new BossAttackIdleState_First() },
             { BossState.RangedAttack, new BossRangedAttackState_First() },
             { BossState.Teleport, new BossTeleportState_First() },
             { BossState.DashAttack, new BossDashAttackState_First() },
             { BossState.AttackRandomMove, new BossAttackRandomMoveState_First() },
             { BossState.Hurt, new BossHurtState() },
             { BossState.Die, new BossDieState_First() },
-            { BossState.Grow, new BossGrowState_First() },
         };
     }
 
@@ -146,11 +159,11 @@ public class BossFirstStateMachine : MonoBehaviour
             Transform currentSegment = _segments[i];
             Transform previousSegment = _segments[i - 1];
 
-            Vector3 targetPosition = previousSegment.position;
+            Vector2 targetPosition = previousSegment.position;
             targetPosition.y = currentSegment.position.y; // 保持y轴位置不变
 
-            Rigidbody rb = currentSegment.GetComponent<Rigidbody>();
-            Vector3 newPos = Vector3.MoveTowards(currentSegment.position, targetPosition, step);
+            Rigidbody2D rb = currentSegment.GetComponent<Rigidbody2D>();
+            Vector2 newPos = Vector3.MoveTowards(currentSegment.position, targetPosition, step);
             if (rb != null)
             {
                 rb.MovePosition(newPos);
@@ -161,7 +174,7 @@ public class BossFirstStateMachine : MonoBehaviour
             }
 
             // 保持水平旋转
-            Vector3 direction = previousSegment.position - currentSegment.position;
+            Vector2 direction = previousSegment.position - currentSegment.position;
             direction.y = 0f;
             if (direction.sqrMagnitude > 1e-6f)
             {
@@ -179,14 +192,14 @@ public class BossFirstStateMachine : MonoBehaviour
 
     public bool IsPlayerInRange(float range)
     {
-        return Vector3.Distance(transform.position, Player.position) <= range;
+        return Vector2.Distance(transform.position, Player.position) <= range;
     }
 
     public void LookAtPlayer()
     {
-        Vector3 direction = (Player.position - transform.position).normalized;
+        Vector2 direction = (Player.position - transform.position).normalized;
         direction.y = 0;
-        if (direction != Vector3.zero)
+        if (direction != Vector2.zero)
         {
             transform.rotation = Quaternion.LookRotation(direction);
         }
@@ -196,17 +209,45 @@ public class BossFirstStateMachine : MonoBehaviour
     public void TakeDamage(float damage)
     {
         if (_currentState == BossState.Die) return;
+        if(_isInvulnerable) return;
 
         CurrentHealth -= damage;
+
+        //if (Animator != null)
+        //{
+        //    Animator.SetTrigger("Hurt");
+        //}
+
+        StartHurtRoutine();
 
         if (CurrentHealth <= 0)
         {
             ChangeState(BossState.Die);
         }
-        else
+    }
+
+    private void StartHurtRoutine()
+    {
+        if(_hurtCoroutine != null)
         {
-            ChangeState(BossState.Hurt);
+            StopCoroutine(_hurtCoroutine);
+            _hurtCoroutine = null;
         }
+
+        _hurtCoroutine = StartCoroutine(HurtRoutine());
+    }
+
+    private IEnumerator HurtRoutine()
+    {
+        _isInvulnerable = true;
+        bool prevMove = IsMove;
+        IsMove = false; // 受击时停止移动（各状态应注意 IsMove）
+
+        yield return new WaitForSeconds(HurtInvulnerableTime);
+
+        IsMove = prevMove;
+        _isInvulnerable = false;
+        _hurtCoroutine = null;
     }
 
     #endregion
