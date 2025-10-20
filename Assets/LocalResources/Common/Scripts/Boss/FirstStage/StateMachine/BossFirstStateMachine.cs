@@ -98,6 +98,13 @@ public class BossFirstStateMachine : MonoBehaviour
     [Range(0f, 2f)] public float RangedAttackInvulnerableTime;
     #endregion
 
+
+
+    #region BossDieState_First
+    [Header("BossDieState_First的Boss出招僵直时间")]
+    [Range(0f, 2f)] public float DieInvulnerableTime;
+    #endregion
+
     #region private fields
     // 运行时字段
     private bool _isInvulnerable = false;
@@ -307,7 +314,23 @@ public class BossFirstStateMachine : MonoBehaviour
     #endregion
 
     #region Attack State Choose
-
+    public void AttackStateChoose()
+    {
+        //分为远程攻击，冲锋攻击，攻击类型的随机移动三种
+        int randonNum = UnityEngine.Random.Range(0, 4);
+        if (randonNum == 0)
+        {
+            ChangeState(BossState.RangedAttack);
+        }
+        else if (randonNum == 1)
+        {
+            ChangeState(BossState.Teleport);
+        }
+        else
+        {
+            ChangeState(BossState.AttackRandomMove);
+        }
+    }
     #endregion
 
     #region Animation Events
