@@ -15,7 +15,6 @@ public class BossEatBeansState_First : IBossStateFirstStage
 
     private Bean _targetBean;
     private float NoBeansWaitTime = 0.2f;                             // 没有豆子时的等待时间
-    private float _moveSpeed;
     private List<Vector3> _path;
     private int targetIndex;
 
@@ -26,7 +25,7 @@ public class BossEatBeansState_First : IBossStateFirstStage
     public void EnterState(BossFirstStateMachine stateMachine)
     {
         _stateMachine = stateMachine;
-        _moveSpeed = _stateMachine.EatBeanMoveSpeed;
+        _stateMachine.CurrentMoveSpeed = _stateMachine.EatBeanMoveSpeed;
         _stateMachine.IsMove = true;
 
         EatBeansMove();
@@ -124,7 +123,7 @@ public class BossEatBeansState_First : IBossStateFirstStage
                 currentWaypoint = _path[targetIndex];
             }
 
-            _stateMachine.transform.position = Vector3.MoveTowards(_stateMachine.transform.position, currentWaypoint, _moveSpeed * Time.deltaTime);
+            _stateMachine.transform.position = Vector3.MoveTowards(_stateMachine.transform.position, currentWaypoint, _stateMachine.CurrentMoveSpeed * Time.deltaTime);
             yield return null;
         }
     }

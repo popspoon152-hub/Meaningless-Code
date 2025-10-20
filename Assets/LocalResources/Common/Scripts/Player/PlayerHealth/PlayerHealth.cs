@@ -6,12 +6,12 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {    
     [Header("Health Num")]
-    [Range(50f, 150f)] public readonly float PlayerMaxHealth = 100f;                                     //玩家最大生命值
+    [Range(50f, 150f)] public  float PlayerMaxHealth = 100f;                                     //玩家最大生命值
 
     [Header("Health Decline")]
-    [Range(0.1f, 1f)] public readonly float ExtraHealthDeclineRateByPlayer = 0.8f;                       //被玩家自己打中虚血条占扣血的比例
-    [Range(0.1f, 1f)] public readonly float ExtraHealthDeclineRateByEnemy = 0.5f;                        //被敌人打中虚血条占扣血的比例
-    [Range(0f, 10f)] public readonly float ExtraHealthDeclineNumDeltaTime = 5f;                          //虚血条每秒下降数值
+    [Range(0.1f, 1f)] public float ExtraHealthDeclineRateByPlayer = 0.8f;                       //被玩家自己打中虚血条占扣血的比例
+    [Range(0.1f, 1f)] public float ExtraHealthDeclineRateByEnemy = 0.5f;                        //被敌人打中虚血条占扣血的比例
+    [Range(0f, 10f)] public float ExtraHealthDeclineNumDeltaTime = 5f;                          //虚血条每秒下降数值
 
 
     private float _currentHealth;                                                                        //当前生命值
@@ -51,7 +51,7 @@ public class PlayerHealth : MonoBehaviour
     }
 
 
-    private static PlayerHealth Ins;
+    public static PlayerHealth Ins;
 
     #region Lifecycle
 
