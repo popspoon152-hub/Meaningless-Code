@@ -7,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Pixel
-  m_Shader: {fileID: 4800000, guid: d5584be47add52e4d9176cf3e22c0824, type: 3}
+  m_Name: jiguang
+  m_Shader: {fileID: 4800000, guid: f9ea9b3f21f6cd640883653eeda78c8f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _APPLY_ON
+  m_ValidKeywords:
+  - _ISOVER_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -28,45 +28,49 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _BaseTex:
-        m_Texture: {fileID: 0}
+    - _BaseColor:
+        m_Texture: {fileID: 2800000, guid: 54b0525a1fba9884e8f5cc02088be8d8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMask:
+        m_Texture: {fileID: 2800000, guid: ade076fa768a22b4c9fb9e600482900c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 54b0525a1fba9884e8f5cc02088be8d8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: 654ff2c89afbb9c43ab6c694e2d6433b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _WaterTexture:
+        m_Texture: {fileID: 2800000, guid: 565410b38686e034484fd7abcb86527f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 1
-    - _Amount: -0.19
-    - _Apply: 1
+    - _DissolveThreshold: 0
+    - _EdgeWidth: 0
     - _EnableExternalAlpha: 0
-    - _Frequency: 0.83
-    - _Glossiness: 0.5
-    - _Indensity: 1
-    - _Intensity: 0.15
-    - _LinesWidth: -0.08
-    - _Metallic: 0
-    - _Offset: 0.97
-    - _PixelInterval: 0.02
-    - _PixelItensity: 1
-    - _PixelRatio: 0.76
-    - _PixelScale: 0.76
-    - _PixelSize: 0.65
-    - _Speed: 0.25
-    - _StencilRef: 0
-    - _TimeX: 42.14
+    - _IsOver: 1
+    - _Speed: 70
+    - _WaterBiasValue: 0.258
+    - _WaterSpeed: 0.15
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EdgeColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Emission: {r: 2.533519, g: 2.5031443, b: 4, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _IsOver: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _WaterColor: {r: 0.29999998, g: 0.29999998, b: 0.29999998, a: 1}
   m_BuildTextureStacks: []

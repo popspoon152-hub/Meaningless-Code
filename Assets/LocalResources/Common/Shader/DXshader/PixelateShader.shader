@@ -2,7 +2,7 @@ Shader "Custom/PixelShader"
 {
     Properties
     {
-        _MainTex ("MaintTex", 2D) = "white" {}
+        _MainTex ("MainTex", 2D) = "white" {}
         _PixelInterval("PixelInterval",Range(0.000001,1.0))=1.0//像素化强度
         _Indensity("Indensity",Range(0,1))=1.0 //影响强度
     }
