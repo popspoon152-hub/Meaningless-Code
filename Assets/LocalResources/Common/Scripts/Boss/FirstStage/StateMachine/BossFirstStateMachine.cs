@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#region Enum
 public enum BossState
 {
     //吃豆环节状态
@@ -12,7 +13,6 @@ public enum BossState
     //攻击类型状态
     AttackIdle,          //攻击待机
     RangedAttack,       //远程攻击
-    Teleport,           //传送
     DashAttack,         //冲锋攻击
     AttackRandomMove,   //攻击类型的移动
 
@@ -22,11 +22,14 @@ public enum BossState
     Grow,               //蛇身变长一节
 }
 
+#endregion
+
 public class BossFirstStateMachine : MonoBehaviour
 {
     #region State Machine Config
     [Header("状态配置")]
     public BossState startingState = BossState.EatBeans;
+    public Pathfinding pathfinding;
 
     [Header("调试信息")]
     [SerializeField] private BossState _currentState;
@@ -44,17 +47,15 @@ public class BossFirstStateMachine : MonoBehaviour
     [Range(1f, 20f)] public int StartSnakeSegments = 5;
     [Range(1f, 20f)] public int MaxSnakeSegments = 10;
     public Transform SegmentPrefab;
-    [HideInInspector] public List<Transform> _segments = new List<Transform>();
+    [HideInInspector] public List<Transform> Segments = new List<Transform>();
     [HideInInspector] public bool IsMove = true;
+    [HideInInspector] public int CurrentSegmentNum;
 
     [Header("受击配置")]
     [Range(0f, 1f)] public float HurtInvulnerableTime = 0.1f;       //受击后的短暂无敌时间(避免重复判定)
     #endregion
 
-    #region Move
-    [Header("Pathfinding")]
-    public Pathfinding pathfinding;
-    #endregion
+
 
     #region BossEatBeansRangedAttackState_First
     [Header("BossEatBeansRangedAttackState_First的子弹")]
@@ -98,6 +99,16 @@ public class BossFirstStateMachine : MonoBehaviour
     [Range(0f, 2f)] public float RangedAttackInvulnerableTime;
     #endregion
 
+    #region BossDashAttackState_First
+    [Header("冲撞攻击相关")]
+    public Transform TelePortLeftPoint;
+    public Transform TelePortRightPoint;
+
+    public int DashLength = 10;             //冲刺的单位长度
+
+    [Range(1f, 20f)] public float DashSpeed = 8f;
+    #endregion
+
 
 
     #region BossDieState_First
@@ -129,6 +140,7 @@ public class BossFirstStateMachine : MonoBehaviour
     public float CurrentHealth { get; set; }
     #endregion
 
+
     #region LifeCycle
     void Awake()
     {
@@ -147,7 +159,6 @@ public class BossFirstStateMachine : MonoBehaviour
 
             { BossState.AttackIdle, new BossAttackIdleState_First() },
             { BossState.RangedAttack, new BossRangedAttackState_First() },
-            { BossState.Teleport, new BossTeleportState_First() },
             { BossState.DashAttack, new BossDashAttackState_First() },
             { BossState.AttackRandomMove, new BossAttackRandomMoveState_First() },
             { BossState.Hurt, new BossHurtState() },
@@ -157,11 +168,11 @@ public class BossFirstStateMachine : MonoBehaviour
 
     void Start()
     {
-        _segments.Add(this.transform); // 添加头部作为第一节
+        Segments.Add(this.transform); // 添加头部作为第一节
 
         CurrentHealth = MaxHealth;
         CurrentMoveSpeed = EatBeanMoveSpeed;
-
+        CurrentSegmentNum = Segments.Count;
 
         // 初始状态
         ChangeState(startingState);
@@ -178,6 +189,7 @@ public class BossFirstStateMachine : MonoBehaviour
     }
 
     #endregion
+
 
     #region ChangeState
 
@@ -209,14 +221,14 @@ public class BossFirstStateMachine : MonoBehaviour
 
     public void SegmentsMove()
     {
-        if (_segments == null || _segments.Count < 2) return;
+        if (Segments == null || Segments.Count < 2) return;
 
         float step = CurrentMoveSpeed * Time.fixedDeltaTime;
 
-        for (int i = _segments.Count - 1; i > 0; i--)
+        for (int i = Segments.Count - 1; i > 0; i--)
         {
-            Transform currentSegment = _segments[i];
-            Transform previousSegment = _segments[i - 1];
+            Transform currentSegment = Segments[i];
+            Transform previousSegment = Segments[i - 1];
 
             Vector2 targetPosition = previousSegment.position;
             targetPosition.y = currentSegment.position.y; // 保持y轴位置不变
@@ -324,7 +336,7 @@ public class BossFirstStateMachine : MonoBehaviour
         }
         else if (randonNum == 1)
         {
-            ChangeState(BossState.Teleport);
+            ChangeState(BossState.DashAttack);
         }
         else
         {
