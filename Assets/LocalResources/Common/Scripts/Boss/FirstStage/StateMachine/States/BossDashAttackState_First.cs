@@ -40,6 +40,7 @@ public class BossDashAttackState_First : IBossStateFirstStage
         _chooseTrans = SelectPoint();
         TelePort((int)_chooseTrans.position.x, (int)_chooseTrans.position.y);
 
+        _stateMachine.IsMove = true;
         _dashAttack = _stateMachine.StartCoroutine(Dash());
     }
 
@@ -160,7 +161,15 @@ public class BossDashAttackState_First : IBossStateFirstStage
             float distToTarget = Vector2.Distance(_stateMachine.transform.position, new Vector2(_targetTrans.position.x, _targetTrans.position.y));
             if (distToTarget <= _stateMachine.EatDistance)
             {
-                _stateMachine.AttackStateChoose();
+                if(UnityEngine.Object.FindObjectsOfType<Bean>() != null)
+                {
+                    _stateMachine.ChangeState(BossState.EatBeans);
+                }
+                else
+                {
+                    _stateMachine.AttackStateChoose();
+                }
+
             }
         }
     }
