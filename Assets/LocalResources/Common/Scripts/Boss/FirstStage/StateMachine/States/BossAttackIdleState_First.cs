@@ -7,7 +7,7 @@ public class BossAttackIdleState_First : IBossStateFirstStage
 {
     private BossFirstStateMachine _stateMachine;
     private Coroutine _AttackIdle;
-
+    private Transform _chooseTrans;
 
     // 进入状态时调用（初始化）
     public void EnterState(BossFirstStateMachine stateMachine)
@@ -17,20 +17,32 @@ public class BossAttackIdleState_First : IBossStateFirstStage
         //{
         //    _stateMachine.Animator.SetTrigger("AttackIdle");
         //}
-
-        ChooseBossPos();
-
         _AttackIdle = _stateMachine.StartCoroutine(AttackIdle());
     }
 
     private void ChooseBossPos()
     {
-        throw new NotImplementedException();
+        int num = UnityEngine.Random.Range(0, 2);
+        if (num == 0)
+        {
+            _chooseTrans = _stateMachine.IdleLeftTransfrom;
+        }
+        else 
+        {
+            _chooseTrans = _stateMachine.IdleRightTransfrom;
+        }
     }
 
     private IEnumerator AttackIdle()
     {
+        ChooseBossPos();
+
+        //瞬移或移动
+
+
         yield return new WaitForSeconds(_stateMachine.IdleTime);
+
+        _stateMachine.AttackStateChoose();
     }
 
 
