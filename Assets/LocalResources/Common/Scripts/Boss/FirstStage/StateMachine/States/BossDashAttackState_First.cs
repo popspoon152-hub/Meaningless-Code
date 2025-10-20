@@ -91,6 +91,7 @@ public class BossDashAttackState_First : IBossStateFirstStage
                 }
 
                 _targetTrans.position = GridManager.Ins.grid[gridX + _stateMachine.DashLength, gridY].worldPosition;
+                _stateMachine._isAtLeft = false;
             }
             else
             {
@@ -101,6 +102,7 @@ public class BossDashAttackState_First : IBossStateFirstStage
                 }
 
                 _targetTrans.position = GridManager.Ins.grid[gridX - _stateMachine.DashLength, gridY].worldPosition;
+                _stateMachine._isAtLeft = true;
             }
         }
     }

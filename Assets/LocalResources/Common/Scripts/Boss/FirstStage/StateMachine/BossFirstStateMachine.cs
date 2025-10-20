@@ -53,6 +53,13 @@ public class BossFirstStateMachine : MonoBehaviour
 
     [Header("受击配置")]
     [Range(0f, 1f)] public float HurtInvulnerableTime = 0.1f;       //受击后的短暂无敌时间(避免重复判定)
+
+    [Header("碰撞伤害")]
+    [Range(1f, 50f)] public float HitDamage = 15f;
+    private float _playerInvulnerableTime = 0.2f;
+    private bool _canHurt = true;
+
+    [HideInInspector] public bool _isAtLeft = false; 
     #endregion
 
 
@@ -107,6 +114,16 @@ public class BossFirstStateMachine : MonoBehaviour
     public int DashLength = 10;             //冲刺的单位长度
 
     [Range(1f, 20f)] public float DashSpeed = 8f;
+    #endregion
+
+    #region BossAttackRandomMoveState_First
+    [Header("BossAttackRandomMoveState_First攻击相关")]
+    public Transform AttackRandomMoveJumpPostion;      //跳到的位置
+    
+    public Transform AttackRandomMoveEndPostionLeftPoint;
+    public Transform AttackRandomMoveEndPostionRightPoint;
+
+    [Range(1f, 20f)] public float AttackRandomMoveSpeed = 10f;
     #endregion
 
 
@@ -188,6 +205,21 @@ public class BossFirstStateMachine : MonoBehaviour
         _currentStateInstance?.FixedUpdateState();
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Player") && _canHurt)
+        {
+            PlayerHealth.Ins.TakeDamageByEnemy(HitDamage);
+            StartCoroutine(HitPlayer());
+        }
+    }
+
+    private IEnumerator HitPlayer()
+    {
+        _canHurt = false;
+        yield return new WaitForSeconds(_playerInvulnerableTime);
+        _canHurt = true;
+    }
     #endregion
 
 

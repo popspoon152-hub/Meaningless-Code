@@ -7,7 +7,7 @@ public class PlayerAttackStats : ScriptableObject
 {
     [Header("Attack Action")]
     public float AttackNumberCount = 3;                                                 //攻击段数
-    [Range(1f, 100f)] float[] ComboDamage = { 10f, 10f, 20f };                          //每段攻击的伤害
+    [Range(1f, 100f)] public float[] ComboDamage = { 10f, 10f, 20f };                          //每段攻击的伤害
 
     [Header("Attack Time")]
     [Range(0.1f, 1f)] public float AttackComboWindow = 0.4f;                            //连击时间窗口
