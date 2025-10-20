@@ -155,6 +155,37 @@ Transform:
   - {fileID: 1875444658}
   m_Father: {fileID: 2110223242}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &511632764
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 511632765}
+  m_Layer: 0
+  m_Name: Map
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &511632765
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 511632764}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.663759, y: -5.420698, z: -0.2376844}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,16 +546,20 @@ MonoBehaviour:
   IsMove: 1
   HurtInvulnerableTime: 0.1
   pathfinding: {fileID: 0}
+  BulletPrefab: {fileID: 0}
+  FirePoint: {fileID: 0}
+  BulletSpeed: 5
+  EatBeansRangedAttackInvulnerableTime: 0
+  StateInvulnerableTime: 1
   RepathInterval: 0.5
   EatDistance: 0.8
   IdleLeftTransfrom: {fileID: 0}
   IdleRightTransfrom: {fileID: 0}
   IdleTime: 2
-  StateInvulnerableTime: 1
-  BulletPrefab: {fileID: 0}
-  FirePoint: {fileID: 0}
-  BulletSpeed: 5
-  EatBeansRangedAttackInvulnerableTime: 0
+  BulletPrefab_Attack: {fileID: 0}
+  FirePoint_Attack: {fileID: 0}
+  BulletSpeed_Attack: 5
+  RangedAttackInvulnerableTime: 0
 --- !u!212 &1337724030
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1153,3 +1188,4 @@ SceneRoots:
   - {fileID: 1131567700}
   - {fileID: 911354946}
   - {fileID: 1337724031}
+  - {fileID: 511632765}

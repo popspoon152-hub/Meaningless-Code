@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class BossDieState_First : IBossStateFirstStage
 {
+    private BossFirstStateMachine _stateMachine;
+
     // 进入状态时调用（初始化）
     public void EnterState(BossFirstStateMachine stateMachine)
     {
-
+        _stateMachine = stateMachine;
+        //if (_stateMachine.Animator != null)
+        //{
+        //    _stateMachine.Animator.SetTrigger("Die");
+        //}
     }
 
     // 每帧更新
