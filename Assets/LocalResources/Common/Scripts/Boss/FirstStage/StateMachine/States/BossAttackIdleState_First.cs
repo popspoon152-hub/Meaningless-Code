@@ -42,7 +42,14 @@ public class BossAttackIdleState_First : IBossStateFirstStage
 
         yield return new WaitForSeconds(_stateMachine.IdleTime);
 
-        _stateMachine.AttackStateChoose();
+        if (UnityEngine.Object.FindObjectsOfType<Bean>() != null)
+        {
+            _stateMachine.ChangeState(BossState.EatBeans);
+        }
+        else
+        {
+            _stateMachine.AttackStateChoose();
+        }
     }
 
 

@@ -61,9 +61,16 @@ public class BossRangedAttackState_First : IBossStateFirstStage
 
 
         //Attack State Choose
-        _stateMachine.ChangeState(BossState.AttackIdle);
-    }
+        if (UnityEngine.Object.FindObjectsOfType<Bean>() != null)
+        {
+            _stateMachine.ChangeState(BossState.EatBeans);
+        }
+        else
+        {
+            _stateMachine.ChangeState(BossState.AttackIdle);
+        }
 
+    }
     #endregion
 
 

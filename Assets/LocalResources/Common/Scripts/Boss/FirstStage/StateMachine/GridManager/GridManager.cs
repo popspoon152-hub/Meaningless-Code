@@ -8,9 +8,9 @@ public class GridManager : MonoBehaviour
     public Vector2 gridWorldSize;
     public float nodeRadius = 0.5f;
 
-    private Node[,] grid;
-    private float nodeDiameter;
-    private int gridSizeX, gridSizeY;
+    public Node[,] grid;
+    public float nodeDiameter;
+    public int gridSizeX, gridSizeY;
 
     public static GridManager Ins;
 

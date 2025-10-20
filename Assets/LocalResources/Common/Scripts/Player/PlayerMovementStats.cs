@@ -46,6 +46,7 @@ public class PlayerMovementStats : ScriptableObject
     [Header("Jump Coyote Time")]
     [Range(0f, 1f)] public float JumpCoyoteTime = 0.1f;                         //当角色从平台边缘掉落后的一段时间内,系统仍然认为角色处于地面上,并允许跳跃
 
+
     [Header("Debug")]
     public bool DebugShowIsGroundedBox;
     public bool DebugShowHeadBumpBox;

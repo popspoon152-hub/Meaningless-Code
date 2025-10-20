@@ -26,15 +26,15 @@ public class BossGrowState_First : IBossStateFirstStage
         _stateMachine.IsMove = false;
 
         Transform segment = GameObject.Instantiate(_stateMachine.SegmentPrefab);
-        segment.position = _stateMachine._segments[_stateMachine._segments.Count - 1].position;
+        segment.position = _stateMachine.Segments[_stateMachine.Segments.Count - 1].position;
 
-        _stateMachine._segments.Add(segment);
+        _stateMachine.Segments.Add(segment);
 
         yield return new WaitForSeconds(_stateMachine.StateInvulnerableTime);
 
         _stateMachine.IsMove = true;
 
-        if (_stateMachine._segments.Count > _stateMachine.MaxSnakeSegments)
+        if (_stateMachine.Segments.Count > _stateMachine.MaxSnakeSegments)
         {
             _stateMachine.ChangeState(BossState.EatBeansRangedAttack);
         }

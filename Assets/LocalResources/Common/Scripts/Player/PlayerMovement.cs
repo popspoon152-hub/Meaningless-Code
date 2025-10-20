@@ -8,9 +8,11 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    #region Player 
     [Header("References")]
     public PlayerMovementStats MoveStats;
     public PlayerAttackStats AttackStats;
+    [SerializeField] private BossFirstStateMachine _boss;
     [SerializeField] private Collider2D _feetColl;
     [SerializeField] private Collider2D _bodyColl;
     [SerializeField] private Collider2D _attackColl;
@@ -60,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
     private float _lastAttackTime;
     private bool _isAttacking = false;
     private Coroutine _attackCoroutine;
-
+    #endregion
 
     #region LifeCycle
     private void Awake()
@@ -502,12 +504,10 @@ public class PlayerMovement : MonoBehaviour
         if (InputManager.AttackWasPressed && !_isAttacking)
         {
             StartAttack();
-            Debug.Log("Attack");
         }
         else if(_isAttacking && InputManager.AttackWasPressed && CanCombo())
         {
             ContinueCombo();
-            Debug.Log("Combo");
         }
     }
 
@@ -545,7 +545,7 @@ public class PlayerMovement : MonoBehaviour
     private IEnumerator AttackCoroutine()
     {
         float attackRange;
-        if (_currentCombo == 0)
+        if (_currentCombo == 1)
         {
             attackRange = AttackStats.AttackRange[0];
         }
@@ -557,9 +557,24 @@ public class PlayerMovement : MonoBehaviour
 
         yield return new WaitForSeconds(AttackStats.AttackDuration[(int)_currentCombo - 1]);
 
+        if(hitEnemies != null)
+        {
+            
+        }
+
+        bool bossHurt = true;
         foreach (var enemy in hitEnemies)
         {
-            //´¥·¢¿ÛÑª
+            if (enemy.CompareTag("Bean"))
+            {
+                Bean bean = enemy.GetComponent<Bean>();
+                bean.TakeDamage(1);
+            }
+            if (enemy.CompareTag("Boss") && bossHurt)
+            {
+                _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1]);
+                bossHurt = false;
+            }
         }
     }
 
