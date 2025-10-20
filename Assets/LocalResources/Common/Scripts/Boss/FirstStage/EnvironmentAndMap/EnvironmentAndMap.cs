@@ -68,6 +68,9 @@ public class EnvironmentAndMap : MonoBehaviour
         }
         _currentMap.TileMap.SetActive(true);
 
+        //创建网格
+        GridManager.Ins.CreateGrid();
+
         //实例化豆子
         ChooseInstantiatePoints();
     }

@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IBossState 
+public interface IBossStateFirstStage
 {
     // 进入状态时调用（初始化）
-    void EnterState(BossStateMachine stateMachine);
+    void EnterState(BossFirstStateMachine stateMachine);
 
     // 每帧更新
     void UpdateState();
