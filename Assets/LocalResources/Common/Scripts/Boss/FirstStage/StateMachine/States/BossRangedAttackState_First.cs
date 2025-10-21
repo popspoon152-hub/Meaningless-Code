@@ -41,6 +41,7 @@ public class BossRangedAttackState_First : IBossStateFirstStage
             //Attack State Choose
             _stateMachine.ChangeState(BossState.AttackIdle);
         }
+
         else if (_stateMachine.BulletPrefab_Attack != null && _stateMachine.FirePoint_Attack != null && _playerPos != null)
         {
             _stateMachine.IsMove = false;
@@ -67,7 +68,7 @@ public class BossRangedAttackState_First : IBossStateFirstStage
         }
         else
         {
-            _stateMachine.ChangeState(BossState.AttackIdle);
+            _stateMachine.AttackStateChoose();
         }
 
     }
