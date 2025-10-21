@@ -477,6 +477,9 @@ MonoBehaviour:
     m_Bits: 64
   gridWorldSize: {x: 50, y: 30}
   nodeRadius: 1
+  nodeDiameter: 0
+  gridSizeX: 0
+  gridSizeY: 0
 --- !u!4 &911354946
 Transform:
   m_ObjectHideFlags: 0
@@ -570,6 +573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingState: 0
+  pathfinding: {fileID: 0}
   _currentState: 0
   _currentStateName: 
   MaxHealth: 100
@@ -582,7 +586,8 @@ MonoBehaviour:
   IsMove: 1
   CurrentSegmentNum: 0
   HurtInvulnerableTime: 0.1
-  pathfinding: {fileID: 0}
+  HitDamage: 15
+  _isAtLeft: 0
   BulletPrefab: {fileID: 0}
   FirePoint: {fileID: 0}
   BulletSpeed: 5
@@ -597,6 +602,14 @@ MonoBehaviour:
   FirePoint_Attack: {fileID: 0}
   BulletSpeed_Attack: 5
   RangedAttackInvulnerableTime: 0
+  TelePortLeftPoint: {fileID: 0}
+  TelePortRightPoint: {fileID: 0}
+  DashLength: 10
+  DashSpeed: 8
+  AttackRandomMoveJumpPostion: {fileID: 0}
+  AttackRandomMoveEndPostionLeftPoint: {fileID: 0}
+  AttackRandomMoveEndPostionRightPoint: {fileID: 0}
+  AttackRandomMoveSpeed: 10
   DieInvulnerableTime: 0
 --- !u!212 &1337724030
 SpriteRenderer:
@@ -704,7 +717,6 @@ GameObject:
   - component: {fileID: 1359352715}
   - component: {fileID: 1359352714}
   - component: {fileID: 1359352718}
-  - component: {fileID: 1359352717}
   m_Layer: 0
   m_Name: INPUT
   m_TagString: Untagged
@@ -769,27 +781,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1359352717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1359352713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08d7c6bcefa4b36469b644da1b70b15e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  laserLength: 5
-  laserWidth: 0.2
-  laserDuration: 0.4
-  preCastTime: 0.25
-  postCastTime: 0.25
-  backStepDistance: 0.5
-  backStepTime: 0.1
-  firePoint: {fileID: 0}
-  laserPrefab: {fileID: 0}
 --- !u!50 &1359352718
 Rigidbody2D:
   serializedVersion: 4
@@ -1171,6 +1162,7 @@ GameObject:
   - component: {fileID: 2110223240}
   - component: {fileID: 2110223239}
   - component: {fileID: 2110223243}
+  - component: {fileID: 2110223244}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1192,6 +1184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveStats: {fileID: 11400000, guid: e600c43351cb48a409959e955a463373, type: 2}
   AttackStats: {fileID: 11400000, guid: ac1446050e69e6f4a8b0c5bf5aa20dee, type: 2}
+  _boss: {fileID: 0}
   _feetColl: {fileID: 1875444659}
   _bodyColl: {fileID: 1766016117}
   _attackColl: {fileID: 1773067122}
@@ -1314,6 +1307,19 @@ MonoBehaviour:
   laserPrefab: {fileID: 0}
   moveScriptToDisable: {fileID: 0}
   directionController: {fileID: 0}
+--- !u!114 &2110223244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2110223238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99c552d6b962b9645a56547f5a6d7d2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BackTime: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

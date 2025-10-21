@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
-{    
+{
     [Header("Health Num")]
-    [Range(50f, 150f)] public  float PlayerMaxHealth = 100f;                                     //玩家最大生命值
+    [Range(50f, 150f)] public float PlayerMaxHealth = 100f;                                     //玩家最大生命值
 
     [Header("Health Decline")]
     [Range(0.1f, 1f)] public float ExtraHealthDeclineRateByPlayer = 0.8f;                       //被玩家自己打中虚血条占扣血的比例
@@ -17,7 +17,8 @@ public class PlayerHealth : MonoBehaviour
     private float _currentHealth;                                                                        //当前生命值
     private float _currentExtraHealth;                                                                   //当前虚血值
     private bool _isHealthDeclining;                                                                     //是否正在扣血
-    
+
+
     public float CurrentHealth
     {
         get {  return _currentHealth; }
@@ -69,13 +70,13 @@ public class PlayerHealth : MonoBehaviour
 
     private void Start()
     {
-        _isHealthDeclining = false; 
+        _isHealthDeclining = false;
     }
 
 
     private void Update()
     {
-        if(_isHealthDeclining)
+        if (_isHealthDeclining)
         {
             CurrentExtraHealth -= ExtraHealthDeclineNumDeltaTime * Time.deltaTime;
             if (CurrentExtraHealth <= CurrentHealth)
@@ -87,7 +88,7 @@ public class PlayerHealth : MonoBehaviour
     }
     #endregion
 
-
+    #region Take Damage
     public void TakeDamageByEnemy(float damage)
     {
         if (damage <= 0) return;
@@ -130,4 +131,26 @@ public class PlayerHealth : MonoBehaviour
             _isHealthDeclining = true;
         }
     }
+
+    #endregion
+
+    #region Health
+    public void HealthUntilExtraHealth()
+    {
+        CurrentHealth = CurrentExtraHealth;
+        CurrentExtraHealth = CurrentHealth;
+        _isHealthDeclining = false;
+    }
+
+    public void Health(float num)
+    {
+        CurrentHealth += num;
+        if (CurrentHealth > CurrentExtraHealth)
+        {
+            CurrentExtraHealth = CurrentHealth;
+            _isHealthDeclining = false;
+        }
+    }
+
+    #endregion
 }
