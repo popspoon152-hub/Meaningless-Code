@@ -122,6 +122,40 @@ MonoBehaviour:
   alpha:
     m_OverrideState: 1
     m_Value: 0.2
+--- !u!114 &-8297023747137972327
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: LineBlock
+  m_EditorClassIdentifier: Assembly-CSharp::LineBlock
+  active: 1
+  enable:
+    m_OverrideState: 1
+    m_Value: 1
+  frequency:
+    m_OverrideState: 1
+    m_Value: 0.8
+  timeX:
+    m_OverrideState: 1
+    m_Value: 0.25
+  lineswidth:
+    m_OverrideState: 1
+    m_Value: 35.52
+  amount:
+    m_OverrideState: 1
+    m_Value: 0.71
+  offset:
+    m_OverrideState: 1
+    m_Value: 0
+  alpha:
+    m_OverrideState: 1
+    m_Value: 0
 --- !u!114 &-8186173970564298259
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -307,6 +341,40 @@ MonoBehaviour:
   strength:
     m_OverrideState: 1
     m_Value: 0.7
+--- !u!114 &-2726353752175942921
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: LineBlock
+  m_EditorClassIdentifier: Assembly-CSharp::LineBlock
+  active: 1
+  enable:
+    m_OverrideState: 1
+    m_Value: 1
+  frequency:
+    m_OverrideState: 1
+    m_Value: 0.08
+  timeX:
+    m_OverrideState: 1
+    m_Value: 2
+  lineswidth:
+    m_OverrideState: 1
+    m_Value: 28.72
+  amount:
+    m_OverrideState: 1
+    m_Value: 0.7
+  offset:
+    m_OverrideState: 1
+    m_Value: 0.06
+  alpha:
+    m_OverrideState: 1
+    m_Value: 0
 --- !u!114 &-2147596132465269234
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -451,6 +519,25 @@ MonoBehaviour:
   scale:
     m_OverrideState: 1
     m_Value: 1.04
+--- !u!114 &-5302306143279099
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Pixelate
+  m_EditorClassIdentifier: Assembly-CSharp::Pixelate
+  active: 1
+  "\u5F00\u5173":
+    m_OverrideState: 1
+    m_Value: 1
+  "\u50CF\u7D20\u683C\u6570":
+    m_OverrideState: 1
+    m_Value: 250
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,9 +555,9 @@ MonoBehaviour:
   - {fileID: -144384827776335854}
   - {fileID: -8614612123386498905}
   - {fileID: -8186173970564298259}
-  - {fileID: -1975936294912329634}
-  - {fileID: -9007915978154478500}
-  - {fileID: -8535536087965355086}
+  - {fileID: -8297023747137972327}
+  - {fileID: 5854670645501289608}
+  - {fileID: -5302306143279099}
 --- !u!114 &532521651946985474
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -490,6 +577,28 @@ MonoBehaviour:
   "\u50CF\u7D20\u683C\u6570":
     m_OverrideState: 1
     m_Value: 250
+--- !u!114 &595835727690794998
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Nosie
+  m_EditorClassIdentifier: Assembly-CSharp::Nosie
+  active: 1
+  enable:
+    m_OverrideState: 1
+    m_Value: 1
+  speed:
+    m_OverrideState: 1
+    m_Value: 0.05
+  strength:
+    m_OverrideState: 1
+    m_Value: 0.75
 --- !u!114 &1150854683779593371
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -618,6 +727,28 @@ MonoBehaviour:
   "\u50CF\u7D20\u683C\u6570":
     m_OverrideState: 1
     m_Value: 250
+--- !u!114 &5854670645501289608
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Nosie
+  m_EditorClassIdentifier: Assembly-CSharp::Nosie
+  active: 1
+  enable:
+    m_OverrideState: 1
+    m_Value: 1
+  speed:
+    m_OverrideState: 1
+    m_Value: 0.01
+  strength:
+    m_OverrideState: 1
+    m_Value: 0.75
 --- !u!114 &6036225101296812958
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -640,6 +771,25 @@ MonoBehaviour:
   strength:
     m_OverrideState: 1
     m_Value: 0.75
+--- !u!114 &6138200366396624604
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Pixelate
+  m_EditorClassIdentifier: Assembly-CSharp::Pixelate
+  active: 1
+  "\u5F00\u5173":
+    m_OverrideState: 1
+    m_Value: 1
+  "\u50CF\u7D20\u683C\u6570":
+    m_OverrideState: 1
+    m_Value: 250
 --- !u!114 &7212281398608326211
 MonoBehaviour:
   m_ObjectHideFlags: 3
