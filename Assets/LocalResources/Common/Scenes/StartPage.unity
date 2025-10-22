@@ -174,7 +174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartMoveVideo: 0
   ExitVideo: 0
-  StartButton: {fileID: 0}
+  StartButton: {fileID: 711459383}
   VideoPlayer: {fileID: 1200202843}
 --- !u!114 &310007778
 MonoBehaviour:
@@ -415,7 +415,7 @@ GameObject:
   - component: {fileID: 711459383}
   - component: {fileID: 711459382}
   m_Layer: 5
-  m_Name: Button
+  m_Name: StartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
