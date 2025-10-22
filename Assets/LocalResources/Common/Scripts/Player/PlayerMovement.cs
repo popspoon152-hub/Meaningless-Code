@@ -15,7 +15,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private BossFirstStateMachine _boss;
     [SerializeField] private Collider2D _feetColl;
     [SerializeField] private Collider2D _bodyColl;
-    [SerializeField] private Collider2D _attackColl;
     [SerializeField] private Animator Anim;
     private Rigidbody2D _rb;
 
@@ -70,7 +69,6 @@ public class PlayerMovement : MonoBehaviour
         _isFacingRight = true;
         _rb = GetComponent<Rigidbody2D>();
         MoveStats.CalculateValues();
-        _attackColl.enabled = false;
     }
 
     private void Update()
@@ -80,6 +78,7 @@ public class PlayerMovement : MonoBehaviour
         DashChecks();
         AttackCheck();
         CheckComboReset();
+        DropChecks();
     }
 
     private void FixedUpdate()
@@ -544,6 +543,8 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator AttackCoroutine()
     {
+        yield return new WaitForSeconds(0.025f);
+
         float attackRange;
         if (_currentCombo == 1)
         {
@@ -553,30 +554,29 @@ public class PlayerMovement : MonoBehaviour
         {
             attackRange = AttackStats.AttackRange[(int)_currentCombo - 1];
         }
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackStats.AttackPoint.position, attackRange, AttackStats.EnemyLayer);
+
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackStats.AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.EnemyLayer);
+
+        if (hitEnemies != null)
+        {
+            bool bossHurt = true;
+            foreach (var enemy in hitEnemies)
+            {
+                if (enemy.CompareTag("Bean"))
+                {
+                    Bean bean = enemy.GetComponent<Bean>();
+                    bean.TakeDamage(1);
+                }
+                if (enemy.CompareTag("Boss") && bossHurt)
+                {
+                    _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1]);
+                    PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum);
+                    bossHurt = false;
+                }
+            }
+        }
 
         yield return new WaitForSeconds(AttackStats.AttackDuration[(int)_currentCombo - 1]);
-
-        if(hitEnemies != null)
-        {
-            
-        }
-
-        bool bossHurt = true;
-        foreach (var enemy in hitEnemies)
-        {
-            if (enemy.CompareTag("Bean"))
-            {
-                Bean bean = enemy.GetComponent<Bean>();
-                bean.TakeDamage(1);
-            }
-            if (enemy.CompareTag("Boss") && bossHurt)
-            {
-                _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1]);
-                PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum);
-                bossHurt = false;
-            }
-        }
     }
 
     private bool CanCombo()
@@ -599,6 +599,41 @@ public class PlayerMovement : MonoBehaviour
         //animator.SetInteger(comboIndex, 0);
     }
 
+    #endregion
+
+    #region Drop
+    private void DropChecks()
+    {
+        if (MoveStats == null)
+        {
+            Debug.LogError("MoveStats is not assigned!");
+            return;
+        }
+
+        if (MoveStats.DropPoint == null)
+        {
+            Debug.LogError("DropPoint is not assigned!");
+            return;
+        }
+
+        if (MoveStats.BackPoint == null)
+        {
+            Debug.LogError("BackPoint is not assigned!");
+            return;
+        }
+
+        if (PlayerHealth.Ins == null)
+        {
+            Debug.LogError("PlayerHealth instance is null!");
+            return;
+        }
+
+        if (gameObject.transform.position.y < MoveStats.DropPoint.position.y)
+        {
+            gameObject.transform.position = MoveStats.BackPoint.position;
+            PlayerHealth.Ins.TakeDamageByPlayer(MoveStats.DropHurt);
+        }
+    }
     #endregion
 
     #region Gizmos
@@ -675,17 +710,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void DrawAttackArc()
     {
-        float attackRange;
-        if (_currentCombo == 0)
+        if (_currentCombo != 0)
         {
-            attackRange = AttackStats.AttackRange[0];
+            Gizmos.DrawWireSphere(AttackStats.AttackPoints[(int)_currentCombo - 1].position, AttackStats.AttackRange[(int)_currentCombo - 1]);
         }
-        else
-        {
-            attackRange = AttackStats.AttackRange[(int)_currentCombo - 1];
-        }
-
-        Gizmos.DrawWireSphere(AttackStats.AttackPoint.position, attackRange);
     }
     #endregion
 }

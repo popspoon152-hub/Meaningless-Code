@@ -47,3 +47,6 @@ MonoBehaviour:
   MaxDashLength: 5
   DashCooldown: 0.2
   DashDuration: 0.2
+  DropPoint: {fileID: 0}
+  BackPoint: {fileID: 0}
+  DropHurt: 20

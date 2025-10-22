@@ -46,6 +46,7 @@ public class PlayerMovementStats : ScriptableObject
     [Header("Jump Coyote Time")]
     [Range(0f, 1f)] public float JumpCoyoteTime = 0.1f;                         //当角色从平台边缘掉落后的一段时间内,系统仍然认为角色处于地面上,并允许跳跃
 
+    
 
     [Header("Debug")]
     public bool DebugShowIsGroundedBox;
@@ -85,4 +86,9 @@ public class PlayerMovementStats : ScriptableObject
     [Range(1f, 20f)] public float MaxDashLength = 5f;                           // 冲刺距离
     [Range(0f, 10f)] public float DashCooldown = 1.0f;                          // 冲刺冷却时间
     [Range(0f, 1f)] public float DashDuration = 0.2f;                           // 冲刺持续时间
+
+    [Header("掉落")]
+    public Transform DropPoint;
+    public Transform BackPoint;
+    public float DropHurt = 20f;
 }

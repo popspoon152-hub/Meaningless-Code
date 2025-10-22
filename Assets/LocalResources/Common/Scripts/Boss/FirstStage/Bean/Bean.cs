@@ -18,6 +18,15 @@ public class Bean : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        EnvironmentAndMap environment = FindObjectOfType<EnvironmentAndMap>();
+        if (environment != null)
+        {
+            environment.OnBeanEaten();
+        }
+    }
+
     public void TakeDamage(int damage)
     {
         BeanHealth -= damage;
