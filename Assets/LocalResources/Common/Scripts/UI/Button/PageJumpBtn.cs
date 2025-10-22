@@ -19,10 +19,10 @@ public enum Scenes
 
 public class PageJumpBtn : MonoBehaviour
 {
-    public Scenes scene;
+    public Scenes Scene;
     private MyButton _btn;
 
-    [Header("¹ý³¡¶¯»­")]
+    [Header("è½¬åœº")]
     public Animator transition;
     public float transitionTime;
 
@@ -35,17 +35,17 @@ public class PageJumpBtn : MonoBehaviour
 
     private void HandleBtnClick()
     {
-        var sceneName = scene.ToString();
+        var sceneName = Scene.ToString();
         SceneManager.LoadScene(sceneName);
         //StartCoroutine(loadAnim());
     }
 
-    IEnumerator loadAnim()
+    IEnumerator LoadAnim()
     {
         transition.SetTrigger("Start");
         yield return new WaitForSeconds(transitionTime);
 
-        var sceneName = scene.ToString();
+        var sceneName = Scene.ToString();
         SceneManager.LoadScene(sceneName);
     }
 }
