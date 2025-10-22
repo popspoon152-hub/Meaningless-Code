@@ -25,18 +25,19 @@ public class BossThirdStateMachine : MonoBehaviour
 {
     #region State Machine Config
     [Header("状态配置")]
-    public BossState_Third startingState = BossState_Third.DashAttack;
+    public BossState_Third startingState = BossState_Third.AttackRandomMove;
 
     [Header("调试信息")]
     [SerializeField] private BossState_Third _currentState_Third;
     [SerializeField] private string _currentStateName_Third;
+
     #endregion
 
     #region Boss属性
     [Header("属性配置")]
     [Range(10f, 1000f)] public float MaxHealth = 100f;
     //[Range(1f, 20f)] public float AttackMoveSpeed = 5f;
-    private float _currentMoveSpeed_Third;
+    [SerializeField] private float _currentMoveSpeed_Third;
     [HideInInspector] public bool IsMove = true;
 
     [Header("受击配置")]
@@ -48,6 +49,7 @@ public class BossThirdStateMachine : MonoBehaviour
     [Range(1f, 20f)] public float MoveSpeed_Normal = 4f;        // 普通移动速度
     [Range(1f, 20f)] public float MoveSpeed_Attack = 7f;        // 攻击移动速度（用于AttackRandomMove）
     [Range(1f, 30f)] public float MoveSpeed_Dash = 12f;         // 冲锋攻击速度
+    [Range(1f, 30f)] public float MoveSpeed_ToIdle = 12f;         // 前往待机点速度
     //[Range(1f, 30f)] public float MoveSpeed_Teleport = 10f;     // 闪现滑行速度（可选）
 
     [Header("碰撞伤害配置")]
@@ -239,28 +241,29 @@ public class BossThirdStateMachine : MonoBehaviour
     #region Attack State Choose
     public void AttackStateChoose()
     {
-        // 根据随机选择攻击状态
-        int randomNum = UnityEngine.Random.Range(0, 5);
-        if (randomNum == 0)
-        {
-            ChangeState(BossState_Third.HoleAttack);
-        }
-        else if (randomNum == 1)
-        {
-            ChangeState(BossState_Third.DevourGround);
-        }
-        //else if (randomNum == 2)
+        //// 根据随机选择攻击状态
+        //int randomNum = UnityEngine.Random.Range(0, 5);
+        //if (randomNum == 0)
         //{
-        //    ChangeState(BossState_Third.Teleport);
+        //    ChangeState(BossState_Third.HoleAttack);
         //}
-        else if (randomNum == 3)
-        {
-            ChangeState(BossState_Third.DashAttack);
-        }
-        else
-        {
-            ChangeState(BossState_Third.SmashAttack);
-        }
+        //else if (randomNum == 1)
+        //{
+        //    ChangeState(BossState_Third.DevourGround);
+        //}
+        ////else if (randomNum == 2)
+        ////{
+        ////    ChangeState(BossState_Third.Teleport);
+        ////}
+        //else if (randomNum == 3)
+        //{
+        //    ChangeState(BossState_Third.DashAttack);
+        //}
+        //else
+        //{
+        //    ChangeState(BossState_Third.SmashAttack);
+        //}
+        ChangeState(BossState_Third.AttackRandomMove);
     }
     #endregion
 

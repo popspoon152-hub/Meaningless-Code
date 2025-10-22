@@ -16,6 +16,8 @@ public class BossAttackIdleState_Third : IBossStateThirdStage
         // _stateMachine.Animator?.SetTrigger("AttackIdle");
 
         _attackIdleCoroutine = _stateMachine.StartCoroutine(AttackIdle());
+
+        _stateMachine.CurrentMoveSpeed = _stateMachine.MoveSpeed_ToIdle;//修改当前速度为待机速度
     }
 
     private void ChooseBossPos()
@@ -49,13 +51,15 @@ public class BossAttackIdleState_Third : IBossStateThirdStage
         yield return new WaitForSeconds(_stateMachine.IdleTime);
 
         // 选择一种攻击方式
-        _stateMachine.AttackStateChoose();
+        //_stateMachine.AttackStateChoose();
+
+        _stateMachine.ChangeState(BossState_Third.AttackIdle);  // 使Boss在完成当前待机后重新进入AttackIdle状态
+        //测试用，记得删
     }
 
     // 退出状态时调用（清理）
     public void ExitState()
     {
-        _stateMachine = null;
         if (_attackIdleCoroutine != null)
         {
             _stateMachine.StopCoroutine(_attackIdleCoroutine);
