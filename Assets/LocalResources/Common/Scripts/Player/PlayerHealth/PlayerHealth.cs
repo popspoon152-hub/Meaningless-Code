@@ -58,19 +58,14 @@ public class PlayerHealth : MonoBehaviour
 
     private void Awake()
     {
-        if (Ins == null)
-        {
-            Ins = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Ins = this;
     }
 
     private void Start()
     {
         _isHealthDeclining = false;
+        CurrentHealth = PlayerMaxHealth;
+        CurrentExtraHealth = PlayerMaxHealth;
     }
 
 
@@ -117,19 +112,18 @@ public class PlayerHealth : MonoBehaviour
 
         if(damage >= CurrentHealth)
         {
-            damage = CurrentHealth - 1;
-            CurrentHealth -= damage;
+            CurrentHealth = 1;
         }
         else
         {
             CurrentHealth -= damage;
-
-            if (!_isHealthDeclining)
-            {
-                CurrentExtraHealth -= damage * ExtraHealthDeclineRateByEnemy;
-            }
-            _isHealthDeclining = true;
         }
+
+        if (!_isHealthDeclining)
+        {
+            CurrentExtraHealth -= damage * ExtraHealthDeclineRateByEnemy;
+        }
+        _isHealthDeclining = true;
     }
 
     #endregion

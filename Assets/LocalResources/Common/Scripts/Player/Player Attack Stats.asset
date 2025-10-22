@@ -13,13 +13,20 @@ MonoBehaviour:
   m_Name: Player Attack Stats
   m_EditorClassIdentifier: 
   AttackNumberCount: 3
+  ComboDamage:
+  - 10
+  - 10
+  - 20
   AttackComboWindow: 0.4
   AttackDuration:
   - 0.2
   - 0.2
   - 0.2
   AttackBuffer: 0.1
-  AttackPoint: {fileID: 0}
+  AttackPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   AttackRange:
   - 1
   - 1.1
@@ -32,3 +39,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   ShowAttackRangeArc: 1
+  AttackHurtPlayerNum: 10

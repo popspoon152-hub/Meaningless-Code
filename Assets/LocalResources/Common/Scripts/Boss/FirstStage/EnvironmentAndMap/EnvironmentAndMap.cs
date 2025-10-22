@@ -6,14 +6,30 @@ using UnityEngine;
 
 public class EnvironmentAndMap : MonoBehaviour
 {
-    public int CurrentBeansCount;
+    [Header("地图")]
+    public GameObject TileMap1;                                                                      //地图数组
+    public Transform[] BeansPositions1;                                                                //豆子生成点数组
+    public GameObject TileMap2;                                                                      //地图数组
+    public Transform[] BeansPositions2;                                                                //豆子生成点数组
 
-    public EnvironmentAndMapStats MapStats;
+    [Header("豆子生成逻辑")]
+    [Range(1f, 10f)] public int MinBeansInstantiatePerTime1 = 2;                                         //地图每次生成最少的豆子数量
+    [Range(1f, 10f)] public int MaxBeansInstantiatePerTime1 = 5;                                         //地图每次生成最多的豆子数量
+    [Range(1f, 5f)] public int BeansInstantiateTimes1 = 2;                                               //每个地图生成豆子的次数
+    [Range(1f, 10f)] public int MinBeansInstantiatePerTime2 = 2;                                         //地图每次生成最少的豆子数量
+    [Range(1f, 10f)] public int MaxBeansInstantiatePerTime2 = 5;                                         //地图每次生成最多的豆子数量
+    [Range(1f, 5f)] public int BeansInstantiateTimes2 = 2;                                               //每个地图生成豆子的次数
+
+    [Header("地图停留时间")]
+    [Range(5f, 120f)] public float MapStayTime1 = 20f;                                                     //地图停留时间(然后切换下一个地图)
+    [Range(5f, 120f)] public float MapStayTime2 = 20f;                                                     //地图停留时间(然后切换下一个地图)
+
+    public GameObject BeansPrefabs;
+
+    public int CurrentBeansCount { get; private set; }
 
     private int _currentMapIndex;
 
-    private Map _currentMap;
-    private Vector2[] _currentBeansPositions;
     private int _currentBeansInstantiatedTime;
 
     private int _BeansInstantiateThisTime;
@@ -22,15 +38,30 @@ public class EnvironmentAndMap : MonoBehaviour
 
     private Coroutine _waitCoroutine;
 
+    private int _beansInstantiateThisTime;
+
+    public static EnvironmentAndMap Ins { get; private set; }
+
     #region LifeCycle
+
+    private void Awake()
+    {
+        if(Ins != null)
+        {
+            Ins = this;
+        }
+    }
     private void Start()
     {
-        _currentMapIndex = 0;
-
-        for(int i = 0; i < MapStats.Maps.Length; i++)
+        if (!ValidateReferences())
         {
-            MapStats.Maps[i].TileMap.SetActive(false);
+            Debug.LogError("EnvironmentAndMap: 必要的引用未在Inspector中设置！");
+            return;
         }
+        _currentMapIndex = 1;
+
+        TileMap1.SetActive(false);
+        TileMap2.SetActive(false);
 
         LoadMap(_currentMapIndex);
     }
@@ -41,11 +72,13 @@ public class EnvironmentAndMap : MonoBehaviour
         {
             CheckBeans();
         }
+    }
 
-        //如果boss没血了
-        if(_isWaitingForNextMap /*&& boss没血了*/)
+    private void OnDestroy()
+    {
+        if(_waitCoroutine != null)
         {
-            CancelNextMapSwitch();
+            StopCoroutine(_waitCoroutine);
         }
     }
 
@@ -54,22 +87,30 @@ public class EnvironmentAndMap : MonoBehaviour
     #region LoadBeansAndMap
     private void LoadMap(int currentMapIndex)
     {
-        _currentMap = MapStats.Maps[currentMapIndex];
-        _currentBeansPositions = _currentMap.BeansPositions;
-        _currentBeansInstantiatedTime = _currentMap.BeansInstantiateTimes;
+        if (!ValidateReferences()) return;
 
-        if(_currentMapIndex == 0)
+        if (_currentMapIndex == 1)
         {
-            MapStats.Maps[MapStats.Maps.Length - 1].TileMap.SetActive(false);
+            TileMap1.SetActive(true);
+            TileMap2.SetActive(false);
+            _currentBeansInstantiatedTime = BeansInstantiateTimes1;
         }
         else
         {
-            MapStats.Maps[_currentMapIndex - 1].TileMap.SetActive(false);
+            TileMap1.SetActive(false);
+            TileMap2.SetActive(true);
+            _currentBeansInstantiatedTime = BeansInstantiateTimes2;
         }
-        _currentMap.TileMap.SetActive(true);
 
         //创建网格
-        GridManager.Ins.CreateGrid();
+        if (GridManager.Ins != null)
+        {
+            GridManager.Ins.CreateGrid();
+        }
+        else
+        {
+            Debug.LogWarning("GridManager.Instance 为空！");
+        }
 
         //实例化豆子
         ChooseInstantiatePoints();
@@ -77,32 +118,89 @@ public class EnvironmentAndMap : MonoBehaviour
 
     private void ChooseInstantiatePoints()
     {
-        //选择生成几个
-        _BeansInstantiateThisTime = UnityEngine.Random.Range(_currentMap.MinBeansInstantiatePerTime, _currentMap.MaxBeansInstantiatePerTime + 1);
+        if (!ValidateReferences()) return;
 
-        //选择点
-        Vector2[] choosePoints = GetRandomSequence(_currentBeansPositions, _BeansInstantiateThisTime);
+        Transform[] currentPositions;
+        int minBeans, maxBeans;
 
-        for(int i = 0; i < choosePoints.Length; i++)
+        if (_currentMapIndex == 1)
         {
-            Instantiate(MapStats.BeansPrefabs, /*(Vector2)_currentMap.TileMap.transform.position + */choosePoints[i], Quaternion.identity);
+            currentPositions = BeansPositions1;
+            minBeans = MinBeansInstantiatePerTime1;
+            maxBeans = MaxBeansInstantiatePerTime1;
+        }
+        else
+        {
+            currentPositions = BeansPositions2;
+            minBeans = MinBeansInstantiatePerTime2;
+            maxBeans = MaxBeansInstantiatePerTime2;
         }
 
-        CurrentBeansCount = _BeansInstantiateThisTime;
-    }
-
-    public static Vector2[] GetRandomSequence(Vector2[] array, int count)
-    {
-        Vector2[] output = new Vector2[count];
-
-        for (int i = array.Length - 1; i >= 0 && count > 0; i--)
+        // 安全检查
+        if (currentPositions == null || currentPositions.Length == 0)
         {
-            if (UnityEngine.Random.Range(0, i + 1) < count)//概率是 剩余取数长度/总数组剩余的长度
+            Debug.LogError($"当前地图 {_currentMapIndex} 的豆子位置数组为空！");
+            return;
+        }
+
+        // 选择生成数量
+        _beansInstantiateThisTime = Mathf.Clamp(UnityEngine.Random.Range(minBeans, maxBeans + 1), 1, currentPositions.Length);
+
+        // 选择生成点
+        Transform[] choosePoints = GetRandomSequence(currentPositions, _beansInstantiateThisTime);
+
+        if (choosePoints == null || choosePoints.Length == 0)
+        {
+            Debug.LogError("没有有效的豆子生成点！");
+            return;
+        }
+
+        // 实例化豆子
+        int successfulInstantiates = 0;
+        for (int i = 0; i < choosePoints.Length; i++)
+        {
+            if (choosePoints[i] != null)
             {
-                output[count - 1] = array[i];//output从最后一位开始往前存
-                count--;
+                Instantiate(BeansPrefabs, choosePoints[i].position, Quaternion.identity);
+                successfulInstantiates++;
             }
         }
+
+        CurrentBeansCount = successfulInstantiates;
+        Debug.Log($"成功生成了 {successfulInstantiates} 个豆子");
+    }
+
+    public static Transform[] GetRandomSequence(Transform[] array, int count)
+    {
+        if (array == null || array.Length == 0 || count <= 0)
+        {
+            Debug.LogError("GetRandomSequence: 输入参数无效");
+            return new Transform[0];
+        }
+
+        // 确保count不超过数组长度
+        count = Mathf.Min(count, array.Length);
+        Transform[] output = new Transform[count];
+
+        // 复制数组以避免修改原数组
+        Transform[] tempArray = new Transform[array.Length];
+        array.CopyTo(tempArray, 0);
+
+        // Fisher-Yates洗牌算法
+        for (int i = tempArray.Length - 1; i > 0; i--)
+        {
+            int j = UnityEngine.Random.Range(0, i + 1);
+            Transform temp = tempArray[i];
+            tempArray[i] = tempArray[j];
+            tempArray[j] = temp;
+        }
+
+        // 取前count个元素
+        for (int i = 0; i < count; i++)
+        {
+            output[i] = tempArray[i];
+        }
+
         return output;
     }
 
@@ -120,40 +218,91 @@ public class EnvironmentAndMap : MonoBehaviour
         else
         {
             _isWaitingForNextMap = true;
-            //进入战斗环节
             _waitCoroutine = StartCoroutine(WaitForBattleEnd());
         }
     }
 
     private IEnumerator WaitForBattleEnd()
     {
-        yield return new WaitForSeconds(_currentMap.MapStayTime);
+        float waitTime = _currentMapIndex == 1 ? MapStayTime1 : MapStayTime2;
+        yield return new WaitForSeconds(waitTime);
 
-        _waitCoroutine = null;
-        _isWaitingForNextMap = false;
+        // 切换地图前检查对象是否仍然存在
+        if (this == null) yield break;
 
-        //加载下一个地图
-        _currentMapIndex++;
-        if (_currentMapIndex >= MapStats.Maps.Length - 1)
-        {
-            _currentMapIndex = 0;
-        }
+        // 切换地图
+        _currentMapIndex = _currentMapIndex == 1 ? 2 : 1;
         LoadMap(_currentMapIndex);
     }
 
-    private void CancelNextMapSwitch()
+    public void OnBeanEaten()
     {
-        if (!_isWaitingForNextMap) return;
-
-        // 停止协程，重置状态
-        if (_waitCoroutine != null)
+        if (CurrentBeansCount > 0)
         {
-            StopCoroutine(_waitCoroutine);
-            _waitCoroutine = null;
+            CurrentBeansCount--;
         }
-        _isWaitingForNextMap = false;
     }
-
     #endregion
 
+    #region Validation
+    private bool ValidateReferences()
+    {
+        bool isValid = true;
+
+        if (TileMap1 == null)
+        {
+            Debug.LogError("TileMap1 未赋值！");
+            isValid = false;
+        }
+
+        if (TileMap2 == null)
+        {
+            Debug.LogError("TileMap2 未赋值！");
+            isValid = false;
+        }
+
+        if (BeansPrefabs == null)
+        {
+            Debug.LogError("BeansPrefabs 未赋值！");
+            isValid = false;
+        }
+
+        if (BeansPositions1 == null || BeansPositions1.Length == 0)
+        {
+            Debug.LogError("BeansPositions1 数组为空或未赋值！");
+            isValid = false;
+        }
+        else
+        {
+            // 检查数组中是否有空元素
+            for (int i = 0; i < BeansPositions1.Length; i++)
+            {
+                if (BeansPositions1[i] == null)
+                {
+                    Debug.LogError($"BeansPositions1 索引 {i} 为空！");
+                    isValid = false;
+                }
+            }
+        }
+
+        if (BeansPositions2 == null || BeansPositions2.Length == 0)
+        {
+            Debug.LogError("BeansPositions2 数组为空或未赋值！");
+            isValid = false;
+        }
+        else
+        {
+            for (int i = 0; i < BeansPositions2.Length; i++)
+            {
+                if (BeansPositions2[i] == null)
+                {
+                    Debug.LogError($"BeansPositions2 索引 {i} 为空！");
+                    isValid = false;
+                }
+            }
+        }
+
+        return isValid;
+    }
+    #endregion
 }

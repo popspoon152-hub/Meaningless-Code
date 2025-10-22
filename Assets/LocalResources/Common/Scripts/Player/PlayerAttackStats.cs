@@ -15,7 +15,7 @@ public class PlayerAttackStats : ScriptableObject
     [Range(0.1f, 1f)] public float AttackBuffer = 0.1f;                                 //¹¥»÷»º³åÊ±¼ä
 
     [Header("Attack Postion")]
-    public Transform AttackPoint;                                                       //¹¥»÷µã
+    public Transform[] AttackPoints;                                                       //¹¥»÷µã
     [Range(0.1f, 10f)] public float[] AttackRange = { 3f, 4f, 5f };                       //¹¥»÷·¶Î§
     [Range(0f, 3f)] public float[] AttackLittleDash = { 0.1f, 0.1f, 0.1f };             //Ã¿¶Î¹¥»÷µÄÐ¡³å´Ì¾àÀë
 

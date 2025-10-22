@@ -41,14 +41,14 @@ public abstract class PostProcessingUniversalRenderPass<T> : ScriptableRenderPas
         volumeComponent = stack.GetComponent<T>();
         if (volumeComponent == null || !volumeComponent.IsActive())
         {
-            if (volumeComponent == null) Debug.LogError("ScriptableRenderPass:" + RenderTag + "未获取到Volume组件");
-            else Debug.LogWarning("ScriptableRenderPass:" + RenderTag + "的Volume组件未激活");
+            //if (volumeComponent == null) Debug.LogError("ScriptableRenderPass:" + RenderTag + "未获取到Volume组件");
+            //else Debug.LogWarning("ScriptableRenderPass:" + RenderTag + "的Volume组件未激活");
             return;
         }
 
         if (material == null)
         {
-            Debug.LogWarning("ScriptableRenderPass:" + RenderTag + "的材质初始化失败");
+            //Debug.LogWarning("ScriptableRenderPass:" + RenderTag + "的材质初始化失败");
             return;
         }
         //设置渲染命令缓冲区
