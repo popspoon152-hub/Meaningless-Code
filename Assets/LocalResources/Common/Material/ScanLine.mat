@@ -41,7 +41,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Amount: 0.341
+    - _Amount: 0.025
     - _EnableExternalAlpha: 0
     - _Frequency: 0
     - _ScanLineDensity: 0
