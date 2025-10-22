@@ -41,6 +41,7 @@ public class BossRangedAttackState_First : IBossStateFirstStage
             //Attack State Choose
             _stateMachine.ChangeState(BossState.AttackIdle);
         }
+
         else if (_stateMachine.BulletPrefab_Attack != null && _stateMachine.FirePoint_Attack != null && _playerPos != null)
         {
             _stateMachine.IsMove = false;
@@ -53,6 +54,21 @@ public class BossRangedAttackState_First : IBossStateFirstStage
             {
                 rb.velocity = direction * _stateMachine.BulletSpeed_Attack;
             }
+            
+
+
+            for (int i = 0; i < 5; i++)
+            {
+                GameObject littleBullet = UnityEngine.Object.Instantiate(_stateMachine.LittleBulletPrefab_Attack, 
+                                                                         _stateMachine.FirePoint_Attack.position, 
+                                                                         _stateMachine.FirePoint_Attack.rotation);
+                littleBullet.transform.eulerAngles = new Vector3(0, 0, -40 + (i - 1) * 20);
+                if (littleBullet.TryGetComponent<Rigidbody2D>(out Rigidbody2D r))
+                {
+                    r.velocity = direction * _stateMachine.LittleBulletSpeed_Attack;
+                }
+            }
+
             _stateMachine.IsMove = true;
         }
 
@@ -67,11 +83,16 @@ public class BossRangedAttackState_First : IBossStateFirstStage
         }
         else
         {
-            _stateMachine.ChangeState(BossState.AttackIdle);
+            _stateMachine.AttackStateChoose();
         }
 
     }
     #endregion
+
+
+
+
+
 
 
     // 固定时间步长更新（物理相关）

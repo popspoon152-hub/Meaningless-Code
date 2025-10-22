@@ -79,13 +79,13 @@ public class BossFirstStateMachine : MonoBehaviour
     [Range(0f, 2f)] public float StateInvulnerableTime = 1f;
     #endregion
 
-
-
     #region BossEatBeansState_First
     [Header("BossEatBeansState_First")]
     [Range(0.5f, 2f)] public float RepathInterval = 0.5f;                  // 定期重算路径，防止障碍/豆子移动导致路径失效
     [Range(0.1f, 3f)] public float EatDistance = 0.8f;                     // 到达此距离视为“吃掉”豆子
     #endregion
+
+
 
     #region BossAttackIdleState_First
     [Header("BossAttackIdleState_First中Boss的位置设定")]
@@ -99,8 +99,10 @@ public class BossFirstStateMachine : MonoBehaviour
     #region BossRangedAttackState_First
     [Header("BossRangedAttackState_First的子弹")]
     public GameObject BulletPrefab_Attack;
+    public GameObject LittleBulletPrefab_Attack;
     public Transform FirePoint_Attack;
-    [Range(1f, 14f)] public float BulletSpeed_Attack = 5f;
+    [Range(1f, 20f)] public float BulletSpeed_Attack = 5f;
+    [Range(1f, 20f)] public float LittleBulletSpeed_Attack = 7f;
 
     [Header("BossRangedAttackState_First的Boss出招僵直时间")]
     [Range(0f, 2f)] public float RangedAttackInvulnerableTime;
@@ -111,8 +113,9 @@ public class BossFirstStateMachine : MonoBehaviour
     public Transform TelePortLeftPoint;
     public Transform TelePortRightPoint;
 
-    public int DashLength = 10;             //冲刺的单位长度
-
+    [Header("冲刺的单位长度")]
+    public int DashLength = 10;
+    public float DashTargetCheckLength = 1f;
     [Range(1f, 20f)] public float DashSpeed = 8f;
     #endregion
 

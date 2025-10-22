@@ -599,12 +599,15 @@ MonoBehaviour:
   IdleRightTransfrom: {fileID: 0}
   IdleTime: 2
   BulletPrefab_Attack: {fileID: 0}
+  LittleBulletPrefab_Attack: {fileID: 0}
   FirePoint_Attack: {fileID: 0}
   BulletSpeed_Attack: 5
+  LittleBulletSpeed_Attack: 7
   RangedAttackInvulnerableTime: 0
   TelePortLeftPoint: {fileID: 0}
   TelePortRightPoint: {fileID: 0}
   DashLength: 10
+  DashTargetCheckLength: 1
   DashSpeed: 8
   AttackRandomMoveJumpPostion: {fileID: 0}
   AttackRandomMoveEndPostionLeftPoint: {fileID: 0}

@@ -161,7 +161,7 @@ public class BossDashAttackState_First : IBossStateFirstStage
         if (_targetTrans != null)
         {
             float distToTarget = Vector2.Distance(_stateMachine.transform.position, new Vector2(_targetTrans.position.x, _targetTrans.position.y));
-            if (distToTarget <= _stateMachine.EatDistance)
+            if (distToTarget <= _stateMachine.DashTargetCheckLength)
             {
                 if(UnityEngine.Object.FindObjectsOfType<Bean>() != null)
                 {

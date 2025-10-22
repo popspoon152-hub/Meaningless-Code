@@ -81,10 +81,6 @@ public class BossEatBeansState_First : IBossStateFirstStage
 
         if (beansAfter == null || beansAfter.Length == 0)
         {
-            //Ë²ÒÆ
-
-
-
             _stateMachine.ChangeState(BossState.AttackIdle);
         }
         else
