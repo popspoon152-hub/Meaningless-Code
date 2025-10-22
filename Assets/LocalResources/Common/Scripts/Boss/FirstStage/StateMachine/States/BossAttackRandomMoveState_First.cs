@@ -22,6 +22,7 @@ public class BossAttackRandomMoveState_First : IBossStateFirstStage
         //    _stateMachine.Animator.SetTrigger("AttackRandomMove");
         //}
 
+        _stateMachine.IsMove = true;
         _stateMachine.CurrentMoveSpeed = _stateMachine.AttackRandomMoveSpeed;
         _attackRandomMove = _stateMachine.StartCoroutine(AttackRandomMove());
     }
@@ -29,7 +30,7 @@ public class BossAttackRandomMoveState_First : IBossStateFirstStage
     #region AttackRandomMove
     private IEnumerator AttackRandomMove()
     {
-        _isAtLeft = _stateMachine.transform.position.x > _stateMachine.AttackRandomMoveJumpPostion.position.x ? false : true;
+        _isAtLeft = _stateMachine.transform.position.x <= _stateMachine.AttackRandomMoveJumpPostion.position.x;
 
         List<Vector3> path = _stateMachine.pathfinding.FindPath(_stateMachine.transform.position, _stateMachine.AttackRandomMoveJumpPostion.position);
         if (path != null && path.Count > 0)
@@ -81,9 +82,51 @@ public class BossAttackRandomMoveState_First : IBossStateFirstStage
                 yield return null;
             }
         }
+
+        if (UnityEngine.Object.FindObjectsOfType<Bean>() != null)
+        {
+            _stateMachine.ChangeState(BossState.EatBeans);
+        }
+        else
+        {
+            _stateMachine.AttackStateChoose();
+        }
     }
 
     #endregion
+
+    // 每帧更新
+    public void UpdateState()
+    {
+        if (_attackRandomMove != null)
+        {
+            if (_isAtLeft)
+            {
+                CheckStateChange(_stateMachine.AttackRandomMoveEndPostionRightPoint.position);
+            }
+            else
+            {
+                CheckStateChange(_stateMachine.AttackRandomMoveEndPostionLeftPoint.position);
+            }
+        }
+    }
+
+    private void CheckStateChange(Vector2 position)
+    {
+        float distToTarget = Vector2.Distance(_stateMachine.transform.position, new Vector2(position.x, position.y));
+        if (distToTarget <= _stateMachine.DashTargetCheckLength)
+        {
+            if (UnityEngine.Object.FindObjectsOfType<Bean>() != null)
+            {
+                _stateMachine.ChangeState(BossState.EatBeans);
+            }
+            else
+            {
+                _stateMachine.AttackStateChoose();
+            }
+
+        }
+    }
 
     // 固定时间步长更新（物理相关）
     public void FixedUpdateState()
@@ -117,11 +160,6 @@ public class BossAttackRandomMoveState_First : IBossStateFirstStage
 
 
 
-    // 每帧更新
-    public void UpdateState()
-    {
-
-    }
 
     // 处理动画事件
     public void OnAnimationEvent(string eventName)
