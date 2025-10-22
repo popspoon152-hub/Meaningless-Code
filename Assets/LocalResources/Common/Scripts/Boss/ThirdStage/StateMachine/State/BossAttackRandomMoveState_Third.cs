@@ -1,85 +1,111 @@
-using System.Collections;
+ï»¿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BossAttackRandomMoveState_Third : IBossStateThirdStage
 {
     private BossThirdStateMachine _stateMachine;
-    private Coroutine _attackRandomMoveCoroutine;
+    private Coroutine _moveRoutine;
+    private bool _hasHitPlayer;
 
     public void EnterState(BossThirdStateMachine stateMachine)
     {
         _stateMachine = stateMachine;
+        _hasHitPlayer = false;
 
-        // ¿ÉÑ¡£º²¥·Å¶¯»­
-        // _stateMachine.Animator_Third?.SetTrigger("AttackRandomMove");
+        // ç¡®ä¿Bosså…è®¸ç§»åŠ¨
+        _stateMachine.IsMove = true;
 
-        _attackRandomMoveCoroutine = _stateMachine.StartCoroutine(AttackRandomMove());
+        _moveRoutine = _stateMachine.StartCoroutine(MovePathfindingRoutine());
     }
 
-    private IEnumerator AttackRandomMove()
+    private IEnumerator MovePathfindingRoutine()
     {
+        Transform player = _stateMachine.Player_Third;
         float moveSpeed = _stateMachine.MoveSpeed_Attack;
 
-        while (true)
+        while (_stateMachine.CurrentState != BossState_Third.Hurt) // å—ä¼¤åç«‹å³é€€å‡º
         {
-            // »ñÈ¡Íæ¼ÒÎ»ÖÃ
-            Vector2 targetPos = _stateMachine.Player_Third.position;
-            Vector2 currentPos = _stateMachine.transform.position;
-            Vector2 direction = (targetPos - currentPos).normalized;
+            if (!_stateMachine.IsMove) yield break;
+            if (_hasHitPlayer) yield break;
 
-            // BossÏòÍæ¼ÒÒÆ¶¯
-            _stateMachine.transform.position = Vector2.MoveTowards(
-                currentPos,
-                targetPos,
-                moveSpeed * Time.deltaTime
-            );
-
-            // BossÃæÏòÍæ¼Ò
-            if (direction != Vector2.zero)
+            if (player == null)
             {
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                _stateMachine.transform.rotation = Quaternion.Euler(0, 0, angle);
+                yield return new WaitForSeconds(0.5f);
+                continue;
             }
 
-            // Èç¹ûÓëÍæ¼Ò¾àÀëºÜ½ü£¬¿ÉÒÔÑ¡Ôñ½áÊøÒÆ¶¯£¬½øÈëÏÂÒ»×´Ì¬
-            if (Vector2.Distance(currentPos, targetPos) <= 1.5f)
+            // è·å–å¯»è·¯è·¯å¾„
+            List<Vector3> path = _stateMachine.pathfinding.FindPath(
+                _stateMachine.transform.position,
+                player.position
+            );
+
+            if (path == null || path.Count == 0)
             {
-                yield return new WaitForSeconds(0.5f); // ÉÔÎ¢Í£¶Ù
-                break;
+                yield return new WaitForSeconds(0.5f);
+                continue;
+            }
+
+            // é€ç‚¹ç§»åŠ¨
+            for (int i = 0; i < path.Count; i++)
+            {
+                Vector3 nextPos = path[i];
+
+                while (Vector2.Distance(_stateMachine.transform.position, nextPos) > 0.05f)
+                {
+                    if (_stateMachine.CurrentState == BossState_Third.Hurt)
+                        yield break;
+
+                    if (_hasHitPlayer)
+                        yield break;
+
+                    if (!_stateMachine.IsMove)
+                        yield break;
+
+                    _stateMachine.transform.position = Vector2.MoveTowards(
+                        _stateMachine.transform.position,
+                        nextPos,
+                        moveSpeed * Time.deltaTime
+                    );
+
+                    yield return null;
+                }
+
+                // æŠµè¾¾ç»ˆç‚¹åæ£€æŸ¥æ˜¯å¦åˆ°è¾¾æœ€åèŠ‚ç‚¹
+                if (i == path.Count - 1)
+                {
+                    _stateMachine.AttackStateChoose();
+                    yield break;
+                }
             }
 
             yield return null;
         }
-
-        // ÒÆ¶¯Íê³ÉºóËæ»úÑ¡ÔñÏÂÒ»¹¥»÷×´Ì¬
-        _stateMachine.AttackStateChoose();
     }
+
+    // Bossè¢«ç©å®¶æ”»å‡»æ—¶çŠ¶æ€æœºä¼šè‡ªåŠ¨åˆ‡æ¢åˆ° Hurt çŠ¶æ€ï¼Œæˆ‘ä»¬æ— éœ€æ‰‹åŠ¨æ£€æµ‹ï¼Œä½†å¯ä»¥å“åº”äº‹ä»¶æˆ–æ£€æŸ¥ CurrentState
 
     public void ExitState()
     {
-        if (_attackRandomMoveCoroutine != null)
+        if (_moveRoutine != null)
         {
-            _stateMachine.StopCoroutine(_attackRandomMoveCoroutine);
-            _attackRandomMoveCoroutine = null;
+            _stateMachine.StopCoroutine(_moveRoutine);
+            _moveRoutine = null;
         }
+
+        _stateMachine.IsMove = false;
         _stateMachine = null;
     }
 
-    // Ã¿Ö¡¸üĞÂ
-    public void UpdateState()
+    // å½“Bossç¢°åˆ°ç©å®¶æ—¶ï¼ŒBossThirdStateMachineä¼šè°ƒç”¨TryDealCollisionDamage
+    // æˆ‘ä»¬å¯ä»¥é€šè¿‡ä¸€ä¸ªäº‹ä»¶æ–¹å¼æˆ–ç®€å•è°ƒç”¨é€šçŸ¥çŠ¶æ€ä¸­æ–­
+    public void OnBossHitPlayer()
     {
-        // ¿ÉÒÔÔÚ´ËÌí¼ÓÃ¿Ö¡µÄ¼ì²é£¨ÀıÈçÄ¿±êÊÇ·ñ¸üĞÂ£©
+        _hasHitPlayer = true;
     }
 
-    // ¹Ì¶¨Ê±¼ä²½³¤¸üĞÂ£¨ÎïÀíÏà¹Ø£©
-    public void FixedUpdateState()
-    {
-        // Èç¹ûĞèÒªÎïÀí¸üĞÂ£¬¿ÉÒÔÔÚÕâÀïÊµÏÖ
-    }
-
-    // ´¦Àí¶¯»­ÊÂ¼ş
-    public void OnAnimationEvent(string eventName)
-    {
-        // ´¦Àí¶¯»­ÊÂ¼ş£¨ÀıÈç£ºÅö×²¡¢¹¥»÷µÈ£©
-    }
+    public void UpdateState() { }
+    public void FixedUpdateState() { }
+    public void OnAnimationEvent(string eventName) { }
 }

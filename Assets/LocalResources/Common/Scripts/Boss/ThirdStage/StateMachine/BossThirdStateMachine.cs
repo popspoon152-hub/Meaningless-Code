@@ -296,6 +296,11 @@ public class BossThirdStateMachine : MonoBehaviour
             health.TakeDamageByEnemy(CollisionDamage);
         }
 
+        if (_currentState_Third == BossState_Third.AttackRandomMove &&_currentStateInstance is BossAttackRandomMoveState_Third moveState)
+        {
+            moveState.OnBossHitPlayer();
+        }
+
         // ¿ªÆôÅö×²ÀäÈ´£¬·ÀÖ¹Á¬Ðø´¥·¢
         //StartCoroutine(CollisionCooldownRoutine());
     }
