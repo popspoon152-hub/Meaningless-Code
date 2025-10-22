@@ -32,7 +32,7 @@ public class BossAttackRandomMoveState_First : IBossStateFirstStage
     {
         _isAtLeft = _stateMachine.transform.position.x <= _stateMachine.AttackRandomMoveJumpPostion.position.x;
 
-        List<Vector3> path = _stateMachine.pathfinding.FindPath(_stateMachine.transform.position, _stateMachine.AttackRandomMoveJumpPostion.position);
+        List<Vector3> path = Pathfinding.Ins.FindPath(_stateMachine.transform.position, _stateMachine.AttackRandomMoveJumpPostion.position);
         if (path != null && path.Count > 0)
         {
             Vector3 currentWaypoint = path[0];
@@ -59,8 +59,8 @@ public class BossAttackRandomMoveState_First : IBossStateFirstStage
         {
 
         }
-        path = _isAtLeft ? _stateMachine.pathfinding.FindPath(_stateMachine.transform.position, _stateMachine.AttackRandomMoveEndPostionRightPoint.position)
-                         : _stateMachine.pathfinding.FindPath(_stateMachine.transform.position, _stateMachine.AttackRandomMoveEndPostionLeftPoint.position);
+        path = _isAtLeft ? Pathfinding.Ins.FindPath(_stateMachine.transform.position, _stateMachine.AttackRandomMoveEndPostionRightPoint.position)
+                         : Pathfinding.Ins.FindPath(_stateMachine.transform.position, _stateMachine.AttackRandomMoveEndPostionLeftPoint.position);
 
         if (path != null && path.Count > 0)
         {

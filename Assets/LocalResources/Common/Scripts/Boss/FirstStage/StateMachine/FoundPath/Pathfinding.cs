@@ -6,6 +6,13 @@ public class Pathfinding : MonoBehaviour
 {
     public Transform seeker, target;
 
+    public static Pathfinding Ins;
+
+    private void Awake()
+    {
+        Ins = this;
+    }
+
     public List<Vector3> FindPath(Vector3 startPos, Vector3 targetPos)
     {
         Node startNode = GridManager.Ins.NodeFromWorldPoint(startPos);

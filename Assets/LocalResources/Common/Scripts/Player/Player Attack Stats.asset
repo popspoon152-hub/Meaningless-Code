@@ -17,7 +17,7 @@ MonoBehaviour:
   - 10
   - 10
   - 20
-  AttackComboWindow: 0.4
+  AttackComboWindow: 0.8
   AttackDuration:
   - 0.2
   - 0.2
@@ -28,13 +28,13 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   AttackRange:
-  - 1
-  - 1.1
-  - 1.2
+  - 5
+  - 5.5
+  - 6
   AttackLittleDash:
-  - 0.1
-  - 0.1
-  - 0.1
+  - 1
+  - 1
+  - 1
   EnemyLayer:
     serializedVersion: 2
     m_Bits: 128

@@ -27,7 +27,7 @@ public class PlayerMovementStats : ScriptableObject
 
     [Header("Jump")]
     public float JumpHeight = 6.5f;                                             //跳跃高度
-    [Range(1f, 1.1f)] public float JumpHeightCompensationFactor = 1.054f;       //跳跃的修正系数(玩家在进行短按跳跃时的最小高度)
+    [Range(1f, 2f)] public float JumpHeightCompensationFactor = 1.054f;       //跳跃的修正系数(玩家在进行短按跳跃时的最小高度)
     public float TimeTillJumpApex = 0.35f;                                      //到达最高点所需的时间
     [Range(0.01f, 5f)] public float GravityOnReleaseMultiplier = 2f;            //松开按键时的重力乘数(当玩家在空中松开跳跃键时，施加在角色身上的重力会乘以这个系数，为了让你跳得更高或更低)
     public float MaxFallSpeed = 26f;                                            //最大下落速度

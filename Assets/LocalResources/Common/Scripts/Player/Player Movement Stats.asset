@@ -12,28 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52c59fcc07cfc4e43a6a6dacec3fe3ca, type: 3}
   m_Name: Player Movement Stats
   m_EditorClassIdentifier: 
-  MaxWalkSpeed: 12.5
-  GroundAccleration: 5
-  GroundDeceleration: 20
-  AirAccleration: 5
-  AirDeceleration: 5
-  MaxRunSpeed: 20
+  MaxWalkSpeed: 25
+  GroundAccleration: 10
+  GroundDeceleration: 40
+  AirAccleration: 10
+  AirDeceleration: 10
+  MaxRunSpeed: 40
   GroundLayer:
     serializedVersion: 2
     m_Bits: 64
   GroundDetectionRayLength: 0.02
   HeadDetectionRayLength: 0.02
   HeadWidth: 0.75
-  JumpHeight: 6.5
-  JumpHeightCompensationFactor: 1.054
-  TimeTillJumpApex: 0.35
+  JumpHeight: 20
+  JumpHeightCompensationFactor: 1.2
+  TimeTillJumpApex: 0.9
   GravityOnReleaseMultiplier: 2
-  MaxFallSpeed: 26
+  MaxFallSpeed: 40
   NumberOfJumpsAllowed: 2
   TimeForUpwardCancel: 0.027
-  ApexThreshold: 0.97
-  ApexHangTime: 0.075
-  JumpBufferTime: 0.125
+  ApexThreshold: 0.85
+  ApexHangTime: 0.01
+  JumpBufferTime: 0.109
   JumpCoyoteTime: 0.1
   DebugShowIsGroundedBox: 0
   DebugShowHeadBumpBox: 0
@@ -44,9 +44,9 @@ MonoBehaviour:
   DrawRight: 1
   ArcSolution: 20
   VisualizationSteps: 90
-  MaxDashLength: 5
+  MaxDashLength: 15
   DashCooldown: 0.2
-  DashDuration: 0.2
+  DashDuration: 0.1
   DropPoint: {fileID: 0}
   BackPoint: {fileID: 0}
   DropHurt: 20

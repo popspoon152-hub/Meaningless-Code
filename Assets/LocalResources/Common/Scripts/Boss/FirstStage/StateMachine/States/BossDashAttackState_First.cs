@@ -16,6 +16,7 @@ public class BossDashAttackState_First : IBossStateFirstStage
 
     private Coroutine _dashAttack;
 
+    private int _flag;
     // 进入状态时调用（初始化）
     public void EnterState(BossFirstStateMachine stateMachine)
     {
@@ -80,28 +81,52 @@ public class BossDashAttackState_First : IBossStateFirstStage
                 Debug.LogWarning($"目标网格 ({gridX}, {gridY}) 不可行走！");
             }
 
-
             //设置后面的尾巴与目标地点
             if (_isLeft)
             {
+
                 for (int i = 1; i < _stateMachine.Segments.Count; i++)
                 {
-                    Node segmentsTargetNode = GridManager.Ins.grid[gridX - i, gridY];
-                    _stateMachine.Segments[i].position = segmentsTargetNode.worldPosition;
+                    if (gridX - i >= 0)
+                    {
+                        if(gridX - i == 0)
+                        {
+                            _flag = i;
+                        }
+                        Node segmentsTargetNode = GridManager.Ins.grid[gridX - i, gridY];
+                        _stateMachine.Segments[i].position = segmentsTargetNode.worldPosition;
+                    }
+                    else
+                    {
+                        Node segmentsTargetNode = GridManager.Ins.grid[0, gridY - i + _flag];
+                        _stateMachine.Segments[i].position = segmentsTargetNode.worldPosition;
+                    }
                 }
 
-                _targetTrans.position = GridManager.Ins.grid[gridX + _stateMachine.DashLength, gridY].worldPosition;
+                _targetTrans.position = GridManager.Ins.grid[(int)_stateMachine.DashEndRightPoint.position.x, gridY].worldPosition;
                 _stateMachine._isAtLeft = false;
             }
             else
             {
                 for (int i = 1; i < _stateMachine.Segments.Count; i++)
                 {
-                    Node segmentsTargetNode = GridManager.Ins.grid[gridX + i, gridY];
-                    _stateMachine.Segments[i].position = segmentsTargetNode.worldPosition;
+                    if (gridX + i <= GridManager.Ins.gridSizeX - 1)
+                    {
+                        if (gridX - i == GridManager.Ins.gridSizeX - 1)
+                        {
+                            _flag = i;
+                        }
+                        Node segmentsTargetNode = GridManager.Ins.grid[gridX + i, gridY];
+                        _stateMachine.Segments[i].position = segmentsTargetNode.worldPosition;
+                    }
+                    else
+                    {
+                        Node segmentsTargetNode = GridManager.Ins.grid[GridManager.Ins.gridSizeX - 1, gridY - i + _flag];
+                        _stateMachine.Segments[i].position = segmentsTargetNode.worldPosition;
+                    }
                 }
 
-                _targetTrans.position = GridManager.Ins.grid[gridX - _stateMachine.DashLength, gridY].worldPosition;
+                _targetTrans.position = GridManager.Ins.grid[(int)_stateMachine.DashEndLeftPoint.position.x, gridY].worldPosition;
                 _stateMachine._isAtLeft = true;
             }
         }
@@ -109,7 +134,7 @@ public class BossDashAttackState_First : IBossStateFirstStage
 
     private IEnumerator Dash()
     {
-        List<Vector3> path = _stateMachine.pathfinding.FindPath(_stateMachine.transform.position, _targetTrans.position);
+        List<Vector3> path = Pathfinding.Ins.FindPath(_stateMachine.transform.position, _targetTrans.position);
         if (path != null && path.Count > 0)
         {
             Vector3 currentWaypoint = path[0];

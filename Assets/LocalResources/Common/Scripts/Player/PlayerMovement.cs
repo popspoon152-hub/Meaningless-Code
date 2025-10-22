@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.UIElements;
 using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerMovement : MonoBehaviour
@@ -190,6 +191,7 @@ public class PlayerMovement : MonoBehaviour
         {
             _jumpBufferTimer = MoveStats.JumpBufferTime;
             _jumpReleaseDuringBuffer = false;
+            _isFastFalling = false;
         }
 
         //松空格
@@ -205,13 +207,13 @@ public class PlayerMovement : MonoBehaviour
                 if (_isPastApexThreshold)
                 {
                     _isPastApexThreshold = false;
-                    _isFastFalling = true;
+                    _isFastFalling = false;
                     _fastFallTime = MoveStats.TimeForUpwardCancel;
                     VerticalVelocity = 0f;
                 }
                 else
                 {
-                    _isFastFalling = true;
+                    _isFastFalling = false;
                     _fastFallReleaseSpeed = VerticalVelocity;
                 }
             }
@@ -224,7 +226,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (_jumpReleaseDuringBuffer)
             {
-                _isFastFalling = true;
+                //_isFastFalling = true;
                 _fastFallReleaseSpeed = VerticalVelocity;
             }
         }
@@ -468,16 +470,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (InputManager.DashWasPressed && !_isDashing && _dashCooldownTimer <= 0f)
         {
-            StartDash();
+            StartDash(MoveStats.MaxDashLength);
         }
     }
 
-    private void StartDash()
+    private void StartDash(float length)
     {
         _isDashing = true;
         _dashTime = 0f;
         _dashDirection = _isFacingRight ? Vector2.right : Vector2.left;
-        _dashSpeed = MoveStats.MaxDashLength / MoveStats.DashDuration; // 速度=距离/时间
+        _dashSpeed = length / MoveStats.DashDuration; // 速度=距离/时间
         _rb.velocity = new Vector2(_dashDirection.x * _dashSpeed, 0f);
     }
 
@@ -549,13 +551,17 @@ public class PlayerMovement : MonoBehaviour
         if (_currentCombo == 1)
         {
             attackRange = AttackStats.AttackRange[0];
+            StartDash(AttackStats.AttackLittleDash[0]);
         }
         else
         {
             attackRange = AttackStats.AttackRange[(int)_currentCombo - 1];
+            StartDash(AttackStats.AttackLittleDash[(int)_currentCombo - 1]);
         }
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackStats.AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.EnemyLayer);
+
+        
 
         if (hitEnemies != null)
         {

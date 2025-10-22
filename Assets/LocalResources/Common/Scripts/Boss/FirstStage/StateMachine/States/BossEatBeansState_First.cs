@@ -96,7 +96,7 @@ public class BossEatBeansState_First : IBossStateFirstStage
     /// <exception></exception>
     private void MoveToTarget()
     {
-        _path = _stateMachine.pathfinding.FindPath(_stateMachine.transform.position, _targetBean.transform.position);
+        _path = Pathfinding.Ins.FindPath(_stateMachine.transform.position, _targetBean.transform.position);
         if(_path != null && _path.Count > 0)
         {
             _followPath = _stateMachine.StartCoroutine(FollowPath());

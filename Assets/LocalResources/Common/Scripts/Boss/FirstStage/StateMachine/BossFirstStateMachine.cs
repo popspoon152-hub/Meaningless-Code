@@ -29,7 +29,6 @@ public class BossFirstStateMachine : MonoBehaviour
     #region State Machine Config
     [Header("状态配置")]
     public BossState startingState = BossState.EatBeans;
-    public Pathfinding pathfinding;
 
     [Header("调试信息")]
     [SerializeField] private BossState _currentState;
@@ -39,8 +38,8 @@ public class BossFirstStateMachine : MonoBehaviour
     #region Boss属性
     [Header("属性配置")]
     [Range(10f, 1000f)] public float MaxHealth = 100f;
-    [Range(1f, 20f)] public float EatBeanMoveSpeed = 3f;
-    [Range(1f, 20f)] public float AttackMoveSpeed = 5f;
+    [Range(1f, 60f)] public float EatBeanMoveSpeed = 3f;
+    [Range(1f, 60f)] public float AttackMoveSpeed = 5f;
     private float _currentMoveSpeed;
 
     [Header("蛇的节数配置")]
@@ -68,7 +67,7 @@ public class BossFirstStateMachine : MonoBehaviour
     [Header("BossEatBeansRangedAttackState_First的子弹")]
     public GameObject BulletPrefab;
     public Transform FirePoint;
-    [Range(1f, 14f)] public float BulletSpeed = 5f;
+    [Range(1f, 30f)] public float BulletSpeed = 5f;
 
     [Header("BossEatBeansRangedAttackState_First的Boss出招僵直时间")]
     [Range(0f, 2f)] public float EatBeansRangedAttackInvulnerableTime;
@@ -113,10 +112,11 @@ public class BossFirstStateMachine : MonoBehaviour
     public Transform TelePortLeftPoint;
     public Transform TelePortRightPoint;
 
-    [Header("冲刺的单位长度")]
-    public int DashLength = 10;
+    [Header("冲刺的结束位置")]
+    public Transform DashEndLeftPoint;
+    public Transform DashEndRightPoint;
     public float DashTargetCheckLength = 1f;
-    [Range(1f, 20f)] public float DashSpeed = 8f;
+    [Range(1f, 50f)] public float DashSpeed = 8f;
     #endregion
 
     #region BossAttackRandomMoveState_First
@@ -126,7 +126,7 @@ public class BossFirstStateMachine : MonoBehaviour
     public Transform AttackRandomMoveEndPostionLeftPoint;
     public Transform AttackRandomMoveEndPostionRightPoint;
 
-    [Range(1f, 20f)] public float AttackRandomMoveSpeed = 10f;
+    [Range(1f, 50f)] public float AttackRandomMoveSpeed = 10f;
     #endregion
 
 

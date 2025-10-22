@@ -7,9 +7,11 @@ using UnityEngine;
 public class EnvironmentAndMap : MonoBehaviour
 {
     [Header("地图")]
-    public GameObject TileMap1;                                                                      //地图数组
+    public GameObject TileMapStairs1;                                                                      //地图数组
+    public GameObject TileMapWall1;                                                                      //地图数组
     public Transform[] BeansPositions1;                                                                //豆子生成点数组
-    public GameObject TileMap2;                                                                      //地图数组
+    public GameObject TileMapStairs2;                                                                      //地图数组
+    public GameObject TileMapWall2;                                                                      //地图数组
     public Transform[] BeansPositions2;                                                                //豆子生成点数组
 
     [Header("豆子生成逻辑")]
@@ -60,8 +62,10 @@ public class EnvironmentAndMap : MonoBehaviour
         }
         _currentMapIndex = 1;
 
-        TileMap1.SetActive(false);
-        TileMap2.SetActive(false);
+        TileMapStairs1.SetActive(false);
+        TileMapWall1.SetActive(false);
+        TileMapStairs2.SetActive(false);
+        TileMapWall2.SetActive(false);
 
         LoadMap(_currentMapIndex);
     }
@@ -91,14 +95,18 @@ public class EnvironmentAndMap : MonoBehaviour
 
         if (_currentMapIndex == 1)
         {
-            TileMap1.SetActive(true);
-            TileMap2.SetActive(false);
+            TileMapStairs1.SetActive(true);
+            TileMapWall1.SetActive(true);
+            TileMapStairs2.SetActive(false);
+            TileMapWall2.SetActive(false);
             _currentBeansInstantiatedTime = BeansInstantiateTimes1;
         }
         else
         {
-            TileMap1.SetActive(false);
-            TileMap2.SetActive(true);
+            TileMapStairs1.SetActive(false);
+            TileMapWall1.SetActive(false);
+            TileMapStairs2.SetActive(true);
+            TileMapWall2.SetActive(true);
             _currentBeansInstantiatedTime = BeansInstantiateTimes2;
         }
 
@@ -225,7 +233,22 @@ public class EnvironmentAndMap : MonoBehaviour
     private IEnumerator WaitForBattleEnd()
     {
         float waitTime = _currentMapIndex == 1 ? MapStayTime1 : MapStayTime2;
-        yield return new WaitForSeconds(waitTime);
+        if(_currentMapIndex == 1)
+        {
+            TileMapStairs1.SetActive(false);
+            TileMapWall1.SetActive(true);
+            TileMapStairs2.SetActive(false);
+            TileMapWall2.SetActive(false);
+        }
+        else
+        {
+            TileMapStairs1.SetActive(false);
+            TileMapWall1.SetActive(false);
+            TileMapStairs2.SetActive(false);
+            TileMapWall2.SetActive(true);
+        }
+
+            yield return new WaitForSeconds(waitTime);
 
         // 切换地图前检查对象是否仍然存在
         if (this == null) yield break;
@@ -249,15 +272,27 @@ public class EnvironmentAndMap : MonoBehaviour
     {
         bool isValid = true;
 
-        if (TileMap1 == null)
+        if (TileMapStairs1 == null)
         {
-            Debug.LogError("TileMap1 未赋值！");
+            Debug.LogError("TileMapStairs1 未赋值！");
             isValid = false;
         }
 
-        if (TileMap2 == null)
+        if(TileMapWall1 == null)
         {
-            Debug.LogError("TileMap2 未赋值！");
+            Debug.LogError("TileMapWall1 未赋值");
+            isValid = false;
+        }
+
+        if (TileMapWall2 == null)
+        {
+            Debug.LogError("TileMapWall2 未赋值");
+            isValid = false;
+        }
+
+        if (TileMapStairs2 == null)
+        {
+            Debug.LogError("TileMapStairs2 未赋值！");
             isValid = false;
         }
 

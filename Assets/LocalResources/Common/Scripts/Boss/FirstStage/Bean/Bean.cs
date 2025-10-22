@@ -5,13 +5,18 @@ using UnityEngine;
 public class Bean : MonoBehaviour
 {
     [Range(1, 8)] public int BeanHealth = 5;            //豆子生命值
+    [SerializeField] private int _currentHealth;
 
+    private void Start()
+    {
+        _currentHealth = BeanHealth;
+    }
 
     private void Update()
     {
         //播动画
 
-        if (BeanHealth <= 0)
+        if (_currentHealth <= 0)
         {
             //播动画
             Destroy(this.gameObject);
@@ -29,7 +34,7 @@ public class Bean : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        BeanHealth -= damage;
+        _currentHealth -= damage;
     }
 
     //被吃了的还没写
