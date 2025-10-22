@@ -1,5 +1,9 @@
 fileFormatVersion: 2
-guid: 0f86f85a2aed7974aa928ad79df4aa2b
+<<<<<<<< HEAD:Assets/LocalResources/Common/Scenes/SkillTest.unity.meta
+guid: ca62a5d6cb215f84aa5b4207b29df533
+========
+guid: c141806db9d3e81498f75862e52ccbd0
+>>>>>>>> TA:Assets/LocalResources/Common/Scenes/MapTest1.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
