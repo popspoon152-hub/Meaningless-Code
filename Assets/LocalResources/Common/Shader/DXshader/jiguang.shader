@@ -15,6 +15,7 @@ Shader "Custom/jiguang"
             "RenderPipeline"="UniversalRenderPipeline"
             "IgnoreProjector" = "true"
         }
+        Cull Off
         ZWrite Off
 		Blend SrcAlpha OneMinusSrcAlpha
         Pass
@@ -40,6 +41,7 @@ Shader "Custom/jiguang"
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseColor_ST;
+                float4 _EmissionMask_ST;
             CBUFFER_END
 
             struct Attributes 

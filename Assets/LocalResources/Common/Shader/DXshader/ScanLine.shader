@@ -13,6 +13,9 @@ Shader "Custom/ScanLine"
             "RenderType"="Opaque"
             "RenderPipeline"="UniversalRenderPipeline"
         }
+        Cull Off
+        ZWrite Off
+		Blend SrcAlpha OneMinusSrcAlpha
         Pass
         {
 
