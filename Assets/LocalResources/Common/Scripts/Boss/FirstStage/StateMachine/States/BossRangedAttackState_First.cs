@@ -33,16 +33,7 @@ public class BossRangedAttackState_First : IBossStateFirstStage
     
     private IEnumerator RangedAttack()
     {
-        if (_stateMachine.BulletPrefab_Attack == null || _stateMachine.FirePoint_Attack == null || _playerPos == null)
-        {
-            Debug.LogWarning("Bullet_Attack Prefab, Fire Point_Attack, or Player Position is not assigned.");
-
-
-            //Attack State Choose
-            _stateMachine.ChangeState(BossState.AttackIdle);
-        }
-
-        else if (_stateMachine.BulletPrefab_Attack != null && _stateMachine.FirePoint_Attack != null && _playerPos != null)
+        if (_stateMachine.BulletPrefab_Attack != null && _stateMachine.FirePoint_Attack != null && _playerPos != null)
         {
             _stateMachine.IsMove = false;
 
@@ -54,18 +45,28 @@ public class BossRangedAttackState_First : IBossStateFirstStage
             {
                 rb.velocity = direction * _stateMachine.BulletSpeed_Attack;
             }
-            
 
 
-            for (int i = 0; i < 5; i++)
+
+            for (int i = 0; i < 4; i++)
             {
-                GameObject littleBullet = UnityEngine.Object.Instantiate(_stateMachine.LittleBulletPrefab_Attack, 
-                                                                         _stateMachine.FirePoint_Attack.position, 
-                                                                         _stateMachine.FirePoint_Attack.rotation);
-                littleBullet.transform.eulerAngles = new Vector3(0, 0, -40 + (i - 1) * 20);
+                // 计算角度
+                float angle = 60 - (i - 1) * 20;
+
+                // 创建旋转
+                Quaternion rotation = Quaternion.Euler(0, 0, angle);
+
+                GameObject littleBullet = UnityEngine.Object.Instantiate(
+                    _stateMachine.LittleBulletPrefab_Attack,
+                    _stateMachine.FirePoint.position,
+                    rotation
+                );
+
                 if (littleBullet.TryGetComponent<Rigidbody2D>(out Rigidbody2D r))
                 {
-                    r.velocity = direction * _stateMachine.LittleBulletSpeed_Attack;
+                    // 根据旋转计算方向
+                    Vector2 littleBulletDirection = rotation * Vector2.right;
+                    r.velocity = littleBulletDirection * _stateMachine.LittleBulletSpeed_Attack;
                 }
             }
 
@@ -83,7 +84,16 @@ public class BossRangedAttackState_First : IBossStateFirstStage
         }
         else
         {
-            _stateMachine.AttackStateChoose();
+            //分为冲锋攻击，先上在下的随机移动两种
+            int randonNum = UnityEngine.Random.Range(0, 2);
+            if (randonNum == 0)
+            {
+                _stateMachine.ChangeState(BossState.DashAttack);
+            }
+            else if (randonNum == 1)
+            {
+                _stateMachine.ChangeState(BossState.AttackRandomMove);
+            }
         }
 
     }
@@ -107,12 +117,12 @@ public class BossRangedAttackState_First : IBossStateFirstStage
     // 退出状态时调用（清理）
     public void ExitState()
     {
-        _stateMachine = null;
         if (_RangedAttack != null)
         {
             _stateMachine.StopCoroutine(_RangedAttack);
             _RangedAttack = null;
         }
+        _stateMachine = null;
     }
 
 

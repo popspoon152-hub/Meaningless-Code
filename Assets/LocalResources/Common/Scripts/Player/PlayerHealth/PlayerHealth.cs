@@ -14,8 +14,8 @@ public class PlayerHealth : MonoBehaviour
     [Range(0f, 10f)] public float ExtraHealthDeclineNumDeltaTime = 5f;                          //虚血条每秒下降数值
 
 
-    private float _currentHealth;                                                                        //当前生命值
-    private float _currentExtraHealth;                                                                   //当前虚血值
+    [SerializeField] private float _currentHealth;                                                                        //当前生命值
+    [SerializeField] private float _currentExtraHealth;                                                                   //当前虚血值
     private bool _isHealthDeclining;                                                                     //是否正在扣血
 
 

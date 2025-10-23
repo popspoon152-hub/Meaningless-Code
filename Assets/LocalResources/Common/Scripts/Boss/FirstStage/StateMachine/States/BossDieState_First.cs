@@ -33,12 +33,12 @@ public class BossDieState_First : IBossStateFirstStage
     // 退出状态时调用（清理）
     public void ExitState()
     {
-        _stateMachine = null;
         if (_bossDie != null)
         {
-            _stateMachine.StopCoroutine(BossDie());
+            _stateMachine.StopCoroutine(_bossDie);
             _bossDie = null;
         }
+        _stateMachine = null;
     }
 
 
