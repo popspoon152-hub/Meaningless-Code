@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,10 +16,12 @@ public class BossAttackIdleState_First : IBossStateFirstStage
     public void EnterState(BossFirstStateMachine stateMachine)
     {
         _stateMachine = stateMachine;
+
         //if(_stateMachine.Animator != null)
         //{
         //    _stateMachine.Animator.SetTrigger("AttackIdle");
         //}
+        
         _stateMachine.IsMove = false;
         _AttackIdle = _stateMachine.StartCoroutine(AttackIdle());
     }
@@ -43,59 +46,84 @@ public class BossAttackIdleState_First : IBossStateFirstStage
     {
         ChooseBossPos();
 
+        _stateMachine.IsMove = false;
         //瞬移或移动
-        TelePort((int)_chooseTrans.position.x, (int)_chooseTrans.position.y);
-
-        yield return new WaitForSeconds(_stateMachine.IdleTime);
-
-        if (UnityEngine.Object.FindObjectsOfType<Bean>() != null)
+        if (TelePort(_chooseTrans.position))
         {
-            _stateMachine.ChangeState(BossState.EatBeans);
+            yield return new WaitForSeconds(_stateMachine.IdleTime);
+
+            // 检查是否有豆子存在
+            Bean[] beans = UnityEngine.Object.FindObjectsOfType<Bean>();
+            if (beans != null && beans.Length > 0)
+            {
+                _stateMachine.ChangeState(BossState.EatBeans);
+            }
+            else
+            {
+                //分为远程攻击，冲锋攻击，先上在下的随机移动三种
+                int randonNum = UnityEngine.Random.Range(0, 3);
+                if (randonNum == 0)
+                {
+                    _stateMachine.ChangeState(BossState.RangedAttack);
+                }
+                else if (randonNum == 1)
+                {
+                    _stateMachine.ChangeState(BossState.DashAttack);
+                }
+                else
+                {
+                    _stateMachine.ChangeState(BossState.AttackRandomMove);
+                }
+            }
         }
         else
         {
-            _stateMachine.AttackStateChoose();
+            // 瞬移失败，直接选择攻击状态
+
+            //分为远程攻击，冲锋攻击，先上在下的随机移动三种
+            int randonNum = UnityEngine.Random.Range(0, 3);
+            if (randonNum == 0)
+            {
+                _stateMachine.ChangeState(BossState.RangedAttack);
+            }
+            else if (randonNum == 1)
+            {
+                _stateMachine.ChangeState(BossState.DashAttack);
+            }
+            else
+            {
+                _stateMachine.ChangeState(BossState.AttackRandomMove);
+            }
         }
     }
 
-    private void TelePort(int gridX, int gridY)
+    private bool TelePort(Vector2 targetPosition)
     {
-        if (GridManager.Ins != null)
+        _stateMachine.transform.position = targetPosition;
+
+        Rigidbody2D rb = _stateMachine.GetComponent<Rigidbody2D>();
+        if (rb != null)
         {
-            // 确保坐标在网格范围内
-            gridX = Mathf.Clamp(gridX, 0, GridManager.Ins.gridSizeX - 1);
-            gridY = Mathf.Clamp(gridY, 0, GridManager.Ins.gridSizeY - 1);
-
-            // 获取该坐标的节点
-            Node targetNode = GridManager.Ins.grid[gridX, gridY];
-
-            // 如果节点可行走，则瞬移
-            if (targetNode.walkable)
-            {
-                _stateMachine.transform.position = targetNode.worldPosition;
-            }
-            else
-            {
-                Debug.LogWarning($"目标网格 ({gridX}, {gridY}) 不可行走！");
-            }
-
-
-            //设置后面的尾巴与目标地点
-            if (_isLeft)
-            {
-                for (int i = 1; i < _stateMachine.Segments.Count; i++)
-                {
-                    _stateMachine.Segments[i].position = GridManager.Ins.grid[gridX - 1, gridY - i + 1].worldPosition;
-                }
-            }
-            else
-            {
-                for (int i = 1; i < _stateMachine.Segments.Count; i++)
-                {
-                    _stateMachine.Segments[i].position = GridManager.Ins.grid[gridX + 1, gridY - i + 1].worldPosition;
-                }
-            }
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0f;
         }
+
+        return SetupSegmentsPosition();
+    }
+
+    private bool SetupSegmentsPosition()
+    {
+        for (int i = 1; i < _stateMachine.Segments.Count; i++)
+        {
+            // 使用相对位置
+            Vector3 segmentOffset = _isLeft ?
+                new Vector3(-i * 4.5f, 0, 0) :
+                new Vector3(i * 4.5f, 0, 0);
+
+            _stateMachine.Segments[i].position = _stateMachine.transform.position + segmentOffset;
+        }
+
+        return true;
     }
     #endregion
 
@@ -104,20 +132,14 @@ public class BossAttackIdleState_First : IBossStateFirstStage
     // 退出状态时调用（清理）
     public void ExitState()
     {
-        _stateMachine = null;
         if (_AttackIdle != null)
         {
             _stateMachine.StopCoroutine(_AttackIdle);
             _AttackIdle = null;
         }
+        _stateMachine.IsMove = true;
+        _stateMachine = null;
     }
-
-
-
-
-
-
-
 
 
 

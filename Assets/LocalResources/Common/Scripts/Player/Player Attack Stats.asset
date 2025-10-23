@@ -23,10 +23,6 @@ MonoBehaviour:
   - 0.2
   - 0.2
   AttackBuffer: 0.1
-  AttackPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   AttackRange:
   - 5
   - 5.5
@@ -38,5 +34,8 @@ MonoBehaviour:
   EnemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  BeanLayer:
+    serializedVersion: 2
+    m_Bits: 256
   ShowAttackRangeArc: 1
   AttackHurtPlayerNum: 10

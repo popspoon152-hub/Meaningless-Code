@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ public class GridManager : MonoBehaviour
 
     public static GridManager Ins;
 
+    private float timer = 0.0f;
     void Awake()
     {
         Ins = this;
@@ -23,6 +25,16 @@ public class GridManager : MonoBehaviour
         CreateGrid();
     }
 
+    private void Update()
+    {
+        //timer += Time.deltaTime;
+        //if (timer >= 1.0f)
+        //{
+        //    // 每秒执行的操作
+        //    CreateGrid();
+        //    timer = 0.0f;
+        //}
+    }
     public void CreateGrid()
     {
         grid = new Node[gridSizeX, gridSizeY];
@@ -80,15 +92,15 @@ public class GridManager : MonoBehaviour
 
     void OnDrawGizmos()
     {
-    //    Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, gridWorldSize.y, 1));
+        //Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, gridWorldSize.y, 1));
 
-    //    if (grid != null)
-    //    {
-    //        foreach (Node n in grid)
-    //        {
-    //            Gizmos.color = n.walkable ? Color.white : Color.red;
-    //            Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
-    //        }
-    //    }
+        //if (grid != null)
+        //{
+        //    foreach (Node n in grid)
+        //    {
+        //        Gizmos.color = n.walkable ? Color.white : Color.red;
+        //        Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
+        //    }
+        //}
     }
 }

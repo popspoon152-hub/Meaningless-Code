@@ -30,6 +30,7 @@ public class BossFirstStateMachine : MonoBehaviour
     #region State Machine Config
     [Header("状态配置")]
     public BossState startingState = BossState.EatBeans;
+    public LayerMask PlayerLayer;
 
     [Header("调试信息")]
     [SerializeField] private BossState _currentState;
@@ -103,8 +104,8 @@ public class BossFirstStateMachine : MonoBehaviour
     public GameObject BulletPrefab_Attack;
     public GameObject LittleBulletPrefab_Attack;
     public Transform FirePoint_Attack;
-    [Range(1f, 20f)] public float BulletSpeed_Attack = 5f;
-    [Range(1f, 20f)] public float LittleBulletSpeed_Attack = 7f;
+    [Range(1f, 50f)] public float BulletSpeed_Attack = 15f;
+    [Range(1f, 50f)] public float LittleBulletSpeed_Attack = 17f;
 
     [Header("BossRangedAttackState_First的Boss出招僵直时间")]
     [Range(0f, 2f)] public float RangedAttackInvulnerableTime;
@@ -124,12 +125,20 @@ public class BossFirstStateMachine : MonoBehaviour
 
     #region BossAttackRandomMoveState_First
     [Header("BossAttackRandomMoveState_First攻击相关")]
-    public Transform AttackRandomMoveJumpPostion;      //跳到的位置
+    public Transform AttackRandomMoveJumpLeftPostion;      //跳到的位置
+    public Transform AttackRandomMoveJumpRightPostion;
     
-    public Transform AttackRandomMoveEndPostionLeftPoint;
-    public Transform AttackRandomMoveEndPostionRightPoint;
+    public Transform AttackRandomMoveStartPostionLeftPoint;
+    public Transform AttackRandomMoveStartPostionRightPoint;
 
-    [Range(1f, 50f)] public float AttackRandomMoveSpeed = 10f;
+    public Transform GroundPoint;
+    [Range(1f, 10f)] public float DownHurtRange = 2f;
+    [Range(10f, 100f)] public float DownDamage = 20f;
+
+
+    [Range(1f, 100f)] public float AttackRandomMoveUpSpeed = 10f;
+    [Range(0f, 2f)] public float UpStayTime = 0.5f;
+    [Range(1f, 100f)] public float AttackRandomMoveDownSpeed = 10f;
     #endregion
 
 
@@ -251,7 +260,6 @@ public class BossFirstStateMachine : MonoBehaviour
     // 状态切换方法
     public void ChangeState(BossState newState)
     {
-        Debug.Log($"尝试从 {_currentState} 切换到 {newState}");
 
         // 退出当前状态
         _currentStateInstance?.ExitState();
@@ -263,14 +271,9 @@ public class BossFirstStateMachine : MonoBehaviour
             _currentState = newState;
             _currentStateName = newState.ToString();
 
-            Debug.Log($"状态切换成功: {_currentState}");
 
             // 进入新状态
             _currentStateInstance.EnterState(this);
-        }
-        else
-        {
-            Debug.LogError($"状态 {newState} 未在字典中注册!");
         }
     }
 
@@ -300,23 +303,23 @@ public class BossFirstStateMachine : MonoBehaviour
                 followSpeed * Time.fixedDeltaTime
             );
 
-            // 或者使用 MoveTowards 获得更精确的控制
-            // Vector2 newPosition = Vector2.MoveTowards(
-            //     currentSegment.position, 
-            //     targetPosition, 
-            //     followSpeed * Time.fixedDeltaTime
-            // );
+            //或者使用 MoveTowards 获得更精确的控制
+            //Vector2 newPosition = Vector2.MoveTowards(
+            //    currentSegment.position,
+            //    targetPosition,
+            //    followSpeed * Time.fixedDeltaTime
+            //);
 
 
             currentSegment.position = newPosition;
 
-            // 简单的2D旋转
-            Vector2 direction = (Vector2)(previousSegment.position - currentSegment.position);
-            if (direction.sqrMagnitude > 0.01f)
-            {
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                currentSegment.rotation = Quaternion.Euler(0, 0, angle);
-            }
+            //// 简单的2D旋转
+            //Vector2 direction = (Vector2)(previousSegment.position - currentSegment.position);
+            //if (direction.sqrMagnitude > 0.01f)
+            //{
+            //    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            //    currentSegment.rotation = Quaternion.Euler(0, 0, angle);
+            //}
         }
     }
 
@@ -386,26 +389,6 @@ public class BossFirstStateMachine : MonoBehaviour
         _hurtCoroutine = null;
     }
 
-    #endregion
-
-    #region Attack State Choose
-    public void AttackStateChoose()
-    {
-        //分为远程攻击，冲锋攻击，攻击类型的随机移动三种
-        int randonNum = UnityEngine.Random.Range(0, 4);
-        if (randonNum == 0)
-        {
-            ChangeState(BossState.RangedAttack);
-        }
-        else if (randonNum == 1)
-        {
-            ChangeState(BossState.DashAttack);
-        }
-        else
-        {
-            ChangeState(BossState.AttackRandomMove);
-        }
-    }
     #endregion
 
     #region Animation Events

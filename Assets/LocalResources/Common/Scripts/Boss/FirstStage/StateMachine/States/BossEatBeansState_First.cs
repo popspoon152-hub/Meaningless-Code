@@ -31,6 +31,11 @@ public class BossEatBeansState_First : IBossStateFirstStage
         targetIndex = 0;
         _path = null;
 
+        if (GridManager.Ins != null)
+        {
+            GridManager.Ins.CreateGrid();
+        }
+
         EatBeansMove();
     }
 

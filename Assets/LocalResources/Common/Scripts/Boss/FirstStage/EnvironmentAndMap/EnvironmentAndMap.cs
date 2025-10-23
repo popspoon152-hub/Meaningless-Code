@@ -48,24 +48,22 @@ public class EnvironmentAndMap : MonoBehaviour
 
     private void Awake()
     {
-        if(Ins != null)
+        if(Ins == null)
         {
             Ins = this;
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
     private void Start()
     {
         if (!ValidateReferences())
         {
-            Debug.LogError("EnvironmentAndMap: 必要的引用未在Inspector中设置！");
             return;
         }
         _currentMapIndex = 1;
-
-        TileMapStairs1.SetActive(false);
-        TileMapWall1.SetActive(false);
-        TileMapStairs2.SetActive(false);
-        TileMapWall2.SetActive(false);
 
         LoadMap(_currentMapIndex);
     }
@@ -93,22 +91,25 @@ public class EnvironmentAndMap : MonoBehaviour
     {
         if (!ValidateReferences()) return;
 
-        if (_currentMapIndex == 1)
+        TileMapStairs1.SetActive(false);
+        TileMapWall1.SetActive(false);
+        TileMapStairs2.SetActive(false);
+        TileMapWall2.SetActive(false);
+
+        if (currentMapIndex == 1)
         {
             TileMapStairs1.SetActive(true);
             TileMapWall1.SetActive(true);
-            TileMapStairs2.SetActive(false);
-            TileMapWall2.SetActive(false);
             _currentBeansInstantiatedTime = BeansInstantiateTimes1;
         }
-        else
+        else if (currentMapIndex == 2)
         {
-            TileMapStairs1.SetActive(false);
-            TileMapWall1.SetActive(false);
             TileMapStairs2.SetActive(true);
             TileMapWall2.SetActive(true);
             _currentBeansInstantiatedTime = BeansInstantiateTimes2;
         }
+
+        _isWaitingForNextMap = false;
 
         //创建网格
         if (GridManager.Ins != null)
@@ -129,37 +130,24 @@ public class EnvironmentAndMap : MonoBehaviour
         if (!ValidateReferences()) return;
 
         Transform[] currentPositions;
-        int minBeans, maxBeans;
 
         if (_currentMapIndex == 1)
         {
             currentPositions = BeansPositions1;
-            minBeans = MinBeansInstantiatePerTime1;
-            maxBeans = MaxBeansInstantiatePerTime1;
+            _beansInstantiateThisTime = Mathf.Clamp(UnityEngine.Random.Range(MinBeansInstantiatePerTime1, MaxBeansInstantiatePerTime1 + 1), 1, currentPositions.Length);
         }
         else
         {
             currentPositions = BeansPositions2;
-            minBeans = MinBeansInstantiatePerTime2;
-            maxBeans = MaxBeansInstantiatePerTime2;
+            _beansInstantiateThisTime = Mathf.Clamp(UnityEngine.Random.Range(MinBeansInstantiatePerTime2, MaxBeansInstantiatePerTime2 + 1), 1, currentPositions.Length);
         }
-
-        // 安全检查
-        if (currentPositions == null || currentPositions.Length == 0)
-        {
-            Debug.LogError($"当前地图 {_currentMapIndex} 的豆子位置数组为空！");
-            return;
-        }
-
-        // 选择生成数量
-        _beansInstantiateThisTime = Mathf.Clamp(UnityEngine.Random.Range(minBeans, maxBeans + 1), 1, currentPositions.Length);
 
         // 选择生成点
         Transform[] choosePoints = GetRandomSequence(currentPositions, _beansInstantiateThisTime);
 
         if (choosePoints == null || choosePoints.Length == 0)
         {
-            Debug.LogError("没有有效的豆子生成点！");
+            //Debug.LogError("没有有效的豆子生成点！");
             return;
         }
 
@@ -175,14 +163,14 @@ public class EnvironmentAndMap : MonoBehaviour
         }
 
         CurrentBeansCount = successfulInstantiates;
-        Debug.Log($"成功生成了 {successfulInstantiates} 个豆子");
+        //Debug.Log($"成功生成了 {successfulInstantiates} 个豆子");
     }
 
     public static Transform[] GetRandomSequence(Transform[] array, int count)
     {
         if (array == null || array.Length == 0 || count <= 0)
         {
-            Debug.LogError("GetRandomSequence: 输入参数无效");
+            //Debug.LogError("GetRandomSequence: 输入参数无效");
             return new Transform[0];
         }
 
@@ -248,7 +236,7 @@ public class EnvironmentAndMap : MonoBehaviour
             TileMapWall2.SetActive(true);
         }
 
-            yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(waitTime);
 
         // 切换地图前检查对象是否仍然存在
         if (this == null) yield break;
@@ -256,6 +244,7 @@ public class EnvironmentAndMap : MonoBehaviour
         // 切换地图
         _currentMapIndex = _currentMapIndex == 1 ? 2 : 1;
         LoadMap(_currentMapIndex);
+        _isWaitingForNextMap = false; // 重置等待状态
     }
 
     public void OnBeanEaten()
