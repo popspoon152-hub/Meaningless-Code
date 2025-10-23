@@ -17,14 +17,22 @@ public class BossGrowState_First : IBossStateFirstStage
         //    _stateMachine.Animator.SetTrigger("Grow");
         //}
 
-        _doGrowOnce = _stateMachine.StartCoroutine(DoGrowOnce());
 
+        if (_stateMachine.Segments.Count == _stateMachine.MaxSnakeSegments)
+        {
+            _stateMachine.IsMove = true;
+            _stateMachine.ChangeState(BossState.EatBeansRangedAttack);
+        }
+        else
+        {
+            _doGrowOnce = _stateMachine.StartCoroutine(DoGrowOnce());
+        }
     }
 
     private IEnumerator DoGrowOnce()
     {
         _stateMachine.IsMove = false;
-
+        
         Transform segment = GameObject.Instantiate(_stateMachine.SegmentPrefab);
         segment.position = _stateMachine.Segments[_stateMachine.Segments.Count - 1].position;
 
@@ -34,14 +42,7 @@ public class BossGrowState_First : IBossStateFirstStage
 
         _stateMachine.IsMove = true;
 
-        if (_stateMachine.Segments.Count > _stateMachine.MaxSnakeSegments)
-        {
-            _stateMachine.ChangeState(BossState.EatBeansRangedAttack);
-        }
-        else
-        {
-            _stateMachine.ChangeState(BossState.EatBeans);
-        }
+        _stateMachine.ChangeState(BossState.EatBeans);
     }
 
     // 固定时间步长更新（物理相关）

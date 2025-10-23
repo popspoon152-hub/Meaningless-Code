@@ -41,6 +41,5 @@ public class Bean : MonoBehaviour
     public void BeEat()
     {
         Destroy(this.gameObject);
-        Debug.Log("¶¹×Ó±»³Ôµô");
     }
 }

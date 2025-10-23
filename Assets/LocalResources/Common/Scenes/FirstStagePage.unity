@@ -326,13 +326,17 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5424857889502558470, guid: 245e13b7df659c449b9666441e83a5eb, type: 3}
+      propertyPath: m_Name
+      value: Wall2
+      objectReference: {fileID: 0}
     - target: {fileID: 5454480075975898177, guid: 245e13b7df659c449b9666441e83a5eb, type: 3}
       propertyPath: m_Name
       value: Level2
       objectReference: {fileID: 0}
     - target: {fileID: 5454480075975898177, guid: 245e13b7df659c449b9666441e83a5eb, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6185709442140238896, guid: 245e13b7df659c449b9666441e83a5eb, type: 3}
       propertyPath: m_CellSize.x
@@ -1014,6 +1018,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1165450908}
     m_Modifications:
+    - target: {fileID: 1390429993966397772, guid: cbccbec4a4abda84dbc685a894b6973c, type: 3}
+      propertyPath: m_Name
+      value: Wall1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1454495075731349453, guid: cbccbec4a4abda84dbc685a894b6973c, type: 3}
+      propertyPath: m_Name
+      value: Ground1
+      objectReference: {fileID: 0}
     - target: {fileID: 1997966478149790880, guid: cbccbec4a4abda84dbc685a894b6973c, type: 3}
       propertyPath: m_TileMatrixArray.Array.size
       value: 4
@@ -1706,10 +1718,10 @@ MonoBehaviour:
   - {fileID: 639852213}
   MinBeansInstantiatePerTime1: 2
   MaxBeansInstantiatePerTime1: 5
-  BeansInstantiateTimes1: 2
+  BeansInstantiateTimes1: 1
   MinBeansInstantiatePerTime2: 2
   MaxBeansInstantiatePerTime2: 5
-  BeansInstantiateTimes2: 2
+  BeansInstantiateTimes2: 1
   MapStayTime1: 5
   MapStayTime2: 5
   BeansPrefabs: {fileID: 2214726139745622937, guid: a530cf054ad61bd41834d119369ac746, type: 3}
@@ -2078,7 +2090,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1337724028}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 133b7dd5a953f7d48ac5da9f147e88ef, type: 3}
   m_Name: 
