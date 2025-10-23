@@ -71,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
     private float _lastAttackTime;
     private bool _isAttacking = false;
     private Coroutine _attackCoroutine;
+
     #endregion
 
     #region LifeCycle
@@ -657,6 +658,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     #endregion
+
 
     #region Gizmos
     private void DrawJumpArc(float moveSpeed, Color gizmoColor)
