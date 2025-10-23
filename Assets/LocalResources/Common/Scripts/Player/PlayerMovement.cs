@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UIElements;
+using static UnityEngine.EventSystems.EventTrigger;
 using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerMovement : MonoBehaviour
@@ -18,6 +19,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Collider2D _bodyColl;
     [SerializeField] private Animator Anim;
     private Rigidbody2D _rb;
+
+    [Header("掉落")]
+    public Transform DropPoint;
+    public Transform BackPoint;
+    public float DropHurt = 20f;
+
+    [Header("Attack")]
+    public Transform[] AttackPoints;                                                       //攻击点
 
     //移动相关
     private Vector2 _moveVelocity;
@@ -559,25 +568,32 @@ public class PlayerMovement : MonoBehaviour
             StartDash(AttackStats.AttackLittleDash[(int)_currentCombo - 1]);
         }
 
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackStats.AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.EnemyLayer);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.EnemyLayer);
+        Collider2D[] hitBeans = Physics2D.OverlapCircleAll(AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.BeanLayer);
 
-        
 
         if (hitEnemies != null)
         {
             bool bossHurt = true;
             foreach (var enemy in hitEnemies)
             {
-                if (enemy.CompareTag("Bean"))
-                {
-                    Bean bean = enemy.GetComponent<Bean>();
-                    bean.TakeDamage(1);
-                }
                 if (enemy.CompareTag("Boss") && bossHurt)
                 {
                     _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1]);
                     PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum);
                     bossHurt = false;
+                }
+            }
+        }
+
+        if (hitBeans != null)
+        {
+            foreach (var bean in hitBeans)
+            {
+                if (bean.CompareTag("Bean"))
+                {
+                    Bean beans = bean.GetComponent<Bean>();
+                    beans.TakeDamage(1);
                 }
             }
         }
@@ -616,13 +632,13 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (MoveStats.DropPoint == null)
+        if (DropPoint == null)
         {
             Debug.LogError("DropPoint is not assigned!");
             return;
         }
 
-        if (MoveStats.BackPoint == null)
+        if (BackPoint == null)
         {
             Debug.LogError("BackPoint is not assigned!");
             return;
@@ -634,10 +650,10 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (gameObject.transform.position.y < MoveStats.DropPoint.position.y)
+        if (gameObject.transform.position.y < DropPoint.position.y)
         {
-            gameObject.transform.position = MoveStats.BackPoint.position;
-            PlayerHealth.Ins.TakeDamageByPlayer(MoveStats.DropHurt);
+            gameObject.transform.position = BackPoint.position;
+            PlayerHealth.Ins.TakeDamageByPlayer(DropHurt);
         }
     }
     #endregion
@@ -718,7 +734,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_currentCombo != 0)
         {
-            Gizmos.DrawWireSphere(AttackStats.AttackPoints[(int)_currentCombo - 1].position, AttackStats.AttackRange[(int)_currentCombo - 1]);
+            Gizmos.DrawWireSphere(AttackPoints[(int)_currentCombo - 1].position, AttackStats.AttackRange[(int)_currentCombo - 1]);
         }
     }
     #endregion

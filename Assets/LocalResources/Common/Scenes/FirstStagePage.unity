@@ -194,6 +194,52 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!1 &182355621
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 182355622}
+  - component: {fileID: 182355623}
+  m_Layer: 0
+  m_Name: PathFinding
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &182355622
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182355621}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1777725682}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &182355623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182355621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a18079142f037934089b164787d5b90c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seeker: {fileID: 0}
+  target: {fileID: 0}
 --- !u!1 &201158671
 GameObject:
   m_ObjectHideFlags: 0
@@ -2032,7 +2078,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1337724028}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 133b7dd5a953f7d48ac5da9f147e88ef, type: 3}
   m_Name: 
@@ -2043,8 +2089,8 @@ MonoBehaviour:
   MaxHealth: 200
   EatBeanMoveSpeed: 20
   AttackMoveSpeed: 20
-  StartSnakeSegments: 5
-  MaxSnakeSegments: 10
+  StartSnakeSegments: 1
+  MaxSnakeSegments: 5
   SegmentPrefab: {fileID: 8467389090405312210, guid: 59ada1b512ad2c54ebc2af62933d7c32, type: 3}
   Segments: []
   IsMove: 1
@@ -2058,7 +2104,10 @@ MonoBehaviour:
   EatBeansRangedAttackInvulnerableTime: 1
   StateInvulnerableTime: 1
   RepathInterval: 1.5
-  EatDistance: 2.5
+  EatDistance: 0.8
+  BeanLayer:
+    serializedVersion: 2
+    m_Bits: 256
   IdleLeftTransfrom: {fileID: 651526992}
   IdleRightTransfrom: {fileID: 696186569}
   IdleTime: 1.5
@@ -2140,7 +2189,7 @@ Transform:
   m_GameObject: {fileID: 1337724028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.8, z: 0}
+  m_LocalPosition: {x: 0, y: 59.5, z: 0}
   m_LocalScale: {x: 4.5, y: 4.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2701,6 +2750,7 @@ Transform:
   m_Children:
   - {fileID: 911354946}
   - {fileID: 627680425}
+  - {fileID: 182355622}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1790785468
@@ -3055,6 +3105,13 @@ MonoBehaviour:
   _feetColl: {fileID: 1875444659}
   _bodyColl: {fileID: 1766016117}
   Anim: {fileID: 0}
+  DropPoint: {fileID: 1162193277}
+  BackPoint: {fileID: 1692830171}
+  DropHurt: 20
+  AttackPoints:
+  - {fileID: 1440887682}
+  - {fileID: 323244046}
+  - {fileID: 1930832478}
 --- !u!1 &2129089005
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ public class Bean : MonoBehaviour
 {
     [Range(1, 8)] public int BeanHealth = 5;            //豆子生命值
     [SerializeField] private int _currentHealth;
+    public bool IsDestroy = false;
 
     private void Start()
     {
@@ -37,5 +38,9 @@ public class Bean : MonoBehaviour
         _currentHealth -= damage;
     }
 
-    //被吃了的还没写
+    public void BeEat()
+    {
+        Destroy(this.gameObject);
+        Debug.Log("豆子被吃掉");
+    }
 }

@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 297877417568399751}
   - component: {fileID: 2363073031695259253}
   - component: {fileID: 7934060231577730995}
-  - component: {fileID: 5044761400215727923}
-  m_Layer: 7
+  - component: {fileID: -6431041686425644604}
+  m_Layer: 8
   m_Name: Bean
   m_TagString: Bean
   m_Icon: {fileID: 0}
@@ -100,7 +100,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BeanHealth: 5
   _currentHealth: 0
---- !u!61 &5044761400215727923
+  IsDestroy: 0
+--- !u!61 &-6431041686425644604
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

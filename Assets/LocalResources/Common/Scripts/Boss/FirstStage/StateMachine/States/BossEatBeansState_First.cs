@@ -28,6 +28,9 @@ public class BossEatBeansState_First : IBossStateFirstStage
         _stateMachine.CurrentMoveSpeed = _stateMachine.EatBeanMoveSpeed;
         _stateMachine.IsMove = true;
 
+        targetIndex = 0;
+        _path = null;
+
         EatBeansMove();
     }
 
@@ -44,7 +47,14 @@ public class BossEatBeansState_First : IBossStateFirstStage
     /// </summary>
     private void SelectNextTarget()
     {
+        if (_noBeansCoroutine != null)
+        {
+            _stateMachine.StopCoroutine(_noBeansCoroutine);
+            _noBeansCoroutine = null;
+        }
+
         Bean[] beans = UnityEngine.Object.FindObjectsOfType<Bean>();
+
         if (beans == null || beans.Length == 0)
         {
             // 若尚未运行等待协程，则启动等待；已经在等待中则直接返回
@@ -55,16 +65,38 @@ public class BossEatBeansState_First : IBossStateFirstStage
             return;
         }
 
-        // 若在等待阶段出现了豆子，取消等待协程
-        if (_noBeansCoroutine != null)
+        Bean closestBean = null;
+        float closestDistance = float.MaxValue;
+        Vector3 currentPos = _stateMachine.transform.position;
+
+        int validBeanCount = 0;
+        foreach (Bean bean in beans)
         {
-            _stateMachine.StopCoroutine(_noBeansCoroutine);
-            _noBeansCoroutine = null;
+            validBeanCount++;
+            float distance = Vector3.Distance(currentPos, bean.transform.position);
+            if (distance < closestDistance)
+            {
+                closestBean = bean;
+                closestDistance = distance;
+            }
         }
 
-        var ordered = beans.OrderByDescending(b => Vector3.Distance(_stateMachine.transform.position, b.transform.position)).ToArray();
+        _targetBean = closestBean;
 
-        _targetBean = ordered[0];
+        // 如果还是没找到有效豆子
+        if (_targetBean == null && _noBeansCoroutine == null)
+        {
+            _noBeansCoroutine = _stateMachine.StartCoroutine(NoBeansWaitCoroutine());
+        }
+
+        //if (_targetBean != null)
+        //{
+        //    Debug.Log($"选择了豆子，位置: {_targetBean.transform.position}, 距离: {Vector3.Distance(_stateMachine.transform.position, _targetBean.transform.position)}");
+        //}
+        //else
+        //{
+        //    Debug.Log("没有找到有效的豆子");
+        //}
     }
 
     /// <summary>
@@ -87,6 +119,10 @@ public class BossEatBeansState_First : IBossStateFirstStage
         {
             // 有豆子则重新选目标
             SelectNextTarget();
+            if (_targetBean != null)
+            {
+                MoveToTarget();
+            }
         }
     }
 
@@ -96,67 +132,190 @@ public class BossEatBeansState_First : IBossStateFirstStage
     /// <exception></exception>
     private void MoveToTarget()
     {
-        _path = Pathfinding.Ins.FindPath(_stateMachine.transform.position, _targetBean.transform.position);
-        if(_path != null && _path.Count > 0)
+        if (_targetBean == null || _targetBean.gameObject == null || !_targetBean.gameObject.activeInHierarchy)
         {
+            SelectNextTarget();
+            return;
+        }
+
+        if (_followPath != null)
+        {
+            _stateMachine.StopCoroutine(_followPath);
+            _followPath = null;
+        }
+
+        if (Pathfinding.Ins == null)
+        {
+            //Debug.LogError("Pathfinding instance is null!");
+            // 路径查找不可用，直接向豆子移动
+            _followPath = _stateMachine.StartCoroutine(MoveDirectlyToBean());
+            return;
+        }
+
+        _path = Pathfinding.Ins.FindPath(_stateMachine.transform.position, _targetBean.transform.position);
+
+        if (_path != null && _path.Count > 0)
+        {
+            targetIndex = 0;
             _followPath = _stateMachine.StartCoroutine(FollowPath());
+        }
+        else
+        {
+            //Debug.LogWarning("路径查找失败，直接向豆子移动");
+            _followPath = _stateMachine.StartCoroutine(MoveDirectlyToBean());
         }
     }
 
     private IEnumerator FollowPath()
     {
+        if (_path == null || _path.Count == 0)
+        {
+            //Debug.LogWarning("路径为空，无法跟随");
+            yield break;
+        }
+
         Vector3 currentWaypoint = _path[0];
+        targetIndex = 0;
 
         while (true)
         {
-            if (_stateMachine.transform.position == currentWaypoint)
+
+            // 路径点到达检查
+            if (Vector3.Distance(_stateMachine.transform.position, currentWaypoint) <= 0.1f)
             {
                 targetIndex++;
                 if (targetIndex >= _path.Count)
                 {
+                    // 路径走完后，直接向豆子移动，直到吃到豆子
+                    yield return _stateMachine.StartCoroutine(MoveDirectlyToBean());
                     yield break;
                 }
                 currentWaypoint = _path[targetIndex];
             }
 
+            // 移动
             _stateMachine.transform.position = Vector3.MoveTowards(_stateMachine.transform.position, currentWaypoint, _stateMachine.CurrentMoveSpeed * Time.deltaTime);
+
             yield return null;
         }
+    }
+
+    private IEnumerator MoveDirectlyToBean()
+    {
+        if (_targetBean == null) yield break;
+
+        while (_targetBean != null && _targetBean.gameObject != null && _targetBean.gameObject.activeInHierarchy)
+        {
+            float distToBean = GetDistanceToBean();
+
+            if (distToBean <= _stateMachine.EatDistance)
+            {
+                EatBean();
+                break;
+            }
+
+            // 直接向豆子位置移动
+            _stateMachine.transform.position = Vector3.MoveTowards(
+                _stateMachine.transform.position,
+                _targetBean.transform.position,
+                _stateMachine.CurrentMoveSpeed * Time.deltaTime
+            );
+
+            yield return null;
+        }
+    }
+
+    // 统一的距离计算方法
+    private float GetDistanceToBean()
+    {
+        if (_targetBean == null) return float.MaxValue;
+
+        return Vector2.Distance(
+            new Vector2(_stateMachine.transform.position.x, _stateMachine.transform.position.y),
+            new Vector2(_targetBean.transform.position.x, _targetBean.transform.position.y)
+        );
     }
     #endregion
 
     public void UpdateState()
     {
-        //如果没有目标豆子，尝试选择下一个
-        if (_targetBean == null)
+        if (_stateMachine == null) return;
+
+        if (_targetBean == null && _noBeansCoroutine == null)
         {
             EatBeansMove();
             return;
         }
 
-        //如果被玩家或其他因素破坏,则重新选择目标
-        if (_targetBean.gameObject == null || !_targetBean.gameObject.activeInHierarchy)
-        {
-            _targetBean = null;
-            EatBeansMove();
-            return;
-        }
 
-        //吃豆
-        if(_targetBean != null)
+        if (_targetBean != null)
         {
-            float distToBean = Vector2.Distance(_stateMachine.transform.position, new Vector2(_targetBean.transform.position.x, _targetBean.transform.position.y));
-            if (distToBean <= _stateMachine.EatDistance)
+            if (_targetBean.gameObject == null || !_targetBean.gameObject.activeInHierarchy)
             {
-                //没加动画
-
-                UnityEngine.Object.Destroy(_targetBean.gameObject);
                 _targetBean = null;
 
-                _stateMachine.ChangeState(BossState.Grow);
+                // 停止移动
+                if (_followPath != null)
+                {
+                    _stateMachine.StopCoroutine(_followPath);
+                    _followPath = null;
+                }
+
+                EatBeansMove();
+                return;
+            }
+
+            // 吃豆检查 - 只在没有路径跟随时检查（路径跟随会在内部处理吃豆）
+            //if (_followPath == null)
+            //{
+            //    float distToBean = GetDistanceToBean();
+
+            //    if (distToBean <= _stateMachine.EatDistance)
+            //    {
+            //        EatBean();
+            //    }
+            //    else
+            //    {
+            //        MoveToTarget();
+            //    }
+            //}
+        }
+    }
+
+    // 统一的吃豆方法
+    private void EatBean()
+    {
+        if (_followPath != null)
+        {
+            _stateMachine.StopCoroutine(_followPath);
+            _followPath = null;
+        }
+
+        if (_targetBean != null && _targetBean.gameObject != null)
+        {
+            try
+            {
+                Bean bean = _targetBean.GetComponent<Bean>();
+                if (bean != null)
+                {
+                    bean.BeEat();
+                }
+                else
+                {
+                    UnityEngine.Object.Destroy(_targetBean.gameObject);
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"豆子销毁失败: {e.Message}");
+                UnityEngine.Object.Destroy(_targetBean.gameObject);
             }
         }
 
+        _targetBean = null;
+
+        // 切换状态
+        _stateMachine.ChangeState(BossState.Grow);
     }
 
     // 固定时间步长更新（物理相关）
@@ -170,17 +329,23 @@ public class BossEatBeansState_First : IBossStateFirstStage
     // 退出状态时调用（清理）
     public void ExitState()
     {
-        _stateMachine = null;
-        if(_noBeansCoroutine != null)
+        // 清理所有协程
+        if (_noBeansCoroutine != null)
         {
             _stateMachine.StopCoroutine(_noBeansCoroutine);
             _noBeansCoroutine = null;
         }
-        if(_followPath != null)
+
+        if (_followPath != null)
         {
             _stateMachine.StopCoroutine(_followPath);
             _followPath = null;
         }
+
+        _stateMachine = null;
+        _targetBean = null;
+        _path = null;
+        targetIndex = 0;
     }
 
     // 处理动画事件
@@ -189,26 +354,12 @@ public class BossEatBeansState_First : IBossStateFirstStage
 
     }
 
-    void OnDrawGizmos()
-    {
-        if (_path != null)
-        {
-            for (int i = targetIndex; i < _path.Count; i++)
-            {
-                Gizmos.color = Color.black;
-                Gizmos.DrawCube(_path[i], Vector3.one * 0.1f);
 
-                if (i == targetIndex)
-                {
-                    Gizmos.DrawLine(_stateMachine.transform.position, _path[i]);
-                }
-                else
-                {
-                    Gizmos.DrawLine(_path[i - 1], _path[i]);
-                }
-            }
-        }
-    }
+
+
+
+
+
 
 
 

@@ -76,12 +76,12 @@ public class BossEatBeansRangedAttackState_First : IBossStateFirstStage
     // 退出状态时调用（清理）
     public void ExitState()
     {
-        _stateMachine = null;
         if(_RangedAttack != null)
         {
             _stateMachine.StopCoroutine(_RangedAttack);
             _RangedAttack = null;
         }
+        _stateMachine = null;
     }
 
 

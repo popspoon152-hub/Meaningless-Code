@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 #region Enum
@@ -58,7 +59,7 @@ public class BossFirstStateMachine : MonoBehaviour
     private float _playerInvulnerableTime = 0.2f;
     private bool _canHurt = true;
 
-    [HideInInspector] public bool _isAtLeft = false; 
+    [HideInInspector] public bool _isAtLeft = false;
     #endregion
 
 
@@ -81,7 +82,9 @@ public class BossFirstStateMachine : MonoBehaviour
     #region BossEatBeansState_First
     [Header("BossEatBeansState_First")]
     [Range(0.5f, 2f)] public float RepathInterval = 0.5f;                  // 定期重算路径，防止障碍/豆子移动导致路径失效
-    [Range(0.1f, 3f)] public float EatDistance = 0.8f;                     // 到达此距离视为“吃掉”豆子
+    [Range(0.1f, 10f)] public float EatDistance = 1f;                     // 到达此距离视为“吃掉”豆子
+
+    public LayerMask BeanLayer;
     #endregion
 
 
@@ -190,6 +193,23 @@ public class BossFirstStateMachine : MonoBehaviour
     {
         Segments.Add(this.transform); // 添加头部作为第一节
 
+        //for (int i = 1; i <= StartSnakeSegments; i++)
+        //{
+        //    Transform segment = Instantiate(SegmentPrefab);
+        //    segment.position = Segments[Segments.Count - i].position;
+
+        //    Segments.Add(segment);
+        //}
+        for (int i = 1; i <= StartSnakeSegments; i++)
+        {
+            Transform segment = Instantiate(SegmentPrefab);
+            // 设置初始位置，确保关节之间有适当距离
+            Vector3 spawnPos = Segments[Segments.Count - 1].position - Vector3.up * 9f * i;
+            segment.position = spawnPos;
+
+            Segments.Add(segment);
+        }
+
         CurrentHealth = MaxHealth;
         CurrentMoveSpeed = EatBeanMoveSpeed;
         CurrentSegmentNum = Segments.Count;
@@ -231,6 +251,8 @@ public class BossFirstStateMachine : MonoBehaviour
     // 状态切换方法
     public void ChangeState(BossState newState)
     {
+        Debug.Log($"尝试从 {_currentState} 切换到 {newState}");
+
         // 退出当前状态
         _currentStateInstance?.ExitState();
 
@@ -240,6 +262,8 @@ public class BossFirstStateMachine : MonoBehaviour
             _currentStateInstance = nextState;
             _currentState = newState;
             _currentStateName = newState.ToString();
+
+            Debug.Log($"状态切换成功: {_currentState}");
 
             // 进入新状态
             _currentStateInstance.EnterState(this);
@@ -258,36 +282,40 @@ public class BossFirstStateMachine : MonoBehaviour
     {
         if (Segments == null || Segments.Count < 2) return;
 
-        float step = CurrentMoveSpeed * Time.fixedDeltaTime;
+        float segmentSpacing = 4.5f; // 关节间距
+        float followSpeed = CurrentMoveSpeed;
 
-        for (int i = Segments.Count - 1; i > 0; i--)
+        for (int i = 1; i < Segments.Count; i++)
         {
             Transform currentSegment = Segments[i];
             Transform previousSegment = Segments[i - 1];
 
-            Vector2 targetPosition = previousSegment.position;
-            targetPosition.y = currentSegment.position.y; // 保持y轴位置不变
+            Vector2 targetPosition = (Vector2)previousSegment.position -
+                                    ((Vector2)(previousSegment.position - currentSegment.position)).normalized * segmentSpacing;
 
-            Rigidbody2D rb = currentSegment.GetComponent<Rigidbody2D>();
-            Vector2 newPos = Vector3.MoveTowards(currentSegment.position, targetPosition, step);
-            if (rb != null)
-            {
-                rb.MovePosition(newPos);
-            }
-            else
-            {
-                currentSegment.position = newPos;
-            }
+            // 使用平滑移动
+            Vector2 newPosition = Vector2.Lerp(
+                currentSegment.position,
+                targetPosition,
+                followSpeed * Time.fixedDeltaTime
+            );
 
-            // 保持水平旋转
-            Vector2 direction = previousSegment.position - currentSegment.position;
-            direction.y = 0f;
-            if (direction.sqrMagnitude > 1e-6f)
+            // 或者使用 MoveTowards 获得更精确的控制
+            // Vector2 newPosition = Vector2.MoveTowards(
+            //     currentSegment.position, 
+            //     targetPosition, 
+            //     followSpeed * Time.fixedDeltaTime
+            // );
+
+
+            currentSegment.position = newPosition;
+
+            // 简单的2D旋转
+            Vector2 direction = (Vector2)(previousSegment.position - currentSegment.position);
+            if (direction.sqrMagnitude > 0.01f)
             {
-                direction.Normalize();
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                // 使用 step 作为插值因子（可根据需要改为其他系数）
-                currentSegment.rotation = Quaternion.Slerp(currentSegment.rotation, targetRotation, Mathf.Clamp01(step));
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                currentSegment.rotation = Quaternion.Euler(0, 0, angle);
             }
         }
     }

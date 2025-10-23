@@ -56,13 +56,12 @@ public class BossGrowState_First : IBossStateFirstStage
     // 退出状态时调用（清理）
     public void ExitState()
     {
-        _stateMachine = null;
         if (_doGrowOnce != null)
         {
             _stateMachine.StopCoroutine(_doGrowOnce);
             _doGrowOnce = null;
         }
-
+        _stateMachine = null;
     }
 
 
