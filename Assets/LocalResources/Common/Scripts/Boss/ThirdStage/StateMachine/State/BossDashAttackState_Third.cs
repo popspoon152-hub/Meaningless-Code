@@ -9,8 +9,6 @@ public class BossDashAttackState_Third : IBossStateThirdStage
     public void EnterState(BossThirdStateMachine stateMachine)
     {
         _stateMachine = stateMachine;
-
-        //启动冲刺逻辑
         _dashCoroutine = _stateMachine.StartCoroutine(DashAttackRoutine());
     }
 
@@ -19,75 +17,122 @@ public class BossDashAttackState_Third : IBossStateThirdStage
         Transform boss = _stateMachine.transform;
         Transform player = _stateMachine.Player_Third;
 
-        //进入蓄力阶段
+        if (player == null)
+        {
+            Debug.LogWarning("[BossDash] Player reference missing!");
+            yield break;
+        }
+
+        // =======================
+        //  高度锁定阶段
+        // =======================
+        float targetY = player.position.y;
+        float verticalSpeed = _stateMachine.DashAlignSpeed; // 在状态机中设定（例如 5f）
+        float threshold = 0.05f;
+
+        Debug.Log("[BossDash] Aligning vertically with player...");
+
+        while (Mathf.Abs(boss.position.y - targetY) > threshold)
+        {
+            Vector3 movePos = boss.position;
+            float step = verticalSpeed * Time.deltaTime;
+            movePos.y = Mathf.MoveTowards(boss.position.y, targetY, step);
+            boss.position = movePos;
+
+            yield return null;
+        }
+
+        // 可选：视线检测（检查是否有障碍物）
+        bool clearLine = true;
+        RaycastHit2D wallHit = Physics2D.Raycast(boss.position,
+                                                 (player.position - boss.position).normalized,
+                                                 Mathf.Abs(player.position.x - boss.position.x),
+                                                 _stateMachine.WallLayerMask);
+        if (wallHit.collider != null)
+        {
+            Debug.Log("[BossDash] Line of sight blocked, skipping dash.");
+            clearLine = false;
+        }
+
+        // 若有阻挡则放弃冲刺（可选逻辑）
+        if (!clearLine)
+        {
+            yield return new WaitForSeconds(0.5f);
+            _stateMachine.AttackStateChoose();
+            yield break;
+        }
+
+        // =======================
+        //  蓄力阶段
+        // =======================
         _stateMachine.IsCharging = true;
 
-        //计算并锁定冲刺方向
-        Vector2 dashDirection = (player.position - boss.position).normalized;
+        int directionSign = (player.position.x < boss.position.x) ? -1 : 1;
+        Vector2 dashDirection = new Vector2(directionSign, 0f);
+
+        // 固定朝向
+        boss.localScale = new Vector3(Mathf.Abs(boss.localScale.x) * directionSign,
+                                      boss.localScale.y, boss.localScale.z);
+
         float chargeTime = _stateMachine.DashChargeTime;
-
-        //可选动画触发
-        // _stateMachine.Animator_Third?.SetTrigger("DashCharge");
-
+        Debug.Log("[BossDash] Charging before dash...");
         yield return new WaitForSeconds(chargeTime);
         _stateMachine.IsCharging = false;
 
-        //开始冲刺阶段
-        Vector2 startPosition = boss.position;
+        // 固定Y坐标（保持水平冲刺）
+        float fixedY = boss.position.y;
+
+        // =======================
+        // 冲刺阶段
+        // =======================
         float dashDistance = 0f;
         float trailTimer = 0f;
 
-        //可选动画触发
-        // _stateMachine.Animator_Third?.SetTrigger("DashStart");
+        Debug.Log("[BossDash] Start horizontal dash!");
 
         while (dashDistance < _stateMachine.DashMaxDistance)
         {
             float step = _stateMachine.DashSpeed * Time.deltaTime;
-            boss.Translate(dashDirection * step, Space.World);
+
+            Vector3 newPosition = boss.position + new Vector3(dashDirection.x * step, 0f, 0f);
+            newPosition.y = fixedY;
+            boss.position = newPosition;
             dashDistance += step;
             trailTimer += Time.deltaTime;
 
-            //旋转Boss朝向冲刺方向
-            float angle = Mathf.Atan2(dashDirection.y, dashDirection.x) * Mathf.Rad2Deg;
-            boss.rotation = Quaternion.Euler(0, 0, angle);
-
-            // 定期生成路径标记
+            // 生成路径标记
             if (trailTimer >= _stateMachine.DashTrailSpawnInterval)
             {
                 trailTimer = 0f;
                 if (_stateMachine.DashTrailPrefab != null)
                 {
-                    GameObject trail = Object.Instantiate(
-                        _stateMachine.DashTrailPrefab,
-                        boss.position,
-                        Quaternion.identity);
+                    Object.Instantiate(_stateMachine.DashTrailPrefab,
+                        boss.position, Quaternion.identity);
                 }
             }
 
-            // 检测是否撞到墙体（停止冲刺）
-            RaycastHit2D hit = Physics2D.Raycast(boss.position, dashDirection, 0.5f, _stateMachine.WallLayerMask);
+            // 撞墙检测
+            RaycastHit2D hit = Physics2D.Raycast(boss.position, dashDirection, 0.6f, _stateMachine.WallLayerMask);
             if (hit.collider != null)
             {
-                // 撞墙
+                Debug.Log("[BossDash] Hit wall, dash stop.");
                 break;
             }
 
-            // 如果撞到玩家则造成冲刺伤害
-            if (Vector2.Distance(boss.position, player.position) <= 1f)
-            {
-                var health = player.GetComponent<PlayerHealth>();
-                if (health != null)
-                {
-                    health.TakeDamageByEnemy(_stateMachine.DashImpactDamage);
-                }
-            }
+            // 撞玩家检测
+            var health = player.GetComponent<PlayerHealth>();
+
 
             yield return null;
         }
 
-        // 3️⃣ 冲刺结束，停顿后选择下一个状态
+        // =======================
+        //  结束阶段
+        // =======================
         yield return new WaitForSeconds(0.4f);
         _stateMachine.AttackStateChoose();
+        //_stateMachine.ChangeState(BossState_Third.AttackIdle);  // 使Boss在完成当前待机后重新进入AttackIdle状态
+        //测试用，记得删
     }
 
     public void ExitState()
@@ -97,7 +142,8 @@ public class BossDashAttackState_Third : IBossStateThirdStage
             _stateMachine.StopCoroutine(_dashCoroutine);
             _dashCoroutine = null;
         }
-        _stateMachine.IsCharging = false; // 退出时确保状态重置
+
+        _stateMachine.IsCharging = false;
         _stateMachine = null;
     }
 

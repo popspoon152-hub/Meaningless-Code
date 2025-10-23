@@ -8,83 +8,88 @@ public class BossAttackRandomMoveState_Third : IBossStateThirdStage
     private Coroutine _moveRoutine;
     private bool _hasHitPlayer;
 
+    // 新增字段：锁定目标位置
+    private Vector3 _lockedTargetPosition;
+
     public void EnterState(BossThirdStateMachine stateMachine)
     {
         _stateMachine = stateMachine;
         _hasHitPlayer = false;
 
-        // 确保Boss允许移动
-        _stateMachine.IsMove = true;
+        // 确保Pathfinding存在
+        if (_stateMachine.pathfinding == null)
+        {
+            Debug.LogError("Pathfinding reference missing in BossThirdStateMachine!");
+            return;
+        }
 
+        _stateMachine.IsMove = true;
+        _stateMachine.CurrentMoveSpeed = _stateMachine.MoveSpeed_Attack;
+
+        // 状态开始时仅记录一次玩家位置
+        if (_stateMachine.Player_Third != null)
+            _lockedTargetPosition = _stateMachine.Player_Third.position;
+        else
+            _lockedTargetPosition = _stateMachine.transform.position; // fallback
+
+        // 启动一次性寻路协程
         _moveRoutine = _stateMachine.StartCoroutine(MovePathfindingRoutine());
+
     }
 
     private IEnumerator MovePathfindingRoutine()
     {
-        Transform player = _stateMachine.Player_Third;
-        float moveSpeed = _stateMachine.MoveSpeed_Attack;
+        //  仅在状态开始时寻路一次
+        List<Vector3> path = _stateMachine.pathfinding.FindPath(
+            _stateMachine.transform.position,
+            _lockedTargetPosition
+        );
 
-        while (_stateMachine.CurrentState != BossState_Third.Hurt) // 受伤后立即退出
+        if (path == null || path.Count == 0)
         {
-            if (!_stateMachine.IsMove) yield break;
-            if (_hasHitPlayer) yield break;
+            Debug.LogWarning("[Boss] No valid path found!");
+            yield break;
+        }
 
-            if (player == null)
+        // Debug
+        // Debug.Log($"[Boss] Locked target: {_lockedTargetPosition}, Path nodes: {path.Count}");
+
+        // 按路径逐点移动
+        for (int i = 0; i < path.Count; i++)
+        {
+            Vector3 nextPos = path[i];
+
+            while (Vector2.Distance(_stateMachine.transform.position, nextPos) > 0.05f)
             {
-                yield return new WaitForSeconds(0.5f);
-                continue;
-            }
-
-            // 获取寻路路径
-            List<Vector3> path = _stateMachine.pathfinding.FindPath(
-                _stateMachine.transform.position,
-                player.position
-            );
-
-            if (path == null || path.Count == 0)
-            {
-                yield return new WaitForSeconds(0.5f);
-                continue;
-            }
-
-            // 逐点移动
-            for (int i = 0; i < path.Count; i++)
-            {
-                Vector3 nextPos = path[i];
-
-                while (Vector2.Distance(_stateMachine.transform.position, nextPos) > 0.05f)
+                if (!_stateMachine.IsMove || _hasHitPlayer)// 撞到玩家中断或被攻击中断
                 {
-                    if (_stateMachine.CurrentState == BossState_Third.Hurt)
-                        yield break;
-
-                    if (_hasHitPlayer)
-                        yield break;
-
-                    if (!_stateMachine.IsMove)
-                        yield break;
-
-                    _stateMachine.transform.position = Vector2.MoveTowards(
-                        _stateMachine.transform.position,
-                        nextPos,
-                        moveSpeed * Time.deltaTime
-                    );
-
-                    yield return null;
-                }
-
-                // 抵达终点后检查是否到达最后节点
-                if (i == path.Count - 1)
-                {
+                    // 结束移动状态
                     _stateMachine.AttackStateChoose();
-                    yield break;
+                    //_stateMachine.ChangeState(BossState_Third.AttackIdle);  // 使Boss在完成当前待机后重新进入AttackIdle状态（测试用）
+                    yield break;  
                 }
+               
+                //Debug.Log(_hasHitPlayer);
+
+                _stateMachine.transform.position = Vector2.MoveTowards(
+                    _stateMachine.transform.position,
+                    nextPos,
+                    _stateMachine.CurrentMoveSpeed * Time.deltaTime
+                );
+
+                yield return null;
             }
 
-            yield return null;
+            // 到达目标节点
+            if (i == path.Count - 1)
+            {
+                // 结束移动状态
+                _stateMachine.AttackStateChoose();
+                //_stateMachine.ChangeState(BossState_Third.AttackIdle);  // 使Boss在完成当前待机后重新进入AttackIdle状态（测试用）
+                yield break;
+            }
         }
     }
-
-    // Boss被玩家攻击时状态机会自动切换到 Hurt 状态，我们无需手动检测，但可以响应事件或检查 CurrentState
 
     public void ExitState()
     {
@@ -98,12 +103,7 @@ public class BossAttackRandomMoveState_Third : IBossStateThirdStage
         _stateMachine = null;
     }
 
-    // 当Boss碰到玩家时，BossThirdStateMachine会调用TryDealCollisionDamage
-    // 我们可以通过一个事件方式或简单调用通知状态中断
-    public void OnBossHitPlayer()
-    {
-        _hasHitPlayer = true;
-    }
+    public void OnBossHitPlayer() => _hasHitPlayer = true;
 
     public void UpdateState() { }
     public void FixedUpdateState() { }

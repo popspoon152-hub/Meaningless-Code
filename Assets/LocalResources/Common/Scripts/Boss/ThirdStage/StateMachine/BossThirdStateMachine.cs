@@ -64,10 +64,16 @@ public class BossThirdStateMachine : MonoBehaviour
     [Range(0.1f, 3f)] public float DashChargeTime = 1f;           // 冲刺蓄力时间
     [Range(1f, 50f)] public float DashMaxDistance = 15f;          // 冲刺最大距离限制
     [Range(0.1f, 1f)] public float DashTrailSpawnInterval = 0.2f; // 路径标记生成间隔
+    [Range(1f, 20f)] public float DashAlignSpeed = 5f; // 垂直对齐速度
 
     [Header("BossDashAttackState_Third 伤害配置")]
     [Range(1f, 50f)] public float DashTrailDamagePerTick = 5f;    // 持续伤害区域的伤害
     [Range(1f, 100f)] public float DashImpactDamage = 20f;        // 冲刺直接撞击玩家伤害
+
+    [Header("持续伤害配置")]
+    public float ZoneDamage = 10f;           // 每次造成的伤害
+    public float ZoneDamageInterval = 0.5f;  // 伤害频率（秒）
+    public float ZoneDuration = 3f;          // 区域持续时间
 
     [Header("BossDashAttackState_Third 特效与检测")]
     public GameObject DashTrailPrefab;                            // 路径标记预制体
@@ -81,17 +87,16 @@ public class BossThirdStateMachine : MonoBehaviour
     public GroundTileManager GroundTileManager;          // 地面管理器
     [Range(0f, 5f)] public float DevourPreWarnTime = 1f; // 吞噬前摇时间（预警时间）
     [Range(1f, 30f)] public float DevourSpeed = 10f;     // 吞噬时的横向移动速度
-                                                         //[Range(1f, 10f)] public float DevourDistance = 5f;   // 吞噬的最大范围（从平台位置横向穿越的距离）(未使用，距离直接算的地砖长度)
-                                                         //[Range(0f, 5f)] public float DevourTileRespawnTime = 5f; // 吞噬后的地砖重生时间
+    [Range(1f, 10f)] public float DevourDistance = 5f;   // 吞噬的最大范围（从平台位置横向穿越的距离）(未使用，距离直接算的地砖长度)
+    //[Range(0f, 5f)] public float DevourTileRespawnTime = 5f; // 吞噬后的地砖重生时间
+    [Range(1f, 30f)] public float DevourSideOffset =5f;   // 吞噬时的横向偏移量
     #endregion
 
     #region BossHoleAttackState_Third 配置
     [Header("BossHoleAttackState_Third 配置")]
-    [Range(0f, 5f)] public float HolePreWarnTime = 1.0f;       // 前摇 / 预警时间
-    [Range(0f, 2f)] public float HoleSpawnEndDelay = 0.3f;     // 生成完成后延迟
-    [Range(0f, 20f)] public float HoleSpawnRangeX = 5f;        // X方向随机生成范围
-    [Range(0f, 10f)] public float HoleSpawnRangeY = 3f;        // Y方向随机生成范围
-    public GameObject HolePrefab;                               // 黑洞预制体（自身包含吸力与伤害参数）
+    public GameObject HolePrefab;        // 黑洞预制体
+    public float HolePreWarnTime = 1f;   // 前摇时间
+    public float HoleSpawnEndDelay = 0.5f; // 生成后等待时间
     #endregion
 
     #region BossSmashAttackState_Third 配置
@@ -103,7 +108,6 @@ public class BossThirdStateMachine : MonoBehaviour
     [Range(1f, 50f)] public float SmashImpactDamage = 20f;      // 下砸造成的直接伤害（影响范围内的玩家）
     public LayerMask HoleGroundLayerMask;                       // 用于检测地面是否存在的LayerMask
     #endregion
-
 
 
 
@@ -171,6 +175,7 @@ public class BossThirdStateMachine : MonoBehaviour
         Animator_Third = GetComponent<Animator>();
         Rb_Third = GetComponent<Rigidbody2D>();
         Player_Third = GameObject.FindGameObjectWithTag("Player").transform;
+        pathfinding = GetComponent<Pathfinding>();
 
         // 初始化状态字典
         _states_Third = new Dictionary<BossState_Third, IBossStateThirdStage>
@@ -263,7 +268,7 @@ public class BossThirdStateMachine : MonoBehaviour
         //{
         //    ChangeState(BossState_Third.SmashAttack);
         //}
-        ChangeState(BossState_Third.AttackRandomMove);
+        ChangeState(BossState_Third.HoleAttack);
     }
     #endregion
 
@@ -298,7 +303,7 @@ public class BossThirdStateMachine : MonoBehaviour
 
         if (_currentState_Third == BossState_Third.AttackRandomMove &&_currentStateInstance is BossAttackRandomMoveState_Third moveState)
         {
-            moveState.OnBossHitPlayer();
+            moveState.OnBossHitPlayer();//随机移动撞击停止
         }
 
         // 开启碰撞冷却，防止连续触发
@@ -342,6 +347,7 @@ public class BossThirdStateMachine : MonoBehaviour
         if (_isInvulnerable) return;
 
         CurrentHealth -= damage;
+        Debug.Log("Successfully hurt");
 
         //if (Animator != null)
         //{

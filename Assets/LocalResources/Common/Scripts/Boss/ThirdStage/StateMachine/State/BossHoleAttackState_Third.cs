@@ -14,46 +14,33 @@ public class BossHoleAttackState_Third : IBossStateThirdStage
 
     private IEnumerator HoleAttackRoutine()
     {
-        // 1️⃣ 前摇 / 预警
+        // 1️前摇阶段
         _stateMachine.IsCharging = true;
-        // 可触发动画或特效
-        // _stateMachine.Animator_Third?.SetTrigger("HolePrewarn");
+
+        // 可选动画触发，例如:
+        // _stateMachine.Animator_Third?.SetTrigger("Hole_Prepare");
 
         yield return new WaitForSeconds(_stateMachine.HolePreWarnTime);
+
         _stateMachine.IsCharging = false;
 
-        // 2️⃣ 计算生成位置
-        Vector3 spawnPos = GetHoleSpawnPosition();
-
-        // 3️⃣ 实例化黑洞（空中背景中）
+        // 2️在Boss当前位置生成黑洞
         if (_stateMachine.HolePrefab != null)
         {
+            Vector3 spawnPos = _stateMachine.transform.position;
             GameObject.Instantiate(_stateMachine.HolePrefab, spawnPos, Quaternion.identity);
         }
         else
         {
-            Debug.LogWarning("BossHoleAttackState_Third: HolePrefab is null - cannot spawn black hole.");
+            Debug.LogWarning("[BossHoleAttack] HolePrefab is null - cannot spawn black hole.");
         }
 
-        // 4️⃣ 短暂后摇后切换下个状态
+        // 3️ 短暂等待后切换到下一个状态
         yield return new WaitForSeconds(_stateMachine.HoleSpawnEndDelay);
-        _stateMachine.AttackStateChoose();
-    }
 
-    /// <summary>
-    /// 计算黑洞生成位置
-    /// 默认：在玩家附近随机偏移一段距离
-    /// </summary>
-    private Vector3 GetHoleSpawnPosition()
-    {
-        Transform player = _stateMachine.Player_Third;
-        Vector3 basePos = player != null ? player.position : _stateMachine.transform.position;
-
-        // 随机偏移（上下左右）
-        float offsetX = Random.Range(-_stateMachine.HoleSpawnRangeX, _stateMachine.HoleSpawnRangeX);
-        float offsetY = Random.Range(-_stateMachine.HoleSpawnRangeY, _stateMachine.HoleSpawnRangeY);
-
-        return new Vector3(basePos.x + offsetX, basePos.y + offsetY, basePos.z);
+        //_stateMachine.AttackStateChoose();
+        _stateMachine.ChangeState(BossState_Third.AttackIdle);  // 使Boss在完成当前待机后重新进入AttackIdle状态
+        //测试用，记得删
     }
 
     public void ExitState()
