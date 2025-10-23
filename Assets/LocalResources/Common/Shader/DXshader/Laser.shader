@@ -12,6 +12,8 @@ Shader "Custom/Laser"
             "RenderType"="Opaque"
             "RenderPipeline"="UniversalRenderPipeline"
         }
+        Cull Off
+        ZWrite Off
         Pass
         {
             HLSLPROGRAM

@@ -26,6 +26,7 @@ Shader "Custom/PlayerShader"
         }
 
 
+        Cull Off
         ZWrite Off
 		Blend SrcAlpha OneMinusSrcAlpha
 

@@ -12,6 +12,9 @@ Shader "Custom/PixelShader"
             "RenderType"="Opaque"
             "RenderPipeline"="UniversalRenderPipeline"
         }
+        Cull Off
+        ZWrite Off
+		Blend SrcAlpha OneMinusSrcAlpha
         Pass
         {
             HLSLPROGRAM

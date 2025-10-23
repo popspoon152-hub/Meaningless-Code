@@ -11,6 +11,8 @@ Shader "Custom/Noise"
             "RenderType"="Opaque"
             "RenderPipeline"="UniversalRenderPipeline"
         }
+        Cull Off
+        ZWrite Off
         Pass
         {
 

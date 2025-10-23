@@ -1,8 +1,8 @@
-Shader "Custom/Glitch"
+Shader "Custom/BackGround"
 {
     Properties
     {
-        _MainTex ("MaintTex", 2D) = "white" {}
+        _Tex ("Albedo (RGB)", 2D) = "white" {}
         _BlockSize("BlockSize",Float)=4.0//区块大小
         _Speed("Speed",Float)=40.0//抖动速度
         _MaxRGBSplitX("MaxRGBSplitX",Float)=2.0//X最大抖动
@@ -16,20 +16,22 @@ Shader "Custom/Glitch"
         }
         Cull Off
         ZWrite Off
+		Blend SrcAlpha OneMinusSrcAlpha
         Pass
         {
-
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl"
-            TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);
+            TEXTURE2D(_Tex);
+            SAMPLER(sampler_Tex);
+
             CBUFFER_START(UnityPerMaterial)
-                float4 _MainTex_ST;
+                float4 _Tex_ST;
             CBUFFER_END
+
             float _BlockSize;
             float _Speed;
             float _MaxRGBSplitX;
@@ -47,18 +49,16 @@ Shader "Custom/Glitch"
                 float3 worldPos : TEXCOORD0;
                 float2 uv : TEXCOORD1;
             };
-            
             Varyings vert(Attributes i) 
             {
                 Varyings output;
                 output.worldPos = TransformObjectToWorld(i.vertex.xyz);
                 output.pos = TransformWorldToHClip(output.worldPos);
-                output.uv = TRANSFORM_TEX(i.texcoord,_MainTex);
+                output.uv = TRANSFORM_TEX(i.texcoord,_Tex);
                 return output;
             }
 
-            //抖动
-            inline float randomNoise(float2 seed)
+             inline float randomNoise(float2 seed)
             {
                 return frac(sin(dot(seed * floor(_Time.y * _Speed), float2(17.13, 3.71))) * 43758.5453123);
             }
@@ -70,6 +70,7 @@ Shader "Custom/Glitch"
 
             half4 frag(Varyings i) : SV_Target
             {
+                half4 texcol = SAMPLE_TEXTURE2D(_Tex, sampler_Tex, float2(i.uv.x,i.uv.y + _Time.x));
                 half2 block = randomNoise(floor(i.uv * _BlockSize));//切分生成随机区块
 
                 float displaceNoise = pow(block.x, 8.0) * pow(block.x, 3.0);//二次筛选
@@ -82,11 +83,11 @@ Shader "Custom/Glitch"
                 float noiseY = 0.05 * randomNoise(7.0);
                 float2 offset = float2(offsetX * noiseX, offsetY* noiseY);
 
-                half4 colorR = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                half4 colorG = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + offset);
-                half4 colorB = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv - offset);
+                half4 colorR = SAMPLE_TEXTURE2D(_Tex, sampler_Tex, float2(i.uv.x,i.uv.y + _Time.x));
+                half4 colorG = SAMPLE_TEXTURE2D(_Tex, sampler_Tex, float2(i.uv.x,i.uv.y + _Time.x) + offset);
+                half4 colorB = SAMPLE_TEXTURE2D(_Tex, sampler_Tex, float2(i.uv.x,i.uv.y + _Time.x) - offset);
 
-                return half4(colorR.r , colorG.g, colorB.b, (colorR.a + colorG.a + colorB.a));
+                return half4(colorR.r , colorG.g, colorB.b, 0.9);
             }
             ENDHLSL
         }
