@@ -15,7 +15,6 @@ public class GridManager : MonoBehaviour
 
     public static GridManager Ins;
 
-    private float timer = 0.0f;
     void Awake()
     {
         Ins = this;
@@ -27,13 +26,7 @@ public class GridManager : MonoBehaviour
 
     private void Update()
     {
-        //timer += Time.deltaTime;
-        //if (timer >= 1.0f)
-        //{
-        //    // 每秒执行的操作
-        //    CreateGrid();
-        //    timer = 0.0f;
-        //}
+
     }
     public void CreateGrid()
     {

@@ -1776,7 +1776,7 @@ MonoBehaviour:
   MaxBeansInstantiatePerTime2: 5
   BeansInstantiateTimes2: 1
   MapStayTime1: 20
-  MapStayTime2: 5
+  MapStayTime2: 20
   BeansPrefabs: {fileID: 2214726139745622937, guid: a530cf054ad61bd41834d119369ac746, type: 3}
 --- !u!1 &1150840942
 GameObject:
