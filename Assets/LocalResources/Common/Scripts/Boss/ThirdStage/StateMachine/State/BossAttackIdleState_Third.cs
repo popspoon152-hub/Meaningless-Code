@@ -1,4 +1,5 @@
-using System.Collections;
+ï»¿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BossAttackIdleState_Third : IBossStateThirdStage
@@ -7,57 +8,72 @@ public class BossAttackIdleState_Third : IBossStateThirdStage
     private Coroutine _attackIdleCoroutine;
     private Transform _chooseTrans;
 
-    // ½øÈë×´Ì¬Ê±µ÷ÓÃ£¨³õÊ¼»¯£©
     public void EnterState(BossThirdStateMachine stateMachine)
     {
         _stateMachine = stateMachine;
+        _stateMachine.CurrentMoveSpeed = _stateMachine.MoveSpeed_ToIdle; // è®¾ç½®å¾…æœºç§»åŠ¨é€Ÿåº¦
 
-        // Èç¹ûÓĞ¶¯»­£¬´¥·¢¹¥»÷´ı»ú¶¯»­
-        // _stateMachine.Animator?.SetTrigger("AttackIdle");
-
-        _attackIdleCoroutine = _stateMachine.StartCoroutine(AttackIdle());
-
-        _stateMachine.CurrentMoveSpeed = _stateMachine.MoveSpeed_ToIdle;//ĞŞ¸Äµ±Ç°ËÙ¶ÈÎª´ı»úËÙ¶È
+        _attackIdleCoroutine = _stateMachine.StartCoroutine(AttackIdleRoutine());
     }
 
     private void ChooseBossPos()
     {
-        // Ëæ»úÑ¡Ôñ¹¥»÷´ı»úÎ»ÖÃ
-        int num = UnityEngine.Random.Range(0, 2);
-        if (num == 0)
-        {
-            _chooseTrans = _stateMachine.IdleLeftTransfrom;  // ¿ÉÌæ»»ÎªÊÊµ±µÄ¹¥»÷´ı»úÎ»ÖÃ
-        }
-        else
-        {
-            _chooseTrans = _stateMachine.IdleRightTransfrom;  // ¿ÉÌæ»»ÎªÊÊµ±µÄ¹¥»÷´ı»úÎ»ÖÃ
-        }
+        int num = Random.Range(0, 2);
+        _chooseTrans = (num == 0) ? _stateMachine.IdleLeftTransfrom : _stateMachine.IdleRightTransfrom;
     }
 
-    private IEnumerator AttackIdle()
+    private IEnumerator AttackIdleRoutine()
     {
-        // Ñ¡ÔñBossµÄ´ı»úÎ»ÖÃ
+        // 1ï¸é€‰æ‹©å¾…æœºç›®æ ‡ä½ç½®
         ChooseBossPos();
 
-        // BossÒÆ¶¯µ½Ñ¡ÔñµÄÎ»ÖÃ
-        while (Vector2.Distance(_stateMachine.transform.position, _chooseTrans.position) > 0.1f)
+        if (_chooseTrans == null)
         {
-            // Move towards the chosen position
-            _stateMachine.transform.position = Vector2.MoveTowards(_stateMachine.transform.position, _chooseTrans.position, _stateMachine.CurrentMoveSpeed * Time.deltaTime);
-            yield return null;
+            Debug.LogWarning("[BossAttackIdle] No Idle target assigned.");
+            yield break;
         }
 
-        // Boss´ïµ½Ä¿±êÎ»ÖÃºóÍ£ÁôÆ¬¿Ì
+        // 2ï¸ä½¿ç”¨ Pathfinding è®¡ç®—è·¯å¾„
+        if (_stateMachine.pathfinding == null)
+        {
+            Debug.LogError("[BossAttackIdle] Pathfinding reference missing!");
+            yield break;
+        }
+
+        List<Vector3> path = _stateMachine.pathfinding.FindPath(
+            _stateMachine.transform.position,
+            _chooseTrans.position
+        );
+
+        if (path == null || path.Count == 0)
+        {
+            Debug.LogWarning("[BossAttackIdle] Pathfinding returned empty path.");
+            yield break;
+        }
+
+        // 3ï¸æ²¿è·¯å¾„é€ç‚¹ç§»åŠ¨ï¼ˆä¿è¯æ°´å¹³/ç«–ç›´ï¼‰
+        foreach (var node in path)
+        {
+            Vector3 targetPos = new Vector3(node.x, node.y, _stateMachine.transform.position.z);
+            while (Vector2.Distance(_stateMachine.transform.position, targetPos) > 0.05f)
+            {
+                if (!_stateMachine.IsMove) yield break; // è‹¥ä¸­é€”è¢«æ‰“æ–­
+                _stateMachine.transform.position = Vector3.MoveTowards(
+                    _stateMachine.transform.position,
+                    targetPos,
+                    _stateMachine.CurrentMoveSpeed * Time.deltaTime
+                );
+                yield return null;
+            }
+        }
+
+        // 4ï¸åˆ°è¾¾ç›®æ ‡ä½ç½®ï¼Œç­‰å¾…ä¸€æ®µæ—¶é—´
         yield return new WaitForSeconds(_stateMachine.IdleTime);
 
-        // Ñ¡ÔñÒ»ÖÖ¹¥»÷·½Ê½
+        // 5ï¸é€‰æ‹©ä¸‹ä¸€ç§æ”»å‡»
         _stateMachine.AttackStateChoose();
-
-        //_stateMachine.ChangeState(BossState_Third.AttackIdle);  // Ê¹BossÔÚÍê³Éµ±Ç°´ı»úºóÖØĞÂ½øÈëAttackIdle×´Ì¬
-        //²âÊÔÓÃ£¬¼ÇµÃÉ¾
     }
 
-    // ÍË³ö×´Ì¬Ê±µ÷ÓÃ£¨ÇåÀí£©
     public void ExitState()
     {
         if (_attackIdleCoroutine != null)
@@ -67,21 +83,7 @@ public class BossAttackIdleState_Third : IBossStateThirdStage
         }
     }
 
-    // Ã¿Ö¡¸üĞÂ
-    public void UpdateState()
-    {
-        // ¿ÉÒÔÌí¼ÓÃ¿Ö¡µÄ¸üĞÂÂß¼­£¨ÈçAIĞĞÎª¼ì²éµÈ£©
-    }
-
-    // ¹Ì¶¨Ê±¼ä²½³¤¸üĞÂ£¨ÎïÀíÏà¹Ø£©
-    public void FixedUpdateState()
-    {
-        // ÎïÀíÏà¹ØµÄ´¦Àí
-    }
-
-    // ´¦Àí¶¯»­ÊÂ¼ş
-    public void OnAnimationEvent(string eventName)
-    {
-        // ´¦Àí¶¯»­ÊÂ¼ş£¨ÀıÈç£ºBoss¹¥»÷¶¯»­£©
-    }
+    public void UpdateState() { }
+    public void FixedUpdateState() { }
+    public void OnAnimationEvent(string eventName) { }
 }

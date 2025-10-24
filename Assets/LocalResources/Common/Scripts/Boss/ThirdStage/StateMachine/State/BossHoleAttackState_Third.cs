@@ -38,8 +38,8 @@ public class BossHoleAttackState_Third : IBossStateThirdStage
         // 3️ 短暂等待后切换到下一个状态
         yield return new WaitForSeconds(_stateMachine.HoleSpawnEndDelay);
 
-        //_stateMachine.AttackStateChoose();
-        _stateMachine.ChangeState(BossState_Third.AttackIdle);  // 使Boss在完成当前待机后重新进入AttackIdle状态
+        _stateMachine.AttackStateChoose();
+        //_stateMachine.ChangeState(BossState_Third.AttackIdle);  // 使Boss在完成当前待机后重新进入AttackIdle状态
         //测试用，记得删
     }
 

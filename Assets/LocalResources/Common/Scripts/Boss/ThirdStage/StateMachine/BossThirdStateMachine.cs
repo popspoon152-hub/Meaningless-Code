@@ -104,10 +104,19 @@ public class BossThirdStateMachine : MonoBehaviour
     [Range(0f, 2f)] public float SmashPreWarnTime = 1.0f;       // 下砸前摇时间（预警）
     [Range(1f, 10f)] public float SmashFallSpeed = 5f;           // 下砸的速度
     [Range(1f, 10f)] public float SmashPostDelay = 0.3f;        // 下砸后的停滞时间
-    [Range(1f, 10f)] public float SmashAreaRadius = 3f;         // 下砸范围伤害的半径
-    [Range(1f, 50f)] public float SmashImpactDamage = 20f;      // 下砸造成的直接伤害（影响范围内的玩家）
     public LayerMask HoleGroundLayerMask;                       // 用于检测地面是否存在的LayerMask
+    [Range(0f, 10f)] public float SmashChargeRiseHeight = 2f;       // 前摇上升高度
+    public GameObject SmashShockwavePrefab;        // 冲击波预制体
     #endregion
+
+    #region  Smash 冲击波
+    [Header("Smash 冲击波 Settings")]
+    public float SmashShockwaveSpeed = 10f;       // 冲击波移动速度
+    public float SmashShockwaveDamage = 15f;      // 冲击波伤害
+    public float SmashShockwaveLifetime = 3f;     // 冲击波存在时间
+    public LayerMask PlayerLayerMask;             // 玩家层（用于检测伤害）
+    #endregion
+
 
 
 
@@ -247,28 +256,28 @@ public class BossThirdStateMachine : MonoBehaviour
     public void AttackStateChoose()
     {
         //// 根据随机选择攻击状态
-        //int randomNum = UnityEngine.Random.Range(0, 5);
-        //if (randomNum == 0)
+        int randomNum = UnityEngine.Random.Range(0, 5);
+        if (randomNum == 0)
+        {
+            ChangeState(BossState_Third.HoleAttack);
+        }
+        else if (randomNum == 1)
+        {
+            ChangeState(BossState_Third.DevourGround);
+        }
+        //else if (randomNum == 2)
         //{
-        //    ChangeState(BossState_Third.HoleAttack);
+        //    ChangeState(BossState_Third.Teleport);
         //}
-        //else if (randomNum == 1)
-        //{
-        //    ChangeState(BossState_Third.DevourGround);
-        //}
-        ////else if (randomNum == 2)
-        ////{
-        ////    ChangeState(BossState_Third.Teleport);
-        ////}
-        //else if (randomNum == 3)
-        //{
-        //    ChangeState(BossState_Third.DashAttack);
-        //}
-        //else
-        //{
-        //    ChangeState(BossState_Third.SmashAttack);
-        //}
-        ChangeState(BossState_Third.HoleAttack);
+        else if (randomNum == 3)
+        {
+            ChangeState(BossState_Third.DashAttack);
+        }
+        else
+        {
+            ChangeState(BossState_Third.SmashAttack);
+        }
+        //ChangeState(BossState_Third.AttackIdle);
     }
     #endregion
 
