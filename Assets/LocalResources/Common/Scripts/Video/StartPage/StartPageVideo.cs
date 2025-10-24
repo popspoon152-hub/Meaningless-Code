@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,7 +13,11 @@ public class StartPageVideo : MonoBehaviour
     public VideoClip StartMoveVideo;
     public VideoClip ExitVideo;
 
+    public Image TitleImage;
+    public float Speed = 0.2f;
+
     public MyButton StartButton;
+    [SerializeField] private float fadeDuration = 2.0f;
 
     public VideoPlayer VideoPlayer;
 
@@ -24,6 +29,10 @@ public class StartPageVideo : MonoBehaviour
         VideoPlayer.isLooping = true;
         VideoPlayer.Play();
 
+        StartButton.gameObject.SetActive(true);
+
+        UnityEngine.Color originalColor = TitleImage.color;
+
         StartButton.OnDoubleClick.AddListener(ExitStartPage);
     }
 
@@ -32,6 +41,24 @@ public class StartPageVideo : MonoBehaviour
         StartButton.gameObject.SetActive(false);
 
         StartCoroutine(PlayExitVideoAndLoadScene());
+        StartCoroutine(FadeOut());
+    }
+
+    private IEnumerator FadeOut()
+    {
+        float elapsedTime = 0f;
+        UnityEngine.Color originalColor = TitleImage.color;
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
+            TitleImage.color = new UnityEngine.Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+            yield return null;
+        }
+
+        // 确保最终完全透明
+        TitleImage.color = new UnityEngine.Color(originalColor.r, originalColor.g, originalColor.b, 0f);
     }
 
     private IEnumerator PlayExitVideoAndLoadScene()
