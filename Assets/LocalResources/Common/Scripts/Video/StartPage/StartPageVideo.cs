@@ -10,8 +10,10 @@ using UnityEngine.Video;
 public class StartPageVideo : MonoBehaviour
 {
     [Header("Videos")]
+    public StartPageStats StartStats;
     public VideoClip OpeningAnimation;
     public VideoClip StartMoveVideo;
+    public VideoClip GameFinishedMoveVideo;
     public VideoClip ExitVideo;
 
     public Image TitleImage;
@@ -51,7 +53,15 @@ public class StartPageVideo : MonoBehaviour
 
     private void EnterMainInterface()
     {
-        VideoPlayer.clip = StartMoveVideo;
+        if (!StartStats.IsGameFinished)
+        {
+            VideoPlayer.clip = StartMoveVideo;
+        }
+        else
+        {
+            VideoPlayer.clip = GameFinishedMoveVideo;
+        }
+            
         VideoPlayer.isLooping = true;
         VideoPlayer.Play();
 
