@@ -172,7 +172,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af08484237ed5994e9381a8b98fd9296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StartStats: {fileID: 11400000, guid: 1383617d376a600408efee5554252192, type: 2}
+  OpeningAnimation: {fileID: 32900000, guid: b6866fb7598a3d1418ccf55a9adf7047, type: 3}
   StartMoveVideo: {fileID: 32900000, guid: 4bd65995d81f9384ebfc98e86fa0a1fa, type: 3}
+  GameFinishedMoveVideo: {fileID: 32900000, guid: 69f732a89ec91d242aaa8950d3d1afe7, type: 3}
   ExitVideo: {fileID: 32900000, guid: a4bda58988c729e4d8da32cdc0018722, type: 3}
   TitleImage: {fileID: 1474135739}
   Speed: 0.2
