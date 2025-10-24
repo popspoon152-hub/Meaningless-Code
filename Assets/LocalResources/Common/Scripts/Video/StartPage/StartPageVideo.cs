@@ -10,6 +10,7 @@ using UnityEngine.Video;
 public class StartPageVideo : MonoBehaviour
 {
     [Header("Videos")]
+    public VideoClip OpeningAnimation;
     public VideoClip StartMoveVideo;
     public VideoClip ExitVideo;
 
@@ -25,15 +26,61 @@ public class StartPageVideo : MonoBehaviour
 
     void Start()
     {
+        TitleImage.gameObject.SetActive(false);
+        StartButton.gameObject.SetActive(false);
+
+        StartButton.OnDoubleClick.AddListener(ExitStartPage);
+
+        StartCoroutine(PlayOpeningAnimation());
+    }
+
+    private IEnumerator PlayOpeningAnimation()
+    {
+        if (OpeningAnimation != null)
+        {
+            VideoPlayer.clip = OpeningAnimation;
+            VideoPlayer.isLooping = false;
+            VideoPlayer.Play();
+
+            // 等待开场动画播放完成
+            yield return new WaitForSeconds((float)OpeningAnimation.length);
+
+        }
+        EnterMainInterface();
+    }
+
+    private void EnterMainInterface()
+    {
         VideoPlayer.clip = StartMoveVideo;
         VideoPlayer.isLooping = true;
         VideoPlayer.Play();
 
+        StartCoroutine(FadeIn());
         StartButton.gameObject.SetActive(true);
+    }
 
+    private IEnumerator FadeIn()
+    {
+        TitleImage.gameObject.SetActive(true);
+
+        float elapsedTime = 0f;
         UnityEngine.Color originalColor = TitleImage.color;
+        UnityEngine.Color transparentColor = new UnityEngine.Color(originalColor.r, originalColor.g, originalColor.b, 0f);
+        UnityEngine.Color targetColor = new UnityEngine.Color(originalColor.r, originalColor.g, originalColor.b, 1f);
 
-        StartButton.OnDoubleClick.AddListener(ExitStartPage);
+        // 初始设置为透明
+        TitleImage.color = transparentColor;
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
+            TitleImage.color = new UnityEngine.Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+            yield return null;
+        }
+
+        // 确保最终完全不透明
+        TitleImage.color = targetColor;
     }
 
     private void ExitStartPage()
