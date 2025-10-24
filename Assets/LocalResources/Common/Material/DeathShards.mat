@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Custom_BossLightFlow
-  m_Shader: {fileID: 4800000, guid: e4fdf9a34a7cde641b2173b91ea2d321, type: 3}
+  m_Name: DeathShards
+  m_Shader: {fileID: 4800000, guid: cf07ac5b9ac1fd6499b78c2b2e6ff1a6, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -19,30 +19,33 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties: _ShardTex
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _FlowTex:
-        m_Texture: {fileID: 2800000, guid: 4901b0f1d0ef6d74dbea5cf1e2a75949, type: 3}
-        m_Scale: {x: 0.34, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _StripeTex:
-        m_Texture: {fileID: 2800000, guid: a931cba51e807444bb7d73aa971b49c8, type: 3}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: faab69abd869195499e183c8ec0f646d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShardTex:
+        m_Texture: {fileID: 2800000, guid: faab69abd869195499e183c8ec0f646d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FlowDistort: 15.3
-    - _FlowSpeed: 8.7
-    - _Opacity: 1
-    - _StripeInterval: 4.29
-    - _StripeWidth: 0.957
+    - _BlackPoint: 1
+    - _CrackOffset: 36.9
+    - _NoiseThreshold: 0.0514
+    - _Opacity: 0.713
+    - _PixelHeight: 63.7
+    - _PixelInterval: 27.6
+    - _PixelWidth: 70.4
+    - _ShatterSpeed: 1.9
+    - _StopValue: 0.2
     m_Colors:
-    - _FlowCol: {r: 0.14771195, g: 4.702163, b: 4.303868, a: 1}
-    - _StripeCol: {r: 0.44205123, g: 0.62680405, b: 0.64779866, a: 1}
+    - _CrackCol: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

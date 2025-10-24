@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Custom_BossLightFlow 1
+  m_Name: BossLightFlow_R
   m_Shader: {fileID: 4800000, guid: e4fdf9a34a7cde641b2173b91ea2d321, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
