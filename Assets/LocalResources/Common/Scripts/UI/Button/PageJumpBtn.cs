@@ -10,11 +10,10 @@ public enum Scenes
 {
     StartPage,
     FirstStagePage,
-    GalPage,
+    GalAfterFirstStage,
+    GalBeforeFirstStage,
     SecondStagePage,
-    ThirdStagePage,
     SettingsPage,
-    VideoPage
 }
 
 public class PageJumpBtn : MonoBehaviour
