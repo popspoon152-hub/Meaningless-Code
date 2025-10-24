@@ -9,54 +9,98 @@ using UnityEngine.Video;
 public class StartPageVideo : MonoBehaviour
 {
     [Header("Videos")]
-    public VideoSource StartMoveVideo;
-    public VideoSource ExitVideo;
+    public VideoClip StartMoveVideo;
+    public VideoClip ExitVideo;
 
     public MyButton StartButton;
 
     public VideoPlayer VideoPlayer;
 
+    //private bool isTransitioning = false;
+
     void Start()
     {
-        VideoPlayer.source = StartMoveVideo;
+        VideoPlayer.clip = StartMoveVideo;
+        VideoPlayer.isLooping = true;
+        VideoPlayer.Play();
+
         StartButton.OnDoubleClick.AddListener(ExitStartPage);
-
-        StartButton.gameObject.SetActive(true);
-    }
-
-    private void OnDestroy()
-    {
-        StartButton.OnDoubleClick.RemoveListener(ExitStartPage);
-        VideoPlayer.loopPointReached -= OnStartMoveVideoFinished;
-        VideoPlayer.loopPointReached -= OnExitVideoFinished;
     }
 
     private void ExitStartPage()
     {
         StartButton.gameObject.SetActive(false);
-        
-        VideoPlayer.loopPointReached += OnStartMoveVideoFinished;
 
-        if (!VideoPlayer.isPlaying)
-        {
-            VideoPlayer.Play();
-        }
+        StartCoroutine(PlayExitVideoAndLoadScene());
     }
 
-    private void OnStartMoveVideoFinished(VideoPlayer source)
+    private IEnumerator PlayExitVideoAndLoadScene()
     {
-        VideoPlayer.loopPointReached -= OnStartMoveVideoFinished;
-
-        VideoPlayer.source = ExitVideo;
+        // 播放退出视频
+        VideoPlayer.clip = ExitVideo;
         VideoPlayer.isLooping = false;
-        VideoPlayer.loopPointReached += OnExitVideoFinished;
-
         VideoPlayer.Play();
-    }
 
-    private void OnExitVideoFinished(VideoPlayer source)
-    {
-        VideoPlayer.loopPointReached -= OnExitVideoFinished;
+        // 等待视频长度的时间
+        yield return new WaitForSeconds((float)ExitVideo.length);
+
+        // 加载场景
         SceneManager.LoadScene("FirstStagePage");
     }
+
+
+
+
+
+
+
+
+
+    //void Start()
+    //{
+    //    VideoPlayer.clip = StartMoveVideo;
+    //    VideoPlayer.isLooping = true;
+    //    VideoPlayer.Play();
+
+    //    StartButton.OnDoubleClick.AddListener(ExitStartPage);
+    //    StartButton.gameObject.SetActive(true);
+    //}
+
+    //private void OnDestroy()
+    //{
+    //    StartButton.OnDoubleClick.RemoveListener(ExitStartPage);
+    //    VideoPlayer.loopPointReached -= OnStartMoveVideoFinished;
+    //    //VideoPlayer.loopPointReached -= OnExitVideoFinished;
+    //}
+
+    //private void ExitStartPage()
+    //{
+    //    if (isTransitioning) return;
+
+    //    isTransitioning = true;
+    //    StartButton.gameObject.SetActive(false);
+
+    //    VideoPlayer.loopPointReached -= OnStartMoveVideoFinished;
+    //    VideoPlayer.loopPointReached += OnStartMoveVideoFinished;
+
+    //    VideoPlayer.clip = ExitVideo;
+    //    VideoPlayer.isLooping = false;
+    //    VideoPlayer.Play();
+
+    //    Debug.Log("开始播放退出视频");
+    //}
+
+    //private void OnStartMoveVideoFinished(VideoPlayer source)
+    //{
+    //    Debug.Log("开始移动视频播放完成");
+    //    VideoPlayer.loopPointReached -= OnStartMoveVideoFinished;
+
+    //    SceneManager.LoadScene("FirstStagePage");
+    //}
+
+    ////private void OnExitVideoFinished(VideoPlayer source)
+    ////{
+    ////    VideoPlayer.loopPointReached -= OnExitVideoFinished;
+    ////    SceneManager.LoadScene("FirstStagePage");
+    ////}
 }

@@ -942,10 +942,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveStats: {fileID: 11400000, guid: e600c43351cb48a409959e955a463373, type: 2}
   AttackStats: {fileID: 11400000, guid: ac1446050e69e6f4a8b0c5bf5aa20dee, type: 2}
+  _boss: {fileID: 0}
   _feetColl: {fileID: 1473073557}
   _bodyColl: {fileID: 558242499}
-  _attackColl: {fileID: 1322094100}
   Anim: {fileID: 0}
+  DropPoint: {fileID: 0}
+  BackPoint: {fileID: 0}
+  DropHurt: 20
+  AttackPoints: []
 --- !u!50 &377822912
 Rigidbody2D:
   serializedVersion: 4
@@ -1351,7 +1355,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &902020574
 Transform:
   m_ObjectHideFlags: 0
@@ -1423,6 +1427,9 @@ MonoBehaviour:
     m_Bits: 64
   gridWorldSize: {x: 50, y: 25}
   nodeRadius: 0.5
+  nodeDiameter: 0
+  gridSizeX: 0
+  gridSizeY: 0
 --- !u!4 &1067410767
 Transform:
   m_ObjectHideFlags: 0
@@ -1575,11 +1582,17 @@ MonoBehaviour:
   SmashPreWarnTime: 1
   SmashFallSpeed: 5
   SmashPostDelay: 1
-  SmashAreaRadius: 3
-  SmashImpactDamage: 20
   HoleGroundLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  SmashChargeRiseHeight: 2
+  SmashShockwavePrefab: {fileID: 0}
+  SmashShockwaveSpeed: 10
+  SmashShockwaveDamage: 15
+  SmashShockwaveLifetime: 3
+  PlayerLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   pathfinding: {fileID: 0}
   IdleLeftTransfrom: {fileID: 771124606}
   IdleRightTransfrom: {fileID: 1888778798}
