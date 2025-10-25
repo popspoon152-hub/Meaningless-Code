@@ -8,6 +8,19 @@ using UnityEngine.UIElements;
 using static UnityEngine.EventSystems.EventTrigger;
 using static UnityEngine.Rendering.DebugUI;
 
+#region Audios
+public enum EPlayerFirstAttack { on, off }
+public enum EPlayerSecondAttack { on, off }
+public enum EPlayerThirdAttack { on, off }
+public enum EPlayerDash { on, off }
+public enum EPlayerBack { on, off }
+public enum EPlayerLaser { on, off }
+public enum EPlayerBirth { on, off }
+public enum EPlayerHurt { on, off }
+public enum EPlayerDeath { on, off }
+#endregion
+
+
 public class PlayerMovement : MonoBehaviour
 {
     #region Player 
