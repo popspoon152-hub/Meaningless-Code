@@ -3,18 +3,18 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// ÎÒµÄ×Ô¶¨ÒåButton£¬¼Ì³Ð Button
+/// ï¿½Òµï¿½ï¿½Ô¶ï¿½ï¿½ï¿½Buttonï¿½ï¿½ï¿½Ì³ï¿½ Button
 /// </summary>
 public class MyButton : Button
 {
-    // ¹¹Ôìº¯Êý
+    // ï¿½ï¿½ï¿½ìº¯ï¿½ï¿½
     protected MyButton()
     {
         my_onDoubleClick = new ButtonClickedEvent();
         my_onLongPress = new ButtonClickedEvent();
     }
 
-    // ³¤°´
+    // ï¿½ï¿½ï¿½ï¿½
     public ButtonClickedEvent my_onLongPress;
     public ButtonClickedEvent OnLongPress
     {
@@ -22,7 +22,7 @@ public class MyButton : Button
         set { my_onLongPress = value; }
     }
 
-    // Ë«»÷
+    // Ë«ï¿½ï¿½
     public ButtonClickedEvent my_onDoubleClick;
     public ButtonClickedEvent OnDoubleClick
     {
@@ -30,7 +30,7 @@ public class MyButton : Button
         set { my_onDoubleClick = value; }
     }
 
-    // ³¤°´ÐèÒªµÄ±äÁ¿²ÎÊý
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private bool my_isStartPress = false;
     private float my_curPointDownTime = 0f;
     private float my_longPressTime = 0.6f;
@@ -42,10 +42,10 @@ public class MyButton : Button
         CheckIsLongPress();
     }
 
-    #region ³¤°´
+    #region ï¿½ï¿½ï¿½ï¿½
 
     /// <summary>
-    /// ´¦Àí³¤°´
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     void CheckIsLongPress()
     {
@@ -87,7 +87,7 @@ public class MyButton : Button
 
     #endregion
 
-    #region Ë«»÷£¨µ¥»÷£©
+    #region Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     public override void OnPointerClick(PointerEventData eventData)
     {
