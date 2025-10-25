@@ -12,9 +12,12 @@ public class StartPageVideo : MonoBehaviour
     [Header("Videos")]
     public StartPageStats StartStats;
     public VideoClip OpeningAnimation;
-    public VideoClip StartMoveVideo;
-    public VideoClip GameFinishedMoveVideo;
+    public VideoClip StartVideo;
+    public VideoClip GameFinishedVideo;
     public VideoClip ExitVideo;
+
+    [Header("Audios")]
+    public AudioSource StartAudio;
 
     public Image TitleImage;
     public float Speed = 0.2f;
@@ -30,6 +33,8 @@ public class StartPageVideo : MonoBehaviour
     {
         TitleImage.gameObject.SetActive(false);
         StartButton.gameObject.SetActive(false);
+
+        StartAudio.Stop();
 
         StartButton.OnDoubleClick.AddListener(ExitStartPage);
 
@@ -55,15 +60,18 @@ public class StartPageVideo : MonoBehaviour
     {
         if (!StartStats.IsGameFinished)
         {
-            VideoPlayer.clip = StartMoveVideo;
+            VideoPlayer.clip = StartVideo;      
         }
         else
         {
-            VideoPlayer.clip = GameFinishedMoveVideo;
+            VideoPlayer.clip = GameFinishedVideo;
         }
             
         VideoPlayer.isLooping = true;
         VideoPlayer.Play();
+
+        StartAudio.loop = true;
+        StartAudio.Play();
 
         StartCoroutine(FadeIn());
         StartButton.gameObject.SetActive(true);
@@ -129,6 +137,7 @@ public class StartPageVideo : MonoBehaviour
         yield return new WaitForSeconds((float)ExitVideo.length);
 
         // º”‘ÿ≥°æ∞
+        StartAudio.Stop();
         SceneManager.LoadScene("FirstStagePage");
     }
 
