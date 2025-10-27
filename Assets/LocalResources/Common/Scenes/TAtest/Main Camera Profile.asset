@@ -31,7 +31,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
   m_Name: Bloom
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   skipIterations:
     m_OverrideState: 1
     m_Value: 1
@@ -187,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c03d7f077abb0914e8c359f3a07104df, type: 3}
   m_Name: EdgeDetecteion
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enable:
     m_OverrideState: 1
     m_Value: 1
@@ -306,7 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: BlockGlitch
   m_EditorClassIdentifier: Assembly-CSharp::BlockGlitch
-  active: 1
+  active: 0
   enable:
     m_OverrideState: 1
     m_Value: 1
@@ -883,25 +883,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LineBlock
   active: 1
   enable:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   frequency:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   timeX:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   lineswidth:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 50
   amount:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 0.9
   offset:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   alpha:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
 --- !u!114 &4438368944718899349
 MonoBehaviour:
