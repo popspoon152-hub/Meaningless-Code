@@ -74,8 +74,17 @@ public class BossRangedAttackState_First : IBossStateFirstStage
                 if (littleBullet.TryGetComponent<Rigidbody2D>(out Rigidbody2D r))
                 {
                     // 根据旋转计算方向
-                    Vector2 littleBulletDirection = rotation * Vector2.right;
-                    r.velocity = littleBulletDirection * _stateMachine.LittleBulletSpeed_Attack;
+                    if (littleBullet.transform.position.x > 0)
+                    {
+                        Vector2 littleBulletDirection = rotation * Vector2.left;
+                        r.velocity = littleBulletDirection * _stateMachine.LittleBulletSpeed_Attack;
+                    }
+                    else
+                    {
+                        Vector2 littleBulletDirection = rotation * Vector2.right;
+                        r.velocity = littleBulletDirection * _stateMachine.LittleBulletSpeed_Attack;
+                    }
+
                 }
             }
 

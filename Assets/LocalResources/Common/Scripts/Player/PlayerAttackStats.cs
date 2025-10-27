@@ -21,6 +21,7 @@ public class PlayerAttackStats : ScriptableObject
     [Header("Attack Layer")]
     public LayerMask EnemyLayer;                                                        //µ–»À≤„
     public LayerMask BeanLayer;                                                     //’œ∞≠≤„
+    public LayerMask GroundLayer;                                                   //µÿ√Ê≤„
 
     [Header("AttackVisualization Tool")]
     public bool ShowAttackRangeArc = false;

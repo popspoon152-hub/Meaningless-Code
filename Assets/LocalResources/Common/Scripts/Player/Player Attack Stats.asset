@@ -37,5 +37,8 @@ MonoBehaviour:
   BeanLayer:
     serializedVersion: 2
     m_Bits: 256
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 64
   ShowAttackRangeArc: 1
   AttackHurtPlayerNum: 10

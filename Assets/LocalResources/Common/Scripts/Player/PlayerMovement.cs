@@ -631,11 +631,12 @@ public class PlayerMovement : MonoBehaviour
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.EnemyLayer);
         Collider2D[] hitBeans = Physics2D.OverlapCircleAll(AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.BeanLayer);
+        Collider2D[] hitBossSegments = Physics2D.OverlapCircleAll(AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.GroundLayer);
 
-
+        bool bossHurt = true;
         if (hitEnemies != null)
         {
-            bool bossHurt = true;
+
             foreach (var enemy in hitEnemies)
             {
                 if (enemy.CompareTag("Boss") && bossHurt)
@@ -655,6 +656,19 @@ public class PlayerMovement : MonoBehaviour
                 {
                     Bean beans = bean.GetComponent<Bean>();
                     beans.TakeDamage(1);
+                }
+            }
+        }
+
+        if(hitBossSegments != null)
+        {
+            foreach (var bossSegment in hitBossSegments)
+            {
+                if (bossSegment.CompareTag("Boss") && bossHurt)
+                {
+                    _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1]);
+                    PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum);
+                    bossHurt = false;
                 }
             }
         }
