@@ -15,8 +15,6 @@ public class EdgeDetecteion : VolumeComponent, IPostProcessComponent
     [Tooltip("背景色混合强度")] public FloatParameter BackgroundFade = new FloatParameter(0f);
 
     [Tooltip("背景色")] public ColorParameter BackgroundColor = new ColorParameter(Color.white);
-    public IntParameter _StencilRef = new IntParameter(1);
-    public IntParameter _StencilComp = new IntParameter(3);
 
     public bool IsActive() => enable.value;
 
@@ -48,6 +46,18 @@ public class LineBlock : VolumeComponent, IPostProcessComponent
     [Header("线条数")] public FloatParameter amount = new FloatParameter(0f);
     [Header("偏移量")] public FloatParameter offset = new FloatParameter(0f);
     [Header("Alpha")] public FloatParameter alpha = new FloatParameter(0f);
+    public bool IsActive() => enable.value;
+    public bool IsTileCompatible() => false;
+}
+
+[Serializable, VolumeComponentMenu("PostProcessing/BlockGlitch")]
+public class BlockGlitch : VolumeComponent, IPostProcessComponent
+{
+    [Header("是否启用效果")] public BoolParameter enable = new BoolParameter(false);
+    [Header("区块大小")] public FloatParameter blockSize = new FloatParameter(0f);
+    [Header("抖动速度")] public FloatParameter speed = new FloatParameter(0f);
+    [Header("X偏离")] public FloatParameter MaxRGBSplitX = new FloatParameter(0f);
+    [Header("Y偏离")] public FloatParameter MaxRGBSplitY = new FloatParameter(0f);
     public bool IsActive() => enable.value;
     public bool IsTileCompatible() => false;
 }

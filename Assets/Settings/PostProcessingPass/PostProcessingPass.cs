@@ -155,6 +155,35 @@ public class LineBlockPass : PostProcessingUniversalRenderPass<LineBlock>
 
 }
 
+public class BlockGlitchPass : PostProcessingUniversalRenderPass<BlockGlitch>
+{
+    protected override string RenderTag => "BlockGlitchPass";
+
+    public BlockGlitchPass(RenderPassEvent renderPassEvent, Shader shader)
+     : base(renderPassEvent, shader) { }
+
+    protected override void RenderPostProcessingEffect(CommandBuffer cmd, ref RenderingData renderingData)
+    {
+        ref var cameraData = ref renderingData.cameraData;
+        var camera = cameraData.camera;
+
+        var src = cameraData.renderer.cameraColorTargetHandle;
+        int dest = TempBufferId1;
+
+        material.SetFloat("_BlockSize", volumeComponent.blockSize.value);
+        material.SetFloat("_Speed", volumeComponent.speed.value);
+        material.SetFloat("_MaxRGBSplitX", volumeComponent.MaxRGBSplitX.value);
+        material.SetFloat("_MaxRGBSplitY", volumeComponent.MaxRGBSplitY.value);
+
+        cmd.GetTemporaryRT(dest, camera.scaledPixelWidth, camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
+        cmd.Blit(src, (RenderTargetIdentifier)dest);
+
+        if (volumeComponent.enable == false) cmd.Blit((RenderTargetIdentifier)dest, src);
+        else cmd.Blit((RenderTargetIdentifier)dest, src, material, 3);
+    }
+
+}
+
 public class PixelatePass : PostProcessingUniversalRenderPass<Pixelate>
 {
     protected override string RenderTag => "PixelatePass";
@@ -176,7 +205,7 @@ public class PixelatePass : PostProcessingUniversalRenderPass<Pixelate>
         cmd.Blit(src, (RenderTargetIdentifier)dest);
 
         if (volumeComponent.开关 == false) cmd.Blit((RenderTargetIdentifier)dest, src);
-        else cmd.Blit((RenderTargetIdentifier)dest, src, material, 3);
+        else cmd.Blit((RenderTargetIdentifier)dest, src, material, 4);
     }
 
 }

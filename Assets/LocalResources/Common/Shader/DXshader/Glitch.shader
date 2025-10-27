@@ -19,7 +19,6 @@ Shader "Custom/Glitch"
         Blend SrcAlpha OneMinusSrcAlpha
         Pass
         {
-
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
