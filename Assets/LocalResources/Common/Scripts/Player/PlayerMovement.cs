@@ -121,8 +121,11 @@ public class PlayerMovement : MonoBehaviour
             SceneManager.LoadScene("FirstStagePage");
         }
 
+
         Anim.SetFloat("Speed", Mathf.Abs(_rb.velocity.x));
-        Speed = Mathf.Abs(_rb.velocity.x);
+        Anim.SetBool("IsFalling", _isFalling);
+        Anim.SetBool("IsJumping", _isJumping);
+        Anim.SetBool("IsDashing", _isDashing);
     }
 
     private void FixedUpdate()
@@ -564,6 +567,7 @@ public class PlayerMovement : MonoBehaviour
         _lastAttackTime = Time.time;
 
         //设置动画trigger
+        Anim.SetTrigger("FirstAttackTrigger");
 
         EventCenter.Ins.Dispatch(EPlayerFirstAttack.on);
 
@@ -584,15 +588,17 @@ public class PlayerMovement : MonoBehaviour
 
         if (_currentCombo == 2)
         {
+            Anim.SetTrigger("SecondAttackTrigger");
             EventCenter.Ins.Dispatch(EPlayerSecondAttack.on);
         }
         else if (_currentCombo == 3)
         {
+            Anim.SetTrigger("ThirdAttackTrigger");
             EventCenter.Ins.Dispatch(EPlayerThirdAttack.on);
         }
 
             //开始新携程
-            _attackCoroutine = StartCoroutine(AttackCoroutine());
+        _attackCoroutine = StartCoroutine(AttackCoroutine());
     }
 
     private IEnumerator AttackCoroutine()
@@ -603,12 +609,22 @@ public class PlayerMovement : MonoBehaviour
         if (_currentCombo == 1)
         {
             attackRange = AttackStats.AttackRange[0];
-            StartDash(AttackStats.AttackLittleDash[0]);
+
+            _dashTime = 0f;
+            _dashDirection = _isFacingRight ? Vector2.right : Vector2.left;
+            _dashSpeed = AttackStats.AttackLittleDash[0] / MoveStats.DashDuration; // 速度=距离/时间
+            _rb.velocity = new Vector2(_dashDirection.x * _dashSpeed, 0f);
+
+            EventCenter.Ins.Dispatch(EPlayerDash.on);
         }
         else
         {
             attackRange = AttackStats.AttackRange[(int)_currentCombo - 1];
-            StartDash(AttackStats.AttackLittleDash[(int)_currentCombo - 1]);
+
+            _dashTime = 0f;
+            _dashDirection = _isFacingRight ? Vector2.right : Vector2.left;
+            _dashSpeed = (int)_currentCombo - 1 / MoveStats.DashDuration; // 速度=距离/时间
+            _rb.velocity = new Vector2(_dashDirection.x * _dashSpeed, 0f);
         }
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.EnemyLayer);
@@ -661,7 +677,6 @@ public class PlayerMovement : MonoBehaviour
     {
         _isAttacking = false;
         _currentCombo = 0;
-        //animator.SetInteger(comboIndex, 0);
     }
 
     #endregion
