@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using static UnityEngine.EventSystems.EventTrigger;
 using static UnityEngine.Rendering.DebugUI;
@@ -53,6 +54,10 @@ public class PlayerMovement : MonoBehaviour
 
     //跳跃相关
     public float VerticalVelocity { get; private set; }
+
+    //死亡
+    public bool PlayerIsDead;
+
     private bool _isJumping;
     private bool _isFastFalling;
     private bool _isFalling;
@@ -95,6 +100,11 @@ public class PlayerMovement : MonoBehaviour
         MoveStats.CalculateValues();
     }
 
+    private void Start()
+    {
+        EventCenter.Ins.Dispatch(EPlayerBirth.on);
+    }
+
     private void Update()
     {
         CountTimers();
@@ -103,6 +113,12 @@ public class PlayerMovement : MonoBehaviour
         AttackCheck();
         CheckComboReset();
         DropChecks();
+
+        if (PlayerIsDead)
+        {
+            EventCenter.Ins.Dispatch(EPlayerDeath.on);
+            SceneManager.LoadScene("FirstStagePage");
+        }
     }
 
     private void FixedUpdate()
@@ -504,6 +520,8 @@ public class PlayerMovement : MonoBehaviour
         _dashDirection = _isFacingRight ? Vector2.right : Vector2.left;
         _dashSpeed = length / MoveStats.DashDuration; // 速度=距离/时间
         _rb.velocity = new Vector2(_dashDirection.x * _dashSpeed, 0f);
+
+        EventCenter.Ins.Dispatch(EPlayerDash.on);
     }
 
     private void Dash()
@@ -543,7 +561,7 @@ public class PlayerMovement : MonoBehaviour
 
         //设置动画trigger
 
-
+        EventCenter.Ins.Dispatch(EPlayerFirstAttack.on);
 
         if (_attackCoroutine != null) StopCoroutine(_attackCoroutine);
         _attackCoroutine = StartCoroutine(AttackCoroutine());
@@ -560,10 +578,17 @@ public class PlayerMovement : MonoBehaviour
 
         //更新动画
 
+        if (_currentCombo == 2)
+        {
+            EventCenter.Ins.Dispatch(EPlayerSecondAttack.on);
+        }
+        else if (_currentCombo == 3)
+        {
+            EventCenter.Ins.Dispatch(EPlayerThirdAttack.on);
+        }
 
-
-        //开始新携程
-        _attackCoroutine = StartCoroutine(AttackCoroutine());
+            //开始新携程
+            _attackCoroutine = StartCoroutine(AttackCoroutine());
     }
 
     private IEnumerator AttackCoroutine()
