@@ -8,14 +8,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Player
-  m_Shader: {fileID: 4800000, guid: 4cefd89a71957f94d9923fbd51c4945a, type: 3}
+  m_Shader: {fileID: 4800000, guid: 6a0ed551d8e55344794194ea10d3823b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
+  m_ValidKeywords:
   - _ISBLEEDING_ON
-  - _ISNORMAL_ON
+  - _ISDEAD_ON
   - _ISRUSH_ON
+  m_InvalidKeywords:
+  - _ISNORMAL_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -110,7 +111,9 @@ Material:
     - _Intensity: 3.38
     - _IsAttcked: 0
     - _IsBleeding: 1
+    - _IsDead: 1
     - _IsNormal: 1
+    - _IsReborn: 0
     - _IsRush: 1
     - _MaxRGBSplitX: 2
     - _MaxRGBSplitY: 2

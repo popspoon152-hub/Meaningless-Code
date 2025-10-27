@@ -16,6 +16,7 @@ Shader "Custom/Glitch"
         }
         Cull Off
         ZWrite Off
+        Blend SrcAlpha OneMinusSrcAlpha
         Pass
         {
 
@@ -86,7 +87,7 @@ Shader "Custom/Glitch"
                 half4 colorG = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + offset);
                 half4 colorB = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv - offset);
 
-                return half4(colorR.r , colorG.g, colorB.b, (colorR.a + colorG.a + colorB.a));
+                return half4(colorR.r , colorG.g, colorB.b, (colorR.a + colorG.a + colorB.a)*0.28);
             }
             ENDHLSL
         }

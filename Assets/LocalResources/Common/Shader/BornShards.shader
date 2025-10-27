@@ -1,4 +1,4 @@
-Shader "Custom/DeathShards"
+Shader "Custom/BornShards"
 {
     Properties
     {
@@ -74,7 +74,7 @@ Shader "Custom/DeathShards"
             {
                 float3 mainCol = SAMPLE_TEXTURE2D(_MainTex, sampler_NoiseTex, i.uv);;
                 
-                float offset = frac(_Time.x * _ShatterSpeed);
+                float offset = frac(- _Time.x * _ShatterSpeed);
 
                 float2 shardUV1 = float2(round(i.uv.x * _PixelWidth) / _PixelWidth,
                                         round(i.uv.y * _PixelHeight) / _PixelHeight);
