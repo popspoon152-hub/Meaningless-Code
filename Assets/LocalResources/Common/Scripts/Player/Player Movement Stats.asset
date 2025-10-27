@@ -45,8 +45,5 @@ MonoBehaviour:
   ArcSolution: 20
   VisualizationSteps: 90
   MaxDashLength: 15
-  DashCooldown: 0.2
-  DashDuration: 0.1
-  DropPoint: {fileID: 0}
-  BackPoint: {fileID: 0}
-  DropHurt: 20
+  DashCooldown: 1
+  DashDuration: 0.23

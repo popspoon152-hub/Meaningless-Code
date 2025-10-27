@@ -23,6 +23,12 @@ public class BossAttackIdleState_First : IBossStateFirstStage
         //}
         
         _stateMachine.IsMove = false;
+        for(int i = 0; i < _stateMachine.Segments.Count; i++)
+        {
+            Rigidbody2D rb = _stateMachine.Segments[i].GetComponent<Rigidbody2D>();
+            rb.velocity = Vector2.zero;
+        }
+
         _AttackIdle = _stateMachine.StartCoroutine(AttackIdle());
     }
 

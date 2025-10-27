@@ -87,7 +87,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (_playerIsDead)
         {
-            //PlayerMovement.PlayerIsDead = true;
+            PlayerMovement.PlayerIsDead = true;
         }
     }
     #endregion
@@ -114,6 +114,8 @@ public class PlayerHealth : MonoBehaviour
 
 
         _isHealthDeclining = true;
+
+        EventCenter.Ins.Dispatch(EPlayerHurt.on);
     }
 
     public void TakeDamageByPlayer(float damage)
@@ -134,6 +136,8 @@ public class PlayerHealth : MonoBehaviour
             CurrentExtraHealth -= damage * ExtraHealthDeclineRateByEnemy;
         }
         _isHealthDeclining = true;
+
+        EventCenter.Ins.Dispatch(EPlayerHurt.on);
     }
 
     #endregion

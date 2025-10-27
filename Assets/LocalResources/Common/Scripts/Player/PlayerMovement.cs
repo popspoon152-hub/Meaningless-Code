@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using static UnityEngine.EventSystems.EventTrigger;
 using static UnityEngine.Rendering.DebugUI;
@@ -32,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Collider2D _bodyColl;
     [SerializeField] private Animator Anim;
     private Rigidbody2D _rb;
+    public float Speed;
 
     [Header("掉落")]
     public Transform DropPoint;
@@ -53,6 +55,10 @@ public class PlayerMovement : MonoBehaviour
 
     //跳跃相关
     public float VerticalVelocity { get; private set; }
+
+    //死亡
+    public bool PlayerIsDead;
+
     private bool _isJumping;
     private bool _isFastFalling;
     private bool _isFalling;
@@ -95,6 +101,11 @@ public class PlayerMovement : MonoBehaviour
         MoveStats.CalculateValues();
     }
 
+    private void Start()
+    {
+        EventCenter.Ins.Dispatch(EPlayerBirth.on);
+    }
+
     private void Update()
     {
         CountTimers();
@@ -103,6 +114,19 @@ public class PlayerMovement : MonoBehaviour
         AttackCheck();
         CheckComboReset();
         DropChecks();
+
+        if (PlayerIsDead)
+        {
+            EventCenter.Ins.Dispatch(EPlayerDeath.on);
+            SceneManager.LoadScene("FirstStagePage");
+        }
+
+
+        Anim.SetFloat("Speed", Mathf.Abs(_rb.velocity.x));
+        Anim.SetBool("IsFalling", _isFalling);
+        Anim.SetBool("IsJumping", _isJumping);
+        Anim.SetBool("IsDashing", _isDashing);
+        Anim.SetBool("IsGround", _isGrounded);
     }
 
     private void FixedUpdate()
@@ -500,10 +524,13 @@ public class PlayerMovement : MonoBehaviour
     private void StartDash(float length)
     {
         _isDashing = true;
+        _isJumping = false;
         _dashTime = 0f;
         _dashDirection = _isFacingRight ? Vector2.right : Vector2.left;
         _dashSpeed = length / MoveStats.DashDuration; // 速度=距离/时间
         _rb.velocity = new Vector2(_dashDirection.x * _dashSpeed, 0f);
+
+        EventCenter.Ins.Dispatch(EPlayerDash.on);
     }
 
     private void Dash()
@@ -542,8 +569,9 @@ public class PlayerMovement : MonoBehaviour
         _lastAttackTime = Time.time;
 
         //设置动画trigger
+        Anim.SetTrigger("FirstAttackTrigger");
 
-
+        EventCenter.Ins.Dispatch(EPlayerFirstAttack.on);
 
         if (_attackCoroutine != null) StopCoroutine(_attackCoroutine);
         _attackCoroutine = StartCoroutine(AttackCoroutine());
@@ -560,9 +588,18 @@ public class PlayerMovement : MonoBehaviour
 
         //更新动画
 
+        if (_currentCombo == 2)
+        {
+            Anim.SetTrigger("SecondAttackTrigger");
+            EventCenter.Ins.Dispatch(EPlayerSecondAttack.on);
+        }
+        else if (_currentCombo == 3)
+        {
+            Anim.SetTrigger("ThirdAttackTrigger");
+            EventCenter.Ins.Dispatch(EPlayerThirdAttack.on);
+        }
 
-
-        //开始新携程
+            //开始新携程
         _attackCoroutine = StartCoroutine(AttackCoroutine());
     }
 
@@ -574,21 +611,32 @@ public class PlayerMovement : MonoBehaviour
         if (_currentCombo == 1)
         {
             attackRange = AttackStats.AttackRange[0];
-            StartDash(AttackStats.AttackLittleDash[0]);
+
+            _dashTime = 0f;
+            _dashDirection = _isFacingRight ? Vector2.right : Vector2.left;
+            _dashSpeed = AttackStats.AttackLittleDash[0] / MoveStats.DashDuration; // 速度=距离/时间
+            _rb.velocity = new Vector2(_dashDirection.x * _dashSpeed, 0f);
+
+            EventCenter.Ins.Dispatch(EPlayerDash.on);
         }
         else
         {
             attackRange = AttackStats.AttackRange[(int)_currentCombo - 1];
-            StartDash(AttackStats.AttackLittleDash[(int)_currentCombo - 1]);
+
+            _dashTime = 0f;
+            _dashDirection = _isFacingRight ? Vector2.right : Vector2.left;
+            _dashSpeed = (int)_currentCombo - 1 / MoveStats.DashDuration; // 速度=距离/时间
+            _rb.velocity = new Vector2(_dashDirection.x * _dashSpeed, 0f);
         }
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.EnemyLayer);
         Collider2D[] hitBeans = Physics2D.OverlapCircleAll(AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.BeanLayer);
+        Collider2D[] hitBossSegments = Physics2D.OverlapCircleAll(AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.GroundLayer);
 
-
+        bool bossHurt = true;
         if (hitEnemies != null)
         {
-            bool bossHurt = true;
+
             foreach (var enemy in hitEnemies)
             {
                 if (enemy.CompareTag("Boss") && bossHurt)
@@ -608,6 +656,19 @@ public class PlayerMovement : MonoBehaviour
                 {
                     Bean beans = bean.GetComponent<Bean>();
                     beans.TakeDamage(1);
+                }
+            }
+        }
+
+        if(hitBossSegments != null)
+        {
+            foreach (var bossSegment in hitBossSegments)
+            {
+                if (bossSegment.CompareTag("Boss") && bossHurt)
+                {
+                    _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1]);
+                    PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum);
+                    bossHurt = false;
                 }
             }
         }
@@ -632,7 +693,6 @@ public class PlayerMovement : MonoBehaviour
     {
         _isAttacking = false;
         _currentCombo = 0;
-        //animator.SetInteger(comboIndex, 0);
     }
 
     #endregion

@@ -24,9 +24,9 @@ MonoBehaviour:
   - 0.2
   AttackBuffer: 0.1
   AttackRange:
+  - 6.5
   - 5
-  - 5.5
-  - 6
+  - 10.5
   AttackLittleDash:
   - 1
   - 1
@@ -37,5 +37,8 @@ MonoBehaviour:
   BeanLayer:
     serializedVersion: 2
     m_Bits: 256
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 64
   ShowAttackRangeArc: 1
   AttackHurtPlayerNum: 10
