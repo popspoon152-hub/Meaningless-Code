@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _StripeTex:
-        m_Texture: {fileID: 2800000, guid: 274d2f61fce05364a8b3a8e13610549d, type: 3}
+        m_Texture: {fileID: 2800000, guid: e550deffb84e97f4ba96cd467a7820f9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -39,6 +39,6 @@ Material:
     - _StripeInterval: 5.52
     - _StripeWidth: 1
     m_Colors:
-    - _FlowCol: {r: 0.15272334, g: 0.49056602, b: 0.49056602, a: 1}
+    - _FlowCol: {r: 0, g: 0.9741199, b: 1, a: 1}
     - _StripeCol: {r: 0, g: 0.9, b: 1, a: 1}
   m_BuildTextureStacks: []
