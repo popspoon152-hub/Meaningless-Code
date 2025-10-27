@@ -45,5 +45,5 @@ MonoBehaviour:
   ArcSolution: 20
   VisualizationSteps: 90
   MaxDashLength: 15
-  DashCooldown: 0.2
-  DashDuration: 0.175
+  DashCooldown: 1
+  DashDuration: 0.23

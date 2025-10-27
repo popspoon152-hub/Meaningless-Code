@@ -126,6 +126,7 @@ public class PlayerMovement : MonoBehaviour
         Anim.SetBool("IsFalling", _isFalling);
         Anim.SetBool("IsJumping", _isJumping);
         Anim.SetBool("IsDashing", _isDashing);
+        Anim.SetBool("IsGround", _isGrounded);
     }
 
     private void FixedUpdate()
@@ -523,6 +524,7 @@ public class PlayerMovement : MonoBehaviour
     private void StartDash(float length)
     {
         _isDashing = true;
+        _isJumping = false;
         _dashTime = 0f;
         _dashDirection = _isFacingRight ? Vector2.right : Vector2.left;
         _dashSpeed = length / MoveStats.DashDuration; // 速度=距离/时间
