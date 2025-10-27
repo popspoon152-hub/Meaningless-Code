@@ -25,6 +25,13 @@ public enum BossState
 
 #endregion
 
+#region AudioEnum
+public enum EBossDash { on, off }
+public enum EBossEatBeansMove { on, off }
+public enum EBossEatBean { on, off }
+public enum EBossRangedAttack { on, off }
+#endregion
+
 public class BossFirstStateMachine : MonoBehaviour
 {
     #region State Machine Config

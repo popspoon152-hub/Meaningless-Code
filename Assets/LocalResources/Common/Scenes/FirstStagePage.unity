@@ -859,6 +859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44dd4de0be7af524ea561ee18e9f4608, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerMovement: {fileID: 0}
   PlayerMaxHealth: 100
   ExtraHealthDeclineRateByPlayer: 0.8
   ExtraHealthDeclineRateByEnemy: 0.5
@@ -1608,6 +1609,144 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1337724031}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1057525187
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1057525188}
+  - component: {fileID: 1057525190}
+  - component: {fileID: 1057525189}
+  m_Layer: 0
+  m_Name: Audio
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1057525188
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057525187}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1777725682}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1057525189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057525187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6778f9366796bb44b98ad6167c545761, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClips:
+  - Clip: {fileID: 8300000, guid: 1cab0d0f8254dcd46918baa689172c7b, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: 009f8a75925a84043b477268dcc800fd, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: cfbec37ee99e6c64480336acffad54fe, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: 533aeafb1cd724c4a88f05c73fbc25d0, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: 2cdb406d84cb11e489a6cea060a7c0d1, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: becdfd2b6e076d241b261e92837919e1, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: ab8a115895733364d9aeb01d8aafa8ea, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: e2dd9d4064c0db74e94d8809cb5b1198, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: 1ad320668aa14a44686c9fee5a363ea3, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: cc88484e57046024598f46351be5f7ec, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: 4c085f66535ffc641a3c6451648ac2d5, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: 2bd96e5b7344d584bb7be81676b2ce97, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: eab2a6e5bffd7874bad97f182872b2e9, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: 78feef14d09db3244a807210a259a7f7, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: 100823ed4300117438f949bb08b70ab4, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: efe1e242721a4ae40b7f1b40e56360ae, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: e60a0160cae2fbd43a8c4a441a5c82e8, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: 3458ff6749ad45044b174b9e62657a04, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: a9496219356d5d84dadf6647493416f9, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+  - Clip: {fileID: 8300000, guid: 369a2238a94d74c4f93bfb7fdc09a67d, type: 3}
+    Loop: 0
+    PlayOnAwake: 0
+    Tag: 0
+--- !u!114 &1057525190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057525187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 254c1082583633a458b7aa4f64e67704, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1087210071
 GameObject:
   m_ObjectHideFlags: 0
@@ -2827,6 +2966,7 @@ Transform:
   - {fileID: 911354946}
   - {fileID: 627680425}
   - {fileID: 182355622}
+  - {fileID: 1057525188}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1790785468
