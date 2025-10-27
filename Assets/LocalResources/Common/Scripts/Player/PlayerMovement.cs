@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Collider2D _bodyColl;
     [SerializeField] private Animator Anim;
     private Rigidbody2D _rb;
+    public float Speed;
 
     [Header("µôÂä")]
     public Transform DropPoint;
@@ -119,6 +120,9 @@ public class PlayerMovement : MonoBehaviour
             EventCenter.Ins.Dispatch(EPlayerDeath.on);
             SceneManager.LoadScene("FirstStagePage");
         }
+
+        Anim.SetFloat("Speed", Mathf.Abs(_rb.velocity.x));
+        Speed = Mathf.Abs(_rb.velocity.x);
     }
 
     private void FixedUpdate()

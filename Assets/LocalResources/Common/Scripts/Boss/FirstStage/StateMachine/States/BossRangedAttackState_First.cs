@@ -48,17 +48,26 @@ public class BossRangedAttackState_First : IBossStateFirstStage
 
 
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 1; i < 4; i++)
             {
-                // 计算角度
-                float angle = 60 - (i - 1) * 20;
+                float angle = 0;
+                if(_stateMachine.transform.position.x > 0)
+                {
+                    angle = -i * 20;
+                }
+                else
+                {
+                    // 计算角度
+                    angle = i * 20;
+                }
+
 
                 // 创建旋转
                 Quaternion rotation = Quaternion.Euler(0, 0, angle);
 
                 GameObject littleBullet = UnityEngine.Object.Instantiate(
                     _stateMachine.LittleBulletPrefab_Attack,
-                    _stateMachine.FirePoint.position,
+                    _stateMachine.FirePoint_Attack.position,
                     rotation
                 );
 

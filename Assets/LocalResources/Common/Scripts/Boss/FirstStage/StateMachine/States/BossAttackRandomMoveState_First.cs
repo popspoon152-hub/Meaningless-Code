@@ -26,6 +26,11 @@ public class BossAttackRandomMoveState_First : IBossStateFirstStage
         //    _stateMachine.Animator.SetTrigger("AttackRandomMove");
         //}
 
+        for (int i = 0; i < _stateMachine.Segments.Count; i++)
+        {
+            Rigidbody2D rb = _stateMachine.Segments[i].GetComponent<Rigidbody2D>();
+            rb.velocity = Vector2.zero;
+        }
         RandomMoveAttack();
     }
 
