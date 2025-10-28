@@ -184,11 +184,43 @@ public class BlockGlitchPass : PostProcessingUniversalRenderPass<BlockGlitch>
 
 }
 
+public class Vignette02Pass : PostProcessingUniversalRenderPass<Vignette02>
+{
+    protected override string RenderTag => "Vignette02Pass";
+    
+    public Vignette02Pass(RenderPassEvent renderPassEvent, Shader shader) : base(renderPassEvent, shader) {}
+
+    protected override void RenderPostProcessingEffect(CommandBuffer cmd, ref RenderingData renderingData)
+    {
+        
+        ref var cameraData = ref renderingData.cameraData;
+        var camera = cameraData.camera;
+
+        var src = cameraData.renderer.cameraColorTargetHandle;
+        int dest = TempBufferId1;
+
+        material.SetVector("_Color", volumeComponent.颜色.value);
+        material.SetFloat("_Intensity", volumeComponent.强度.value);
+        material.SetVector("_Center", volumeComponent.中心坐标.value);
+        material.SetFloat("_CenterRadius", volumeComponent.中心半径.value);
+        material.SetFloat("_SmoothnessRadius", volumeComponent.平滑半径.value);
+        material.SetFloat("_BrightnessThreshold", volumeComponent.亮度阈值.value);
+        material.SetFloat("_SmoothnessThreshold", volumeComponent.亮度阈值平滑值.value);
+        material.SetInt("_Rounded", volumeComponent.是否将中心还原为圆形.value ? 1 : 0);
+        
+        cmd.GetTemporaryRT(dest, camera.scaledPixelWidth, camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
+        cmd.Blit(src, (RenderTargetIdentifier)dest);
+        
+        if (volumeComponent.开关 == false) cmd.Blit((RenderTargetIdentifier)dest, src);
+        else cmd.Blit((RenderTargetIdentifier)dest, src, material, 4);
+    }
+}
+
 public class PixelatePass : PostProcessingUniversalRenderPass<Pixelate>
 {
     protected override string RenderTag => "PixelatePass";
 
-    public PixelatePass(RenderPassEvent renderPassEvent, Shader shader) 
+    public PixelatePass(RenderPassEvent renderPassEvent, Shader shader)
     : base(renderPassEvent, shader) { }
 
     protected override void RenderPostProcessingEffect(CommandBuffer cmd, ref RenderingData renderingData)
@@ -205,7 +237,7 @@ public class PixelatePass : PostProcessingUniversalRenderPass<Pixelate>
         cmd.Blit(src, (RenderTargetIdentifier)dest);
 
         if (volumeComponent.开关 == false) cmd.Blit((RenderTargetIdentifier)dest, src);
-        else cmd.Blit((RenderTargetIdentifier)dest, src, material, 4);
+        else cmd.Blit((RenderTargetIdentifier)dest, src, material, 5);
     }
 
 }

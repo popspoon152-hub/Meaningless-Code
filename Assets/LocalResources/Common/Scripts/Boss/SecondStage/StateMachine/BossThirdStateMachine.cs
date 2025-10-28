@@ -46,10 +46,10 @@ public class BossThirdStateMachine : MonoBehaviour
 
     #region Boss移动与碰撞配置
     [Header("Boss移动速度配置")]
-    [Range(1f, 20f)] public float MoveSpeed_Normal = 4f;        // 普通移动速度
-    [Range(1f, 20f)] public float MoveSpeed_Attack = 7f;        // 攻击移动速度（用于AttackRandomMove）
-    [Range(1f, 30f)] public float MoveSpeed_Dash = 12f;         // 冲锋攻击速度
-    [Range(1f, 30f)] public float MoveSpeed_ToIdle = 12f;         // 前往待机点速度
+    [Range(1f, 40f)] public float MoveSpeed_Normal = 10f;        // 普通移动速度;吞噬地面寻找速度
+    [Range(1f, 40f)] public float MoveSpeed_Attack = 7f;        // 攻击移动速度（用于AttackRandomMove）
+    //[Range(1f, 40f)] public float MoveSpeed_Dash = 12f;         // 冲锋攻击速度
+    [Range(1f, 40f)] public float MoveSpeed_ToIdle = 12f;         // 前往待机点速度
     //[Range(1f, 30f)] public float MoveSpeed_Teleport = 10f;     // 闪现滑行速度（可选）
 
     [Header("碰撞伤害配置")]
@@ -62,9 +62,9 @@ public class BossThirdStateMachine : MonoBehaviour
     [Header("BossDashAttackState_Third 配置")]
     [Range(5f, 50f)] public float DashSpeed = 20f;               // 冲刺速度
     [Range(0.1f, 3f)] public float DashChargeTime = 1f;           // 冲刺蓄力时间
-    [Range(1f, 50f)] public float DashMaxDistance = 15f;          // 冲刺最大距离限制
-    [Range(0.1f, 1f)] public float DashTrailSpawnInterval = 0.2f; // 路径标记生成间隔
-    [Range(1f, 20f)] public float DashAlignSpeed = 5f; // 垂直对齐速度
+    [Range(1f, 70f)] public float DashMaxDistance = 15f;          // 冲刺最大距离限制
+    [Range(0.01f, 1f)] public float DashTrailSpawnInterval = 0.2f; // 路径标记生成间隔
+    [Range(1f, 40f)] public float DashAlignSpeed = 5f; // 垂直对齐速度
 
     [Header("BossDashAttackState_Third 伤害配置")]
     [Range(1f, 50f)] public float DashTrailDamagePerTick = 5f;    // 持续伤害区域的伤害
@@ -86,7 +86,7 @@ public class BossThirdStateMachine : MonoBehaviour
     [Header("Boss吞噬地面配置")]
     public GroundTileManager GroundTileManager;          // 地面管理器
     [Range(0f, 5f)] public float DevourPreWarnTime = 1f; // 吞噬前摇时间（预警时间）
-    [Range(1f, 30f)] public float DevourSpeed = 10f;     // 吞噬时的横向移动速度
+    [Range(1f, 50f)] public float DevourSpeed = 10f;     // 吞噬时的横向移动速度
     [Range(1f, 10f)] public float DevourDistance = 5f;   // 吞噬的最大范围（从平台位置横向穿越的距离）(未使用，距离直接算的地砖长度)
     //[Range(0f, 5f)] public float DevourTileRespawnTime = 5f; // 吞噬后的地砖重生时间
     [Range(1f, 30f)] public float DevourSideOffset =5f;   // 吞噬时的横向偏移量
@@ -102,7 +102,8 @@ public class BossThirdStateMachine : MonoBehaviour
     #region BossSmashAttackState_Third 配置
     [Header("BossSmashAttackState_Third 配置")]
     [Range(0f, 2f)] public float SmashPreWarnTime = 1.0f;       // 下砸前摇时间（预警）
-    [Range(1f, 10f)] public float SmashFallSpeed = 5f;           // 下砸的速度
+    [Range(1f, 50f)] public float SmashFallSpeed = 5f;           // 下砸的速度
+    [Range(1f, 50f)] public float SmashRiseSpeed = 5f;           // 上升前摇的速度
     [Range(1f, 10f)] public float SmashPostDelay = 0.3f;        // 下砸后的停滞时间
     public LayerMask HoleGroundLayerMask;                       // 用于检测地面是否存在的LayerMask
     [Range(0f, 10f)] public float SmashChargeRiseHeight = 2f;       // 前摇上升高度
