@@ -50,7 +50,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _Speed: 15
+    - _Speed: 10
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Emission: {r: 4.3893576, g: 3.0714512, b: 5.992157, a: 1}
