@@ -255,6 +255,7 @@ MonoBehaviour:
   StartAudio: {fileID: 996696014}
   TitleImage: {fileID: 1474135739}
   Speed: 0.2
+  VolumeSlider: {fileID: 2096194951}
   StartButton: {fileID: 711459383}
   fadeDuration: 2
   VideoPlayer: {fileID: 1200202843}
@@ -1301,7 +1302,7 @@ GameObject:
   - component: {fileID: 2096194951}
   - component: {fileID: 2096194950}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: VolumeSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -554,7 +554,7 @@ public class PlayerMovement : MonoBehaviour
     private void AttackCheck()
     {
         //��������
-        if (InputManager.AttackWasPressed && !_isAttacking && !_isJumping)
+        if (InputManager.AttackWasPressed && !_isAttacking && !_isJumping && !_isDashing)
         {
             StartAttack();
         }
