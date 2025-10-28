@@ -3809,6 +3809,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 201158672}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!1 &1459819488
 GameObject:
   m_ObjectHideFlags: 0
@@ -3844,6 +3845,8 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+=======
+>>>>>>> parent of 56b29c5 (.)
 --- !u!1 &1504504655
 GameObject:
   m_ObjectHideFlags: 0
@@ -4188,6 +4191,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1109339360}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!1 &1747291819
 GameObject:
   m_ObjectHideFlags: 0
@@ -4278,6 +4282,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+=======
+>>>>>>> parent of 56b29c5 (.)
 --- !u!1 &1766016115
 GameObject:
   m_ObjectHideFlags: 0
@@ -4717,7 +4723,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BackTime: 2
+<<<<<<< HEAD
   Health: {fileID: 627680426}
+=======
+>>>>>>> parent of 56b29c5 (.)
 --- !u!114 &2110223245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4732,7 +4741,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveStats: {fileID: 11400000, guid: e600c43351cb48a409959e955a463373, type: 2}
   AttackStats: {fileID: 11400000, guid: ac1446050e69e6f4a8b0c5bf5aa20dee, type: 2}
+<<<<<<< HEAD
   PlayerHealth: {fileID: 627680426}
+=======
+>>>>>>> parent of 56b29c5 (.)
   _boss: {fileID: 1337724029}
   _feetColl: {fileID: 1875444659}
   _bodyColl: {fileID: 1766016117}
@@ -4746,9 +4758,6 @@ MonoBehaviour:
   - {fileID: 323244046}
   - {fileID: 1930832478}
   PlayerIsDead: 0
-  _isJumping: 0
-  _isFalling: 0
-  _isDashing: 0
 --- !u!95 &2110223246
 Animator:
   serializedVersion: 5
@@ -4782,20 +4791,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc2dcf04bbbe1e54d95c0f0271488c49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Movement: {fileID: 2110223245}
   laserLength: 5
   laserWidth: 0.2
   laserDuration: 0.4
-  laserCollDownTime: 2
+<<<<<<< HEAD
+  laserCollDownTime: 5
   preCastTime: 0.9
-  postCastTime: 0
+  postCastTime: 0.25
   backStepForce: 0.1
   firePoint: {fileID: 1109339360}
-  laserPrefab: {fileID: 9070066570414569370, guid: e53c59285fc8e9546a32094b9e335e64, type: 3}
+  laserPrefab: {fileID: 0}
   moveScriptToDisable: {fileID: 2110223245}
   directionController: {fileID: 2110223248}
   Anim: {fileID: 2110223246}
-  AnimOffset: 4
+  AnimOffset: 2
+=======
+  preCastTime: 0.25
+  postCastTime: 0.25
+  backStepForce: 6
+  firePoint: {fileID: 0}
+  laserPrefab: {fileID: 0}
+  moveScriptToDisable: {fileID: 0}
+  directionController: {fileID: 0}
+>>>>>>> parent of 56b29c5 (.)
 --- !u!114 &2110223248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4883,6 +4901,7 @@ Transform:
   - {fileID: 378321508}
   m_Father: {fileID: 1536495502}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!1001 &416975514521340410
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4996,6 +5015,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 097fbfb5468112d45824d64aa3af2a02, type: 3}
+=======
+>>>>>>> parent of 56b29c5 (.)
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
