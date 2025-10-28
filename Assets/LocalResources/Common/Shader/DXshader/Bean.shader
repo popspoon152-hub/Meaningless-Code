@@ -1,10 +1,9 @@
-Shader "Custom/Laser"
+Shader "Custom/Bean"
 {
     Properties
     {
         _MainTex ("MaintTex", 2D) = "white" {}
-        _LaserMask("LaserMask",2D)="white"{}
-        _LaskTex("LaskTex",2D)="white"{}
+        [HDR]_Emission("Emission",Color)=(1,1,1,1)
     }
     SubShader
     {
@@ -25,17 +24,14 @@ Shader "Custom/Laser"
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
 
-            TEXTURE2D(_LaskMask);
-            SAMPLER(sampler_LaskMask);
-
-            TEXTURE2D(_LaskTex);
-            SAMPLER(sampler_LaskTex);
+            TEXTURE2D(_EmissionMask);
+            SAMPLER(sampler_EmissionMask);
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _MainTex_ST;
-                float4 _LaserMask_ST;
-                float4 _LaserTex_ST;
+                float4 _EmissionMask_ST;
             CBUFFER_END
+            half4 _Emission;
 
             struct Attributes 
             {
@@ -61,9 +57,7 @@ Shader "Custom/Laser"
             half4 frag(Varyings i) : SV_Target
             {
                 half4 texcol = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                half4 laskcol = SAMPLE_TEXTURE2D(_LaskTex, sampler_LaskTex, i.uv + _Time.y * 0.5);
-                half4 laskmask = SAMPLE_TEXTURE2D(_LaskMask, sampler_LaskMask, i.uv + _Time.x);
-                return texcol * (laskcol + 1 - laskmask*2);
+                return texcol * _Emission;
             }
             ENDHLSL
         }
