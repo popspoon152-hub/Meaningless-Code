@@ -9,14 +9,23 @@ EditorBuildSettings:
     path: Assets/LocalResources/Common/Scenes/StartPage.unity
     guid: dd423c56e5f35464bb33c9bbacf03c08
   - enabled: 1
+    path: Assets/LocalResources/Common/Scenes/GalBeforeFirstStage.unity
+    guid: 540367e14ea3bc741b2fd3327a72bab2
+  - enabled: 1
     path: Assets/LocalResources/Common/Scenes/FirstStagePage.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/LocalResources/Common/Scenes/GalPage.unity
-    guid: be167f7108f164a47985ff56f6b94986
+    path: Assets/LocalResources/Common/Scenes/GalAfterFirstStage.unity
+    guid: 5b720381abb4d9841ac24c5ca6ca5643
   - enabled: 1
     path: Assets/LocalResources/Common/Scenes/SecondStagePage.unity
     guid: e44bb5e40d45e624f9b93853576e99af
+  - enabled: 1
+    path: Assets/LocalResources/Common/Scenes/GalAfterSecondStage.unity
+    guid: 1d27d1ec6ef1920418d64d6cac2c46f3
+  - enabled: 1
+    path: Assets/LocalResources/Common/Scenes/EndPage.unity
+    guid: 42606a2cb8662ab44aeaaa427a79cdc9
   - enabled: 1
     path: Assets/LocalResources/Common/Scenes/SettingsPage.unity
     guid: 12ca124d7d32a144698ffdfc742329af

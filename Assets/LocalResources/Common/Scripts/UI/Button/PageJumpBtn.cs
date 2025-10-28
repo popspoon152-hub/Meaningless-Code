@@ -8,11 +8,13 @@ using static System.TimeZoneInfo;
 
 public enum Scenes
 {
-    StartPage,
+    StartPage, 
+    GalBeforeFirstStage,
     FirstStagePage,
     GalAfterFirstStage,
-    GalBeforeFirstStage,
     SecondStagePage,
+    GalBeforeSecondStage,
+    EndPage,
     SettingsPage,
 }
 
