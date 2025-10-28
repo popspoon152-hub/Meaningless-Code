@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("References")]
     public PlayerMovementStats MoveStats;
     public PlayerAttackStats AttackStats;
+    public PlayerHealth PlayerHealth;
     [SerializeField] private BossFirstStateMachine _boss;
     [SerializeField] private Collider2D _feetColl;
     [SerializeField] private Collider2D _bodyColl;
@@ -606,6 +607,8 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(0.025f);
 
+        float healthUp = (PlayerHealth.PlayerMaxHealth - PlayerHealth.CurrentHealth) * AttackStats.PlayerAttackUpPerHealth;
+
         float attackRange;
         if (_currentCombo == 1)
         {
@@ -642,7 +645,7 @@ public class PlayerMovement : MonoBehaviour
                 if (enemy.CompareTag("Boss") && bossHurt)
                 {
                     _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1]);
-                    PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum);
+                    PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum + healthUp);
                     bossHurt = false;
                 }
             }
@@ -667,7 +670,7 @@ public class PlayerMovement : MonoBehaviour
                 if (bossSegment.CompareTag("Boss") && bossHurt)
                 {
                     _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1]);
-                    PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum);
+                    PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum + healthUp);
                     bossHurt = false;
                 }
             }
@@ -744,6 +747,7 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
+    #region Dead
     private void Dead()
     {
         if (PlayerIsDead)
@@ -752,6 +756,8 @@ public class PlayerMovement : MonoBehaviour
             SceneManager.LoadScene("FirstStagePage");
         }
     }
+
+    #endregion
 
     #region Gizmos
     private void DrawJumpArc(float moveSpeed, Color gizmoColor)
