@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     public PlayerMovement PlayerMovement;
-    PlayerSlider PlayerSlider;
+    public PlayerSlider Slider;
  
     [Header("Health Num")]
     [Range(50f, 150f)] public float PlayerMaxHealth = 100f;                                     //玩家最大生命值
@@ -15,36 +15,11 @@ public class PlayerHealth : MonoBehaviour
     [Range(0f, 10f)] public float ExtraHealthDeclineNumDeltaTime = 5f;                          //虚血条每秒下降数值
 
 
-    [SerializeField] private float _currentHealth;                                                                        //当前生命值
-    [SerializeField] private float _currentExtraHealth;                                                                   //当前虚血值
+    public float CurrentHealth;                                                                        //当前生命值
+    public float CurrentExtraHealth;                                                                   //当前虚血值
     private bool _isHealthDeclining;                                                                     //是否正在扣血
 
     private bool _playerIsDead = false;
-
-    public float CurrentHealth
-    {
-        get {  return _currentHealth; }
-        set 
-        {
-            if (value <= PlayerMaxHealth)
-            {
-                _currentHealth = value;
-            }
-            else
-            {
-                _currentHealth = PlayerMaxHealth;
-            }
-        }
-    }
-
-    public float CurrentExtraHealth
-    {
-        get { return _currentExtraHealth; }
-        set 
-        {
-            _currentExtraHealth = value;
-        }
-    }
 
 
     public static PlayerHealth Ins;
@@ -82,7 +57,7 @@ public class PlayerHealth : MonoBehaviour
             PlayerMovement.PlayerIsDead = true;
         }
 
-        PlayerSlider.UpdateHealth(CurrentHealth, CurrentExtraHealth, PlayerMaxHealth);
+        Slider.UpdateHealth(CurrentHealth, CurrentExtraHealth, PlayerMaxHealth);
     }
     #endregion
 

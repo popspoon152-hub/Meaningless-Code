@@ -182,6 +182,7 @@ Transform:
   m_Children:
   - {fileID: 9103623741701659533}
   - {fileID: 5426835365677896484}
+  - {fileID: 5058292114724977167}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!212 &1025673619194476130
@@ -276,6 +277,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BackTime: 2
+  Health: {fileID: 0}
 --- !u!114 &9049313456876744896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,7 +292,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveStats: {fileID: 11400000, guid: e600c43351cb48a409959e955a463373, type: 2}
   AttackStats: {fileID: 11400000, guid: ac1446050e69e6f4a8b0c5bf5aa20dee, type: 2}
+  PlayerHealth: {fileID: 0}
   _boss: {fileID: 0}
+  _boss3: {fileID: 0}
   _feetColl: {fileID: 725795831921896397}
   _bodyColl: {fileID: 5544484284247951588}
   Anim: {fileID: 6274963871515989462}
@@ -303,6 +307,9 @@ MonoBehaviour:
   - {fileID: 2662379688551169349}
   - {fileID: 6821747276091989252}
   PlayerIsDead: 0
+  _isJumping: 0
+  _isFalling: 0
+  _isDashing: 0
 --- !u!95 &6274963871515989462
 Animator:
   serializedVersion: 5
@@ -351,9 +358,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc2dcf04bbbe1e54d95c0f0271488c49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Movement: {fileID: 0}
+  Slider: {fileID: 0}
   laserLength: 5
   laserWidth: 0.2
   laserDuration: 0.4
+  laserCollDownTime: 5
   preCastTime: 0.25
   postCastTime: 0.25
   backStepForce: 6
@@ -361,6 +371,8 @@ MonoBehaviour:
   laserPrefab: {fileID: 0}
   moveScriptToDisable: {fileID: 0}
   directionController: {fileID: 0}
+  Anim: {fileID: 0}
+  AnimOffset: 0.5
 --- !u!1 &1781693792651778964
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,6 +436,37 @@ Transform:
   - {fileID: 4435011272176975079}
   - {fileID: 2662379688551169349}
   - {fileID: 6821747276091989252}
+  m_Father: {fileID: 7533596874070858689}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1929074782417733479
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5058292114724977167}
+  m_Layer: 9
+  m_Name: LaserPoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5058292114724977167
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1929074782417733479}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 7533596874070858689}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4724938462185504764

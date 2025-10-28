@@ -20,6 +20,7 @@ public class StartPageVideo : MonoBehaviour
     public AudioSource StartAudio;
 
     public Image TitleImage;
+    public Image VolumeImage;
     public float Speed = 0.2f;
 
     public Slider VolumeSlider;
@@ -36,6 +37,7 @@ public class StartPageVideo : MonoBehaviour
         TitleImage.gameObject.SetActive(false);
         StartButton.gameObject.SetActive(false);
         VolumeSlider.gameObject.SetActive(false);
+        VolumeImage.gameObject.SetActive(false);
 
         StartAudio.Stop();
 
@@ -79,6 +81,7 @@ public class StartPageVideo : MonoBehaviour
         StartCoroutine(FadeIn());
         StartButton.gameObject.SetActive(true);
         VolumeSlider.gameObject.SetActive(true);
+        VolumeImage.gameObject.SetActive(true);
     }
 
     private IEnumerator FadeIn()
