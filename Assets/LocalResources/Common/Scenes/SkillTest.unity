@@ -2410,6 +2410,7 @@ GameObject:
   - component: {fileID: 2100107520}
   - component: {fileID: 2100107519}
   - component: {fileID: 2100107518}
+  - component: {fileID: 2100107526}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -2435,10 +2436,10 @@ MonoBehaviour:
   preCastTime: 0.25
   postCastTime: 0.25
   backStepForce: 6
-  firePoint: {fileID: 0}
-  laserPrefab: {fileID: 0}
-  moveScriptToDisable: {fileID: 0}
-  directionController: {fileID: 0}
+  firePoint: {fileID: 48043924}
+  laserPrefab: {fileID: 9070066570414569370, guid: e53c59285fc8e9546a32094b9e335e64, type: 3}
+  moveScriptToDisable: {fileID: 2100107522}
+  directionController: {fileID: 2100107519}
 --- !u!114 &2100107519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2611,6 +2612,21 @@ Transform:
   - {fileID: 48043924}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &2100107526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100107517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4253c9b10c1d89645b0358bca1442c14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  directionState: {x: 0, y: 0}
+  hasInput: 1
+  facingDirection: {x: 0, y: 0}
 --- !u!1 &2104921350
 GameObject:
   m_ObjectHideFlags: 0

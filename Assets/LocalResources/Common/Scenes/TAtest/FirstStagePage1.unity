@@ -3642,6 +3642,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1109339360}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1717900256 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1136814797898099407, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+  m_PrefabInstance: {fileID: 8818559093331623854}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1777725681
 GameObject:
   m_ObjectHideFlags: 0
@@ -3784,7 +3789,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9049313456876744896, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
   m_PrefabInstance: {fileID: 8818559093331623854}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1717900256}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34db068672a4adc4eac880b3b471d45b, type: 3}
@@ -3874,6 +3879,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: firePoint
+      value: 
+      objectReference: {fileID: 8818559093331623855}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: laserPrefab
+      value: 
+      objectReference: {fileID: 9070066570414569370, guid: e53c59285fc8e9546a32094b9e335e64, type: 3}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: backStepForce
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: directionController
+      value: 
+      objectReference: {fileID: 8818559093331623857}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: moveScriptToDisable
+      value: 
+      objectReference: {fileID: 8818559093331623856}
     - target: {fileID: 7533596874070858689, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3929,8 +3954,53 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1136814797898099407, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8818559093331623858}
   m_SourcePrefab: {fileID: 100100000, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+--- !u!4 &8818559093331623855 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5426835365677896484, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+  m_PrefabInstance: {fileID: 8818559093331623854}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8818559093331623856 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6980495204902758776, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+  m_PrefabInstance: {fileID: 8818559093331623854}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717900256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99c552d6b962b9645a56547f5a6d7d2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8818559093331623857 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5597701998863985610, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+  m_PrefabInstance: {fileID: 8818559093331623854}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717900256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4253c9b10c1d89645b0358bca1442c14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8818559093331623858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717900256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4253c9b10c1d89645b0358bca1442c14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  directionState: {x: 0, y: 0}
+  hasInput: 0
+  facingDirection: {x: 0, y: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
