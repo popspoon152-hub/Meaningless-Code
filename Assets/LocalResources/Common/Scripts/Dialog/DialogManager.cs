@@ -107,7 +107,7 @@ public class DialogManager : MonoBehaviour
         //dialogRows = _textAsset.text.Split('\n');
         //Debug.Log("读取成功");
         // 使用 UTF-8 编码读取文件内容
-        string[] lines = _textAsset.text.Split(new[] {'\n'}, System.StringSplitOptions.RemoveEmptyEntries);
+        string[] lines = _textAsset.text.Split(new[] {"NEXT"}, System.StringSplitOptions.RemoveEmptyEntries);
 
         // 清理每一行并分割
         dialogRows = new string[lines.Length];
@@ -154,6 +154,7 @@ public class DialogManager : MonoBehaviour
 
     public void OnClickNext()
     {
+        Debug.Log("点击了");
         ShowDialogRow();
     }
 

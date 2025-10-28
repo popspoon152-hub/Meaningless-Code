@@ -8,6 +8,7 @@ public class PlayerBack : MonoBehaviour
 {
     [Header("角色回溯")]
     [Range(1f, 5f)] public float BackTime = 2f;                     //回溯到几秒前的位置
+    public PlayerHealth Health;
 
     [System.Serializable]
     public class TimedPostion
@@ -60,6 +61,7 @@ public class PlayerBack : MonoBehaviour
             {
                 // 队列中最旧的位置就是两秒前的位置
                 backPos = _positionQueue.Peek().Position;
+                Health.HealthUntilExtraHealth();
             }
             else
             {

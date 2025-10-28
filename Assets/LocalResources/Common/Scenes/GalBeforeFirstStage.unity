@@ -238,6 +238,7 @@ GameObject:
   - component: {fileID: 162072346}
   - component: {fileID: 162072349}
   - component: {fileID: 162072347}
+  - component: {fileID: 162072350}
   m_Layer: 5
   m_Name: NextButton
   m_TagString: Untagged
@@ -304,7 +305,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 162072350}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -328,6 +329,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 162072345}
   m_CullTransparentMesh: 1
+--- !u!114 &162072350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 162072345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &976108634
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,7 +477,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -785, y: -332}
+  m_AnchoredPosition: {x: -760, y: -334}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1137900392
@@ -469,7 +500,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u540D\u5B57"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a2890b2c268c9c24f974771aaec206ea, type: 2}
   m_sharedMaterial: {fileID: -2847418909014572970, guid: a2890b2c268c9c24f974771aaec206ea, type: 2}
@@ -503,7 +534,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -532,7 +563,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -311.7234, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -591,16 +622,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogDataFile: {fileID: 4900000, guid: 3451088cd0101c843b298e260ef2a3fb, type: 3}
-  spriteLeft: {fileID: 976108635}
-  spriteRight: {fileID: 1758220895}
+  spriteLeft: {fileID: 1758220895}
+  spriteRight: {fileID: 976108635}
   SayPart: {fileID: 1754220947}
   nameText: {fileID: 1137900392}
   dialogText: {fileID: 1668501237}
   waitingTime: 0.09
   sprites:
-  - {fileID: 21300000, guid: 5d164e70d0e364e4ea20850219a3b286, type: 3}
-  - {fileID: 21300000, guid: c15946c6d9c37294fb49e65e6b3d9287, type: 3}
-  - {fileID: 21300000, guid: 921561b8ffcd7df499712fc3029ca505, type: 3}
+  - {fileID: 21300000, guid: a056ab2ddccd0264db7a85b5a7e49bdc, type: 3}
+  - {fileID: 21300000, guid: 87544547925ac0c439420cf56e4329a8, type: 3}
+  - {fileID: 21300000, guid: 87544547925ac0c439420cf56e4329a8, type: 3}
   dialogIndex: 0
   dialogRows: []
   nextButton: {fileID: 162072347}
@@ -906,7 +937,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -872, y: -488}
+  m_AnchoredPosition: {x: -903, y: -458}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1668501236
@@ -942,7 +973,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u8FD9\u662F\u4E00\u4E2A\u6587\u672C\u6846\u8FD9\u662F\u4E00\u4E2A\u6587\u672C\u6846"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a2890b2c268c9c24f974771aaec206ea, type: 2}
   m_sharedMaterial: {fileID: -2847418909014572970, guid: a2890b2c268c9c24f974771aaec206ea, type: 2}

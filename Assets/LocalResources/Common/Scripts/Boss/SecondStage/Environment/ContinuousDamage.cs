@@ -12,7 +12,6 @@ public class ContinuousDamage : MonoBehaviour
     private bool _isActive;
 
     private Collider2D _collider;
-    private PlayerHealth _playerHealth;
 
     private void Awake()
     {
@@ -55,14 +54,8 @@ public class ContinuousDamage : MonoBehaviour
             if (_damageTimer >= bossStateMachine.ZoneDamageInterval)
             {
                 _damageTimer = 0f;
-
-                if (_playerHealth == null)
-                    _playerHealth = other.GetComponent<PlayerHealth>();
-
-                if (_playerHealth != null)
-                {
-                    _playerHealth.TakeDamageByEnemy(bossStateMachine.ZoneDamage);
-                }
+                MakeDamage(other.gameObject);
+               
             }
         }
     }
@@ -72,6 +65,18 @@ public class ContinuousDamage : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _damageTimer = 0f; // 离开范围后重置计时
+        }
+    }
+
+    private void MakeDamage(GameObject player)
+    {
+        //Debug.Log("玩家受到伤害");
+        // 假设玩家身上有 PlayerHealth 组件
+        var health = player.GetComponentInParent<PlayerHealth>();
+        if (health != null)
+        {
+            //Debug.Log("玩家受到灼烧伤害");
+            health.TakeDamageByEnemy(bossStateMachine.ZoneDamage);
         }
     }
 }

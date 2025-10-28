@@ -46,25 +46,25 @@ public class BlackHole : MonoBehaviour
         _lifeTimer += Time.deltaTime;
         _tickTimer += Time.deltaTime;
 
-        // 定时对范围内对象造成伤害
-        if (_tickTimer >= TickInterval)
-        {
-            _tickTimer = 0f;
-            foreach (var col in _insideColliders)
-            {
-                if (col == null) continue;
-                if (((1 << col.gameObject.layer) & AffectedLayers) == 0) continue; // 只对指定层有效
+        //// 定时对范围内对象造成伤害
+        //if (_tickTimer >= TickInterval)
+        //{
+        //    _tickTimer = 0f;
+        //    foreach (var col in _insideColliders)
+        //    {
+        //        if (col == null) continue;
+        //        if (((1 << col.gameObject.layer) & AffectedLayers) == 0) continue; // 只对指定层有效
 
-                if (col.CompareTag("Player"))
-                {
-                    var health = col.GetComponent<PlayerHealth>();
-                    if (health != null)
-                    {
-                        health.TakeDamageByEnemy(DamagePerTick);
-                    }
-                }
-            }
-        }
+        //        if (col.CompareTag("Player"))
+        //        {
+        //            var health = col.GetComponent<PlayerHealth>();
+        //            if (health != null)
+        //            {
+        //                health.TakeDamageByEnemy(DamagePerTick);
+        //            }
+        //        }
+        //    }
+        //}
 
         // 持续时间到达，销毁黑洞
         if (_lifeTimer >= Duration)
@@ -111,6 +111,12 @@ public class BlackHole : MonoBehaviour
         Rigidbody2D rb = other.attachedRigidbody;
         if (rb != null && !_insideBodies.Contains(rb))
             _insideBodies.Add(rb);
+
+        if (other.CompareTag("Player") || _tickTimer >= TickInterval)
+        {
+                MakeDamage(other.gameObject);
+                //Debug.Log(other.gameObject);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -128,4 +134,17 @@ public class BlackHole : MonoBehaviour
         Gizmos.color = new Color(0.4f, 0f, 0.8f, 0.4f);
         Gizmos.DrawWireSphere(transform.position, Radius);
     }
+
+    private void MakeDamage(GameObject player)
+    {
+        //Debug.Log("玩家受到伤害");
+        // 假设玩家身上有 PlayerHealth 组件
+        var health = player.GetComponentInParent<PlayerHealth>();
+        if (health != null)
+        {
+            //Debug.Log("玩家受到黑洞伤害");
+            health.TakeDamageByEnemy(DamagePerTick);
+        }
+    }
+
 }
