@@ -85,7 +85,7 @@ Shader "Custom/BossLightFlow"
                 float2 flowUV = float2(i.uv.x + _FlowSpeed * _Time.x + phase, i.uv.y);
                 float flowMask = SAMPLE_TEXTURE2D(_FlowTex, sampler_FlowTex, flowUV);
 
-                return float4(_StripeCol + flowMask * _FlowCol, stripeMask * _Opacity);
+                return float4(stripeMask * (_StripeCol + flowMask * _FlowCol),  _Opacity);
             }
             ENDHLSL
         }

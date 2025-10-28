@@ -20,7 +20,7 @@ Shader "Custom/PlayerShader"
         _PixelWidth("方格宽度",Range(0,100)) = 50
         _PixelHeight("方格高度",Range(0,100)) = 50
         _CrackOffset("缝隙偏移",Range(0,50)) = 20
-        _CrackCol("缝隙颜色",Color) = (1,1,1,1)
+        [HDR]_CrackCol("缝隙颜色",Color) = (1,1,1,1)
         _StopValue("破碎停止点",Range(0,1)) = 0.2
         [Toggle]_IsDead("死亡和复活动画",Int)=1.0
     }

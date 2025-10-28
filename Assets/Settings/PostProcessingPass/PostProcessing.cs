@@ -16,6 +16,7 @@ public class PostProcessRendererFeature : ScriptableRendererFeature
     private EdgeDetecteionPass edgeDetectionPass;
     private NosiePass noisePass;
     private LineBlockPass lineBlockPass;
+    private BlockGlitchPass blockGlitchPass;
     private PixelatePass pixelatePass;
     
     public override void Create()
@@ -35,6 +36,11 @@ public class PostProcessRendererFeature : ScriptableRendererFeature
             settings.shader
         );
 
+        blockGlitchPass = new BlockGlitchPass(
+            settings.renderPassEvent,
+            settings.shader
+        );
+
         pixelatePass = new PixelatePass(
             settings.renderPassEvent, 
             settings.shader
@@ -48,6 +54,7 @@ public class PostProcessRendererFeature : ScriptableRendererFeature
         renderer.EnqueuePass(edgeDetectionPass);
         renderer.EnqueuePass(noisePass);
         renderer.EnqueuePass(lineBlockPass);
+        renderer.EnqueuePass(blockGlitchPass);
         renderer.EnqueuePass(pixelatePass);
         // 添加其他pass...
     }

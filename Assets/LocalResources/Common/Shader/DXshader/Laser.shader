@@ -63,7 +63,7 @@ Shader "Custom/Laser"
                 half4 texcol = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 half4 laskcol = SAMPLE_TEXTURE2D(_LaskTex, sampler_LaskTex, i.uv + _Time.y * 0.5);
                 half4 laskmask = SAMPLE_TEXTURE2D(_LaskMask, sampler_LaskMask, i.uv + _Time.x);
-                return texcol * (laskcol + 1 - laskmask);
+                return texcol * (laskcol + 1 - laskmask*2);
             }
             ENDHLSL
         }

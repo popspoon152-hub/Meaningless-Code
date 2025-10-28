@@ -13,7 +13,6 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ISBLEEDING_ON
-  - _ISDEAD_ON
   - _ISRUSH_ON
   m_InvalidKeywords:
   - _ISNORMAL_ON
@@ -96,22 +95,22 @@ Material:
     - _BlockSpeed: 57.39
     - _BumpScale: 1
     - _ColorMask: 15
-    - _CrackOffset: 20
+    - _CrackOffset: 50
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EdgeWidth: 1.6
     - _EnableExternalAlpha: 0
     - _Frequency: 35.5
-    - _GlitchSpeed: 0
-    - _GlitchStrength: 5
+    - _GlitchSpeed: 1
+    - _GlitchStrength: 1.01
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Intensity: 3.38
     - _IsAttcked: 0
     - _IsBleeding: 1
-    - _IsDead: 1
+    - _IsDead: 0
     - _IsNormal: 1
     - _IsReborn: 0
     - _IsRush: 1
@@ -119,7 +118,7 @@ Material:
     - _MaxRGBSplitY: 2
     - _Metallic: 0
     - _Mode: 0
-    - _NoiseThreshold: 0.05
+    - _NoiseThreshold: 0.1
     - _OcclusionStrength: 1
     - _Offset: 0.68
     - _Opacity: 1
@@ -153,7 +152,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 0.09748411, b: 0.09748411, a: 1}
     - _Color: {r: 1, g: 0, b: 0, a: 1}
-    - _CrackCol: {r: 1, g: 1, b: 1, a: 1}
+    - _CrackCol: {r: 1024, g: 1024, b: 1024, a: 1}
     - _Emission: {r: 766.9961, g: 766.9961, b: 766.9961, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}

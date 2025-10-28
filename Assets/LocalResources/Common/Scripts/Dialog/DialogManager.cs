@@ -144,7 +144,8 @@ public class DialogManager : MonoBehaviour
             else if (cells[0]=="END" && int.Parse(cells[1]) == dialogIndex)
             {
                 dialogIndex = 0;
-                SceneManager.LoadScene(int.Parse(cells[6]));//跳转目标场景
+                int index = SceneManager.GetActiveScene().buildIndex;
+                SceneManager.LoadScene(index + 1);
             }
         }
 
