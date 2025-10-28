@@ -678,10 +678,7 @@ MonoBehaviour:
   - {fileID: -144384827776335854}
   - {fileID: -8614612123386498905}
   - {fileID: -8186173970564298259}
-  - {fileID: -1334503377919453311}
-  - {fileID: -5022436835600172139}
-  - {fileID: -4401991626042414164}
-  - {fileID: 4230874680556378436}
+  - {fileID: 1657784787357662266}
 --- !u!114 &92097616096746754
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -801,6 +798,25 @@ MonoBehaviour:
   strength:
     m_OverrideState: 1
     m_Value: 0.65
+--- !u!114 &1657784787357662266
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Pixelate
+  m_EditorClassIdentifier: Assembly-CSharp::Pixelate
+  active: 1
+  "\u5F00\u5173":
+    m_OverrideState: 1
+    m_Value: 1
+  "\u50CF\u7D20\u683C\u6570":
+    m_OverrideState: 1
+    m_Value: 250
 --- !u!114 &2188420150048170719
 MonoBehaviour:
   m_ObjectHideFlags: 3
