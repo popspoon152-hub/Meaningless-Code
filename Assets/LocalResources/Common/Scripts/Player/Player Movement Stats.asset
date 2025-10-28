@@ -44,6 +44,6 @@ MonoBehaviour:
   DrawRight: 1
   ArcSolution: 20
   VisualizationSteps: 90
-  MaxDashLength: 15
+  MaxDashLength: 25
   DashCooldown: 1
   DashDuration: 0.23

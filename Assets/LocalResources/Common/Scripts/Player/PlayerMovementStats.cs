@@ -83,7 +83,7 @@ public class PlayerMovementStats : ScriptableObject
     }
 
     [Header("≥Â¥Ã")]
-    [Range(1f, 20f)] public float MaxDashLength = 5f;                           // ≥Â¥Ãæ‡¿Î
+    [Range(1f, 50f)] public float MaxDashLength = 5f;                           // ≥Â¥Ãæ‡¿Î
     [Range(0f, 10f)] public float DashCooldown = 1.0f;                          // ≥Â¥Ã¿‰»¥ ±º‰
     [Range(0f, 1f)] public float DashDuration = 0.2f;                           // ≥Â¥Ã≥÷–¯ ±º‰
 
