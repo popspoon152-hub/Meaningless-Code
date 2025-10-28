@@ -4,6 +4,7 @@ Shader "Custom/DeadBlock"
     {
         _Tex ("Albedo (RGB)", 2D) = "white" {}
         _EmissionMask ("EmissionMask", 2D) = "white" {}
+        _Speed("Speed",Float)=1.0
         [HDR]_Emission("Emission",Color)=(1,1,1,1)
     }
     SubShader
@@ -28,6 +29,7 @@ Shader "Custom/DeadBlock"
             TEXTURE2D(_EmissionMask);
             SAMPLER(sampler_EmissionMask);
             float4 _Emission;
+            float _Speed;
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _Tex_ST;
@@ -56,8 +58,8 @@ Shader "Custom/DeadBlock"
 
             half4 frag(Varyings i) : SV_Target
             {
-                half4 texcol = SAMPLE_TEXTURE2D(_Tex, sampler_Tex, float2(i.uv.x- _Time.x,i.uv.y ));
-                half4 mask = SAMPLE_TEXTURE2D(_EmissionMask, sampler_EmissionMask, float2 ( i.uv.x - _Time.x , i.uv.y ) );
+                half4 texcol = SAMPLE_TEXTURE2D(_Tex, sampler_Tex, float2(i.uv.x- _Time.x * _Speed,i.uv.y ));
+                half4 mask = SAMPLE_TEXTURE2D(_EmissionMask, sampler_EmissionMask, float2 ( i.uv.x - _Time.x *_Speed, i.uv.y ) );
                 return texcol * mask * _Emission ;
             }
             ENDHLSL

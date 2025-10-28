@@ -35,28 +35,28 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D _rb;
     public float Speed;
 
-    [Header("µôÂä")]
+    [Header("ï¿½ï¿½ï¿½ï¿½")]
     public Transform DropPoint;
     public Transform BackPoint;
     public float DropHurt = 20f;
 
     [Header("Attack")]
-    public Transform[] AttackPoints;                                                       //¹¥»÷µã
+    public Transform[] AttackPoints;                                                       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    //ÒÆ¶¯Ïà¹Ø
+    //ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½
     private Vector2 _moveVelocity;
     private bool _isFacingRight;
 
-    //Åö×²Ìå¼ì²âÏà¹Ø
+    //ï¿½ï¿½×²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private RaycastHit2D _groundHit;
     private RaycastHit2D _headHit;
     private bool _isGrounded;
     private bool _bumpedHead;
 
-    //ÌøÔ¾Ïà¹Ø
+    //ï¿½ï¿½Ô¾ï¿½ï¿½ï¿½
     public float VerticalVelocity { get; private set; }
 
-    //ËÀÍö
+    //ï¿½ï¿½ï¿½ï¿½
     public bool PlayerIsDead;
 
     private bool _isJumping;
@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
     private float _fastFallReleaseSpeed;
     private int _numberOfJumpsUsed;
 
-    //ÌøÔ¾¶¥µãÏà¹Ø
+    //ï¿½ï¿½Ô¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private float _apexPoint;
     private float _timePastApexThreshold;
     private bool _isPastApexThreshold;
@@ -78,14 +78,14 @@ public class PlayerMovement : MonoBehaviour
     //coyote time
     private float _coyoteTimer;
 
-    //³å´ÌÏà¹Ø
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private bool _isDashing = false;
     private float _dashTime;
     private Vector2 _dashDirection;
     private float _dashSpeed;
     private float _dashCooldownTimer;
 
-    //¹¥»÷Ïà¹Ø
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private float _currentCombo;
     private float _lastAttackTime;
     private bool _isAttacking = false;
@@ -233,7 +233,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void JumpChecks()
     {
-        //°´¿Õ¸ñ
+        //ï¿½ï¿½ï¿½Õ¸ï¿½
         if (InputManager.JumpWasPressed)
         {
             _jumpBufferTimer = MoveStats.JumpBufferTime;
@@ -241,7 +241,7 @@ public class PlayerMovement : MonoBehaviour
             _isFastFalling = false;
         }
 
-        //ËÉ¿Õ¸ñ
+        //ï¿½É¿Õ¸ï¿½
         if (InputManager.JumpWasReleased)
         {
             if(_jumpBufferTimer > 0f)
@@ -320,19 +320,19 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        //ÆôÓÃÖØÁ¦
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (_isJumping)
         {
-            //¼ì²âÍ·²¿Åö×²
+            //ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½×²
             if (_bumpedHead)
             {
                 _isFastFalling = true;
             }
 
-            //ÉÏÉýÖØÁ¦
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (VerticalVelocity >= 0f)
             {
-                //¶¥µã¿ØÖÆ
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 _apexPoint = Mathf.InverseLerp(MoveStats.IntialJumpVelocity, 0f, VerticalVelocity);
 
                 if (_apexPoint > MoveStats.ApexThreshold)
@@ -357,7 +357,7 @@ public class PlayerMovement : MonoBehaviour
                     }
                 }
 
-                //ÉÏÉýÖØÁ¦ ²¢ÇÒ ²»Âú×ãÉÏÃæµÄ¶¥µã¿ØÖÆ
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 else
                 {
                     VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
@@ -368,7 +368,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
-            //ÏÂ½µÖØÁ¦
+            //ï¿½Â½ï¿½ï¿½ï¿½ï¿½ï¿½
             else if (!_isFastFalling)
             {
                 VerticalVelocity += MoveStats.Gravity * MoveStats.GravityOnReleaseMultiplier * Time.fixedDeltaTime;
@@ -398,7 +398,7 @@ public class PlayerMovement : MonoBehaviour
             _fastFallTime += Time.fixedDeltaTime;
         }
 
-        //Õý³£ÏÂÂäÊ±µÄÖØÁ¦
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (!_isGrounded && !_isJumping)
         {
             if (!_isFalling)
@@ -409,7 +409,7 @@ public class PlayerMovement : MonoBehaviour
             VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
         }
 
-        //¿ìËÙÏÂÂäËÙ¶È
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
         VerticalVelocity = Mathf.Clamp(VerticalVelocity, -MoveStats.MaxFallSpeed, 50f);
 
         _rb.velocity = new Vector2(_rb.velocity.x, VerticalVelocity);
@@ -527,7 +527,7 @@ public class PlayerMovement : MonoBehaviour
         _isJumping = false;
         _dashTime = 0f;
         _dashDirection = _isFacingRight ? Vector2.right : Vector2.left;
-        _dashSpeed = length / MoveStats.DashDuration; // ËÙ¶È=¾àÀë/Ê±¼ä
+        _dashSpeed = length / MoveStats.DashDuration; // ï¿½Ù¶ï¿½=ï¿½ï¿½ï¿½ï¿½/Ê±ï¿½ï¿½
         _rb.velocity = new Vector2(_dashDirection.x * _dashSpeed, 0f);
 
         EventCenter.Ins.Dispatch(EPlayerDash.on);
@@ -551,12 +551,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void AttackCheck()
     {
-        //°´¹¥»÷¼ü
-        if (InputManager.AttackWasPressed && !_isAttacking)
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        if (InputManager.AttackWasPressed && !_isAttacking && !_isJumping)
         {
             StartAttack();
         }
-        else if(_isAttacking && InputManager.AttackWasPressed && CanCombo())
+        else if(_isAttacking && InputManager.AttackWasPressed && CanCombo() && !_isJumping)
         {
             ContinueCombo();
         }
@@ -568,7 +568,7 @@ public class PlayerMovement : MonoBehaviour
         _currentCombo = 1;
         _lastAttackTime = Time.time;
 
-        //ÉèÖÃ¶¯»­trigger
+        //ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½trigger
         Anim.SetTrigger("FirstAttackTrigger");
 
         EventCenter.Ins.Dispatch(EPlayerFirstAttack.on);
@@ -583,10 +583,10 @@ public class PlayerMovement : MonoBehaviour
         _currentCombo++;
         _lastAttackTime = Time.time;
 
-        //Í£Ö¹Ð¯³Ì
+        //Í£Ö¹Ð¯ï¿½ï¿½
         if(_attackCoroutine != null) StopCoroutine(_attackCoroutine);
 
-        //¸üÐÂ¶¯»­
+        //ï¿½ï¿½ï¿½Â¶ï¿½ï¿½ï¿½
 
         if (_currentCombo == 2)
         {
@@ -599,7 +599,7 @@ public class PlayerMovement : MonoBehaviour
             EventCenter.Ins.Dispatch(EPlayerThirdAttack.on);
         }
 
-            //¿ªÊ¼ÐÂÐ¯³Ì
+            //ï¿½ï¿½Ê¼ï¿½ï¿½Ð¯ï¿½ï¿½
         _attackCoroutine = StartCoroutine(AttackCoroutine());
     }
 
@@ -614,7 +614,7 @@ public class PlayerMovement : MonoBehaviour
 
             _dashTime = 0f;
             _dashDirection = _isFacingRight ? Vector2.right : Vector2.left;
-            _dashSpeed = AttackStats.AttackLittleDash[0] / MoveStats.DashDuration; // ËÙ¶È=¾àÀë/Ê±¼ä
+            _dashSpeed = AttackStats.AttackLittleDash[0] / MoveStats.DashDuration; // ï¿½Ù¶ï¿½=ï¿½ï¿½ï¿½ï¿½/Ê±ï¿½ï¿½
             _rb.velocity = new Vector2(_dashDirection.x * _dashSpeed, 0f);
 
             EventCenter.Ins.Dispatch(EPlayerDash.on);
@@ -625,7 +625,7 @@ public class PlayerMovement : MonoBehaviour
 
             _dashTime = 0f;
             _dashDirection = _isFacingRight ? Vector2.right : Vector2.left;
-            _dashSpeed = (int)_currentCombo - 1 / MoveStats.DashDuration; // ËÙ¶È=¾àÀë/Ê±¼ä
+            _dashSpeed = (int)_currentCombo - 1 / MoveStats.DashDuration; // ï¿½Ù¶ï¿½=ï¿½ï¿½ï¿½ï¿½/Ê±ï¿½ï¿½
             _rb.velocity = new Vector2(_dashDirection.x * _dashSpeed, 0f);
         }
 

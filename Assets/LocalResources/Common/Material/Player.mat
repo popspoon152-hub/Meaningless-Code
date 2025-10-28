@@ -13,7 +13,6 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ISBLEEDING_ON
-  - _ISDEAD_ON
   - _ISRUSH_ON
   m_InvalidKeywords:
   - _ISNORMAL_ON
@@ -103,15 +102,15 @@ Material:
     - _EdgeWidth: 1.6
     - _EnableExternalAlpha: 0
     - _Frequency: 35.5
-    - _GlitchSpeed: 0
-    - _GlitchStrength: 5
+    - _GlitchSpeed: 1
+    - _GlitchStrength: 1.01
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Intensity: 3.38
     - _IsAttcked: 0
     - _IsBleeding: 1
-    - _IsDead: 1
+    - _IsDead: 0
     - _IsNormal: 1
     - _IsReborn: 0
     - _IsRush: 1
@@ -128,8 +127,8 @@ Material:
     - _Parallax: 0.02
     - _ParticleColorAlpha: 135.01
     - _ParticleSpeed: 1
-    - _PixelHeight: 100
-    - _PixelWidth: 100
+    - _PixelHeight: 50
+    - _PixelWidth: 50
     - _RushDistance: 16.1
     - _RushSpeed: 8.6
     - _ShatterSpeed: 5
