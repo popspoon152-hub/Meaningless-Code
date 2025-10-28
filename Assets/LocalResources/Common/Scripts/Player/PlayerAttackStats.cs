@@ -29,5 +29,6 @@ public class PlayerAttackStats : ScriptableObject
     public bool ShowAttackRangeArc = false;
 
     [Header("攻击烧血数值")]
-    [Range(1f, 50f)] public float AttackHurtPlayerNum = 10f;                            //自己烧血 
+    [Range(1f, 50f)] public float AttackHurtPlayerNum = 10f;                            //自己烧血
+    [Range(1, 100f)] public float PlayerAttackUpPerHealth = 1f;                     //每扣1滴血加多少攻击力
 }

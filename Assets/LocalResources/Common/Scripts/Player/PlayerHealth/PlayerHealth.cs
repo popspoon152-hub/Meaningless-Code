@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     public PlayerMovement PlayerMovement;
+    public PlayerSlider PlayerS;
  
     [Header("Health Num")]
     [Range(50f, 150f)] public float PlayerMaxHealth = 100f;                                     //玩家最大生命值
@@ -89,6 +90,8 @@ public class PlayerHealth : MonoBehaviour
         {
             PlayerMovement.PlayerIsDead = true;
         }
+
+        PlayerS.UpdateHealth(CurrentHealth, CurrentExtraHealth, PlayerMaxHealth);
     }
     #endregion
 
