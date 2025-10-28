@@ -6,13 +6,12 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     public PlayerMovement PlayerMovement;
+    PlayerSlider PlayerSlider;
  
     [Header("Health Num")]
     [Range(50f, 150f)] public float PlayerMaxHealth = 100f;                                     //玩家最大生命值
 
     [Header("Health Decline")]
-    [Range(0.1f, 1f)] public float ExtraHealthDeclineRateByPlayer = 0.8f;                       //被玩家自己打中虚血条占扣血的比例
-    [Range(0.1f, 1f)] public float ExtraHealthDeclineRateByEnemy = 0.5f;                        //被敌人打中虚血条占扣血的比例
     [Range(0f, 10f)] public float ExtraHealthDeclineNumDeltaTime = 5f;                          //虚血条每秒下降数值
 
 
@@ -43,14 +42,7 @@ public class PlayerHealth : MonoBehaviour
         get { return _currentExtraHealth; }
         set 
         {
-            if (value <= CurrentHealth)
-            {
-                _currentExtraHealth = value;
-            }
-            else
-            {
-                _currentExtraHealth = CurrentHealth;
-            }
+            _currentExtraHealth = value;
         }
     }
 
@@ -89,6 +81,8 @@ public class PlayerHealth : MonoBehaviour
         {
             PlayerMovement.PlayerIsDead = true;
         }
+
+        PlayerSlider.UpdateHealth(CurrentHealth, CurrentExtraHealth, PlayerMaxHealth);
     }
     #endregion
 
@@ -106,12 +100,6 @@ public class PlayerHealth : MonoBehaviour
             //向player传_isDead
             _playerIsDead = true;
         }
-
-        if (!_isHealthDeclining)
-        {
-            CurrentExtraHealth -= damage * ExtraHealthDeclineRateByEnemy;
-        }
-
 
         _isHealthDeclining = true;
 
@@ -131,10 +119,6 @@ public class PlayerHealth : MonoBehaviour
             CurrentHealth -= damage;
         }
 
-        if (!_isHealthDeclining)
-        {
-            CurrentExtraHealth -= damage * ExtraHealthDeclineRateByEnemy;
-        }
         _isHealthDeclining = true;
 
         EventCenter.Ins.Dispatch(EPlayerHurt.on);

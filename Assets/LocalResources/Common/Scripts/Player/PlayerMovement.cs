@@ -646,8 +646,14 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (enemy.CompareTag("Boss") && bossHurt)
                 {
-                    _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1] + healthUp);
-                    _boss3.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1] + healthUp);
+                    if (_boss != null)
+                    {
+                        _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1] + healthUp);
+                    }
+                    if (_boss3 != null)
+                    {
+                        _boss3.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1] + healthUp);
+                    }
                     PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum);
                     bossHurt = false;
                 }

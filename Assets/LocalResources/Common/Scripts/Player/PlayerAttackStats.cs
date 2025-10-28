@@ -30,4 +30,5 @@ public class PlayerAttackStats : ScriptableObject
 
     [Header("攻击烧血数值")]
     [Range(1f, 50f)] public float AttackHurtPlayerNum = 10f;                            //自己烧血 
+    public float PlayerAttackUpPerHealth;
 }
