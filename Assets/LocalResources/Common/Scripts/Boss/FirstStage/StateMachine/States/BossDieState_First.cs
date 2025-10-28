@@ -40,9 +40,16 @@ public class BossDieState_First : IBossStateFirstStage
             Vector3 segmentOffset = new Vector3(i * 4.5f, 0, 0);
 
             _stateMachine.Segments[i].position = _stateMachine.transform.position + segmentOffset;
+
+            Rigidbody2D r = _stateMachine.Segments[i].GetComponent<Rigidbody2D>();
+            if (r != null)
+            {
+                r.velocity = Vector2.zero;
+                r.angularVelocity = 0f;
+            }
         }
 
-        UnityEngine.Object.Instantiate(_stateMachine.RewardPrefab, _stateMachine.RewardTransform);
+        GameObject reward = UnityEngine.Object.Instantiate(_stateMachine.RewardPrefab, _stateMachine.RewardTransform.position,Quaternion.identity);
 
         yield return new WaitForSeconds(_stateMachine.DieInvulnerableTime);
     }
