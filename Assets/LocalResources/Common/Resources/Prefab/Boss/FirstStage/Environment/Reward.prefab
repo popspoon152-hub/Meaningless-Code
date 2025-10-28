@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 297877417568399751}
   - component: {fileID: 2363073031695259253}
-  - component: {fileID: 7934060231577730995}
   - component: {fileID: 8434068539961984798}
   - component: {fileID: 4745628534633670630}
+  - component: {fileID: -1964964425915895218}
   m_Layer: 11
   m_Name: Reward
   m_TagString: Reward
@@ -87,21 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7934060231577730995
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2214726139745622937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfc4c6d444c68ad47a9b1a5fcf207fe1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BeanHealth: 3
-  _currentHealth: 0
-  IsDestroy: 0
 --- !u!95 &8434068539961984798
 Animator:
   serializedVersion: 5
@@ -158,3 +143,18 @@ CircleCollider2D:
   m_Offset: {x: 0.03635013, y: -0.06058359}
   serializedVersion: 2
   m_Radius: 0.96754825
+--- !u!114 &-1964964425915895218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2214726139745622937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 038bcff387691344882fd5f80e1374db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BeanHealth: 5
+  _currentHealth: 0
+  IsDestroy: 0

@@ -91,6 +91,8 @@ public class PlayerMovement : MonoBehaviour
     private bool _isAttacking = false;
     private Coroutine _attackCoroutine;
 
+
+
     #endregion
 
     #region LifeCycle
@@ -115,12 +117,7 @@ public class PlayerMovement : MonoBehaviour
         CheckComboReset();
         DropChecks();
 
-        if (PlayerIsDead)
-        {
-            EventCenter.Ins.Dispatch(EPlayerDeath.on);
-            SceneManager.LoadScene("FirstStagePage");
-        }
-
+        Dead();
 
         Anim.SetFloat("Speed", Mathf.Abs(_rb.velocity.x));
         Anim.SetBool("IsFalling", _isFalling);
@@ -128,6 +125,8 @@ public class PlayerMovement : MonoBehaviour
         Anim.SetBool("IsDashing", _isDashing);
         Anim.SetBool("IsGround", _isGrounded);
     }
+
+
 
     private void FixedUpdate()
     {
@@ -632,6 +631,7 @@ public class PlayerMovement : MonoBehaviour
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.EnemyLayer);
         Collider2D[] hitBeans = Physics2D.OverlapCircleAll(AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.BeanLayer);
         Collider2D[] hitBossSegments = Physics2D.OverlapCircleAll(AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.GroundLayer);
+        Collider2D[] hitReward = Physics2D.OverlapCircleAll(AttackPoints[(int)_currentCombo - 1].position, attackRange, AttackStats.RewardLayer);
 
         bool bossHurt = true;
         if (hitEnemies != null)
@@ -669,6 +669,18 @@ public class PlayerMovement : MonoBehaviour
                     _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1]);
                     PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum);
                     bossHurt = false;
+                }
+            }
+        }
+
+        if (hitReward != null)
+        {
+            foreach (var reward in hitReward)
+            {
+                if (reward.CompareTag("Reward"))
+                {
+                    RewardBean r = reward.GetComponent<RewardBean>();
+                    r.TakeDamage(1);
                 }
             }
         }
@@ -732,6 +744,14 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
+    private void Dead()
+    {
+        if (PlayerIsDead)
+        {
+            EventCenter.Ins.Dispatch(EPlayerDeath.on);
+            SceneManager.LoadScene("FirstStagePage");
+        }
+    }
 
     #region Gizmos
     private void DrawJumpArc(float moveSpeed, Color gizmoColor)

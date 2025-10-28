@@ -40,5 +40,8 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 64
+  RewardLayer:
+    serializedVersion: 2
+    m_Bits: 2048
   ShowAttackRangeArc: 1
   AttackHurtPlayerNum: 10

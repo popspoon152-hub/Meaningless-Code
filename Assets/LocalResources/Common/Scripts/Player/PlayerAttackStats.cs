@@ -1,3 +1,4 @@
+using Sirenix.Utilities.Editor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,7 @@ public class PlayerAttackStats : ScriptableObject
     public LayerMask EnemyLayer;                                                        //µ–»À≤„
     public LayerMask BeanLayer;                                                     //’œ∞≠≤„
     public LayerMask GroundLayer;                                                   //µÿ√Ê≤„
+    public LayerMask RewardLayer;                                                   //Ω±¿¯≤„
 
     [Header("AttackVisualization Tool")]
     public bool ShowAttackRangeArc = false;

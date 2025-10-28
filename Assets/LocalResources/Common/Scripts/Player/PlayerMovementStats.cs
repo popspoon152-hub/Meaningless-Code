@@ -87,5 +87,6 @@ public class PlayerMovementStats : ScriptableObject
     [Range(0f, 10f)] public float DashCooldown = 1.0f;                          // 冲刺冷却时间
     [Range(0f, 1f)] public float DashDuration = 0.2f;                           // 冲刺持续时间
 
+    //[Header("寄")]
 
 }
