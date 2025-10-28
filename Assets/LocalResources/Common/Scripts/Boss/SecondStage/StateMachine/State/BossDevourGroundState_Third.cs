@@ -13,6 +13,8 @@ public class BossDevourGroundState_Third : IBossStateThirdStage
         _stateMachine.IsMove = true;
 
         _devourCoroutine = _stateMachine.StartCoroutine(DevourGroundRoutine());
+
+        _stateMachine.CurrentMoveSpeed = _stateMachine.MoveSpeed_Normal; // 设置待机移动速度
     }
 
     private IEnumerator DevourGroundRoutine()

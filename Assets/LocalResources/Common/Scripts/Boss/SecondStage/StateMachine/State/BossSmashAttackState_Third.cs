@@ -58,7 +58,7 @@ public class BossSmashAttackState_Third : IBossStateThirdStage
                 _stateMachine.transform.position = Vector3.MoveTowards(
                     _stateMachine.transform.position,
                     nodePos,
-                    _stateMachine.CurrentMoveSpeed * Time.deltaTime);
+                    _stateMachine.MoveSpeed_Attack * Time.deltaTime);
                 yield return null;
             }
         }
@@ -67,7 +67,7 @@ public class BossSmashAttackState_Third : IBossStateThirdStage
         _stateMachine.IsCharging = true;
         Vector3 riseTarget = _stateMachine.transform.position + Vector3.up * _stateMachine.SmashChargeRiseHeight;
         float timer = 0f;
-        float riseSpeed = _stateMachine.CurrentMoveSpeed; // 也可以用单独参数
+        float riseSpeed = _stateMachine.SmashRiseSpeed; // 也可以用单独参数
         while (timer < _stateMachine.SmashPreWarnTime)
         {
             if (!_stateMachine.IsMove)
