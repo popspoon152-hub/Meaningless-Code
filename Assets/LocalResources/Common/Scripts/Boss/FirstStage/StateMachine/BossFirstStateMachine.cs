@@ -50,6 +50,7 @@ public class BossFirstStateMachine : MonoBehaviour
     [Range(1f, 60f)] public float EatBeanMoveSpeed = 3f;
     [Range(1f, 60f)] public float AttackMoveSpeed = 5f;
     private float _currentMoveSpeed;
+    [SerializeField] private BossSlider _slider;
 
     [Header("ÉßµÄ½ÚÊıÅäÖÃ")]
     [Range(1f, 20f)] public int StartSnakeSegments = 5;
@@ -242,6 +243,7 @@ public class BossFirstStateMachine : MonoBehaviour
     void Update()
     {
         _currentStateInstance?.UpdateState();
+        _slider.UpdateHealth(CurrentHealth, MaxHealth);
     }
 
     void FixedUpdate()
