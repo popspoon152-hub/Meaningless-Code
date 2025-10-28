@@ -91,14 +91,14 @@ public class DialogManager : MonoBehaviour
 
     public void ReadCharacter()
     {
-        for (int i = 1; i < sprites.Count+1; i++)
+        for (int i = 1; i < sprites.Count + 1; i++)
         {
             string[] cells = dialogRows[i].Split(',');
             if (cells[8] != null && cells[8] != "")
             {
-                imageDic[cells[8]] = sprites[i-1];
+                imageDic[cells[8]] = sprites[i - 1];
             }
-              
+
         }
     }
 
@@ -107,7 +107,7 @@ public class DialogManager : MonoBehaviour
         //dialogRows = _textAsset.text.Split('\n');
         //Debug.Log("读取成功");
         // 使用 UTF-8 编码读取文件内容
-        string[] lines = _textAsset.text.Split(new[] {'\n'}, System.StringSplitOptions.RemoveEmptyEntries);
+        string[] lines = _textAsset.text.Split(new[] { "NEXT" }, System.StringSplitOptions.RemoveEmptyEntries);
 
         // 清理每一行并分割
         dialogRows = new string[lines.Length];
@@ -141,7 +141,7 @@ public class DialogManager : MonoBehaviour
                 nextButton.gameObject.SetActive(false);
                 GenerateOption(i);
             }
-            else if (cells[0]=="END" && int.Parse(cells[1]) == dialogIndex)
+            else if (cells[0] == "END" && int.Parse(cells[1]) == dialogIndex)
             {
                 dialogIndex = 0;
                 int index = SceneManager.GetActiveScene().buildIndex;
@@ -154,6 +154,7 @@ public class DialogManager : MonoBehaviour
 
     public void OnClickNext()
     {
+        Debug.Log("点击了");
         ShowDialogRow();
     }
 
@@ -186,7 +187,7 @@ public class DialogManager : MonoBehaviour
         nextButton.gameObject.SetActive(true);
     }
 
-    public void OptionEffect(string _effect,int _param,string _target)//效果，数值，目标
+    public void OptionEffect(string _effect, int _param, string _target)//效果，数值，目标
     {
 
     }
