@@ -590,7 +590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4896c1291f57ea641a36f20e7c980c37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogDataFile: {fileID: 4900000, guid: 3451088cd0101c843b298e260ef2a3fb, type: 3}
+  dialogDataFile: {fileID: 4900000, guid: 3c1a7a626e7051f4e8cd5fba592f2ffd, type: 3}
   spriteLeft: {fileID: 976108635}
   spriteRight: {fileID: 1758220895}
   SayPart: {fileID: 1754220947}

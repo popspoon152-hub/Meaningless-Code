@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 7934060231577730995}
   - component: {fileID: 8434068539961984798}
   - component: {fileID: 4745628534633670630}
-  m_Layer: 8
-  m_Name: Bean
-  m_TagString: Bean
+  m_Layer: 11
+  m_Name: Reward
+  m_TagString: Reward
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.74, y: 1.23, z: 0.00020250399}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 3.5, y: 3.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 813758abbbdd40042b85f077aed66286, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9528302, g: 0.867487, b: 0.06741722, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

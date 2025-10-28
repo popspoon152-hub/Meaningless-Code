@@ -8,6 +8,7 @@ TagManager:
   - Bean
   - Boss
   - Ground
+  - Reward
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Bean
   - Player
   - BackGround
-  - 
+  - Reward
   - 
   - 
   - 

@@ -149,11 +149,16 @@ public class BossFirstStateMachine : MonoBehaviour
     #endregion
 
 
-
     #region BossDieState_First
     [Header("BossDieState_First的Boss出招僵直时间")]
     [Range(0f, 2f)] public float DieInvulnerableTime;
+    public Transform BossDieTransform;
+    public GameObject RewardPrefab;
+    public Transform RewardTransform;
     #endregion
+
+
+
 
     #region private fields
     // 运行时字段

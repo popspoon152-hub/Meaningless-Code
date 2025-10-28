@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,10 +25,26 @@ public class BossDieState_First : IBossStateFirstStage
 
     private IEnumerator BossDie()
     {
-        yield return new WaitForSeconds(_stateMachine.DieInvulnerableTime);
+        _stateMachine.transform.position = _stateMachine.BossDieTransform.position;
 
-        //跳转到gal环节
-        SceneManager.LoadScene("GalPage");
+        Rigidbody2D rb = _stateMachine.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+        }
+
+        for (int i = 1; i < _stateMachine.Segments.Count; i++)
+        {
+            // 使用相对位置
+            Vector3 segmentOffset = new Vector3(i * 4.5f, 0, 0);
+
+            _stateMachine.Segments[i].position = _stateMachine.transform.position + segmentOffset;
+        }
+
+        UnityEngine.Object.Instantiate(_stateMachine.RewardPrefab, _stateMachine.RewardTransform);
+
+        yield return new WaitForSeconds(_stateMachine.DieInvulnerableTime);
     }
 
     // 退出状态时调用（清理）
