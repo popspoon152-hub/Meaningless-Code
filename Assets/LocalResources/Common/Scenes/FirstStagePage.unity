@@ -4195,6 +4195,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a3fb8e8b9bf012449c139598379b661, type: 3}
+--- !u!114 &5779307387261180815 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8241281226244313633, guid: 1a3fb8e8b9bf012449c139598379b661, type: 3}
+  m_PrefabInstance: {fileID: 5779307387261180814}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 614286d15c085584796302125b366dcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8818559093331623854
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4207,6 +4218,46 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: Anim
+      value: 
+      objectReference: {fileID: 8818559093331623855}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: Slider
+      value: 
+      objectReference: {fileID: 5779307387261180815}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: Movement
+      value: 
+      objectReference: {fileID: 2110223245}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: AnimOffset
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: laserPrefab
+      value: 
+      objectReference: {fileID: 9070066570414569370, guid: e53c59285fc8e9546a32094b9e335e64, type: 3}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: postCastTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: backStepForce
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: laserCollDownTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: directionController
+      value: 
+      objectReference: {fileID: 8818559093331623856}
+    - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+      propertyPath: moveScriptToDisable
+      value: 
+      objectReference: {fileID: 2110223245}
     - target: {fileID: 7533596874070858689, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -4264,6 +4315,22 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+--- !u!95 &8818559093331623855 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6274963871515989462, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+  m_PrefabInstance: {fileID: 8818559093331623854}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8818559093331623856 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5597701998863985610, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+  m_PrefabInstance: {fileID: 8818559093331623854}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4253c9b10c1d89645b0358bca1442c14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
