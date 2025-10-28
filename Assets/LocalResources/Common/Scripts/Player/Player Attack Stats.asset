@@ -26,7 +26,7 @@ MonoBehaviour:
   AttackRange:
   - 6.5
   - 5
-  - 10.5
+  - 11
   AttackLittleDash:
   - 1
   - 1
@@ -45,3 +45,4 @@ MonoBehaviour:
     m_Bits: 2048
   ShowAttackRangeArc: 1
   AttackHurtPlayerNum: 10
+  PlayerAttackUpPerHealth: 1

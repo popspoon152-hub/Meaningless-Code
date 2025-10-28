@@ -32,12 +32,17 @@ public class LaserHurt : MonoBehaviour
     //}
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Is Shooted");
-        Debug.Log(other.gameObject.name);
         if (other.gameObject.CompareTag("Boss"))
         {
-            Debug.Log("is Taking");
-            other.gameObject.GetComponent<BossThirdStateMachine>().TakeDamage(damage);
+            if (other.gameObject.GetComponent<BossFirstStateMachine>() != null)
+            {
+                other.gameObject.GetComponent<BossFirstStateMachine>().TakeDamage(damage);
+            }
+            if(other.gameObject.GetComponent<BossThirdStateMachine>() != null)
+            {
+                other.gameObject.GetComponent<BossThirdStateMachine>().TakeDamage(damage);
+            }
+            
         }
     }
 
