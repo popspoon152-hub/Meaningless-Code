@@ -62,6 +62,23 @@ public class BlockGlitch : VolumeComponent, IPostProcessComponent
     public bool IsTileCompatible() => false;
 }
 
+[Serializable, VolumeComponentMenu("PostProcessing/Vignette02")]
+public class Vignette02 : VolumeComponent, IPostProcessComponent
+{
+    public BoolParameter 开关 = new BoolParameter(false);
+    public ColorParameter 颜色 = new ColorParameter(Color.black);
+    public ClampedFloatParameter 强度 = new ClampedFloatParameter(0.0f, 0.0f, 1.0f);
+    public Vector2Parameter 中心坐标 = new Vector2Parameter(new Vector2(0.5f, 0.5f));
+    public ClampedFloatParameter 中心半径 = new ClampedFloatParameter(0.1f, 0.0f, 0.5f);
+    public ClampedFloatParameter 平滑半径 = new ClampedFloatParameter(0.0f, 0.0f, 1.0f);
+    public ClampedFloatParameter 亮度阈值 = new ClampedFloatParameter(1.0f, 0.0f, 1.0f);
+    public ClampedFloatParameter 亮度阈值平滑值 = new ClampedFloatParameter(0.0f, 0.0f, 1.0f);
+    public BoolParameter 是否将中心还原为圆形 = new BoolParameter(false);
+
+    public bool IsActive() => active;
+    public bool IsTileCompatible() => false;
+}
+
 [Serializable, VolumeComponentMenu("PostProcessing/Pixelate")]
 public class Pixelate : VolumeComponent, IPostProcessComponent
 {
