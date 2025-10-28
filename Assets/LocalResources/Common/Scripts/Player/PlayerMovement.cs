@@ -747,6 +747,7 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
+    #region Dead
     private void Dead()
     {
         if (PlayerIsDead)
@@ -755,6 +756,8 @@ public class PlayerMovement : MonoBehaviour
             SceneManager.LoadScene("FirstStagePage");
         }
     }
+
+    #endregion
 
     #region Gizmos
     private void DrawJumpArc(float moveSpeed, Color gizmoColor)

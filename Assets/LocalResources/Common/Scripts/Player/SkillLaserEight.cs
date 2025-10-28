@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.iOS;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class LaserSkillEightWay : MonoBehaviour
@@ -9,6 +12,8 @@ public class LaserSkillEightWay : MonoBehaviour
     public float laserLength = 5f;
     public float laserWidth = 0.2f;
     public float laserDuration = 0.4f;
+    [Range(1f,10f)]public float laserCollDownTime = 5f;              //激光的冷却
+    private bool CanLaser = true;
 
     [Header("前后摇与后撤")]
     public float preCastTime = 0.25f;
@@ -28,6 +33,10 @@ public class LaserSkillEightWay : MonoBehaviour
     // 记录原始约束
     private RigidbodyConstraints2D originalConstraints;
 
+    [Header("Anim")]
+    public Animator Anim;
+    public float AnimOffset = 0.5f;     //anim的修正值
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -35,12 +44,33 @@ public class LaserSkillEightWay : MonoBehaviour
         PlayerInputControls.Player.Shoot.started += OnShoot;
     }
 
+    private void Update()
+    {
+        LaserTimer();
+    }
+
+    #region
+    private void LaserTimer()
+    {
+        if (!CanLaser)
+        {
+            float time = 0;
+            time += Time.deltaTime;
+            if(time >= laserCollDownTime)
+            {
+                CanLaser = true;
+            }
+        }
+
+    }
+    #endregion
+
     private void OnEnable() => PlayerInputControls.Enable();
     private void OnDisable() => PlayerInputControls.Disable();
 
     private void OnShoot(InputAction.CallbackContext ctx)
     {
-        if (!isCasting)
+        if (!isCasting && CanLaser)
         {
             StartCoroutine(LaserSequenceCoroutine());
         }
@@ -49,6 +79,7 @@ public class LaserSkillEightWay : MonoBehaviour
     private IEnumerator LaserSequenceCoroutine()
     {
         isCasting = true;
+        CanLaser = false;
 
         // 锁定Y轴（悬浮）
         originalConstraints = rb.constraints;
@@ -58,6 +89,8 @@ public class LaserSkillEightWay : MonoBehaviour
         // 禁止移动
         if (moveScriptToDisable != null) moveScriptToDisable.enabled = false;
 
+
+        SetPreAnim();
         yield return new WaitForSeconds(preCastTime);
 
         Vector2 dir = GetShootDirection();
@@ -66,8 +99,8 @@ public class LaserSkillEightWay : MonoBehaviour
         yield return new WaitForSeconds(laserDuration);
 
         // 立即后撤：施加反方向的力
-        Vector2 recoil = -dir.normalized * backStepForce;
-        rb.AddForce(recoil, ForceMode2D.Impulse);
+        //Vector2 recoil = -dir.normalized * backStepForce;
+        //rb.AddForce(recoil, ForceMode2D.Impulse);
 
         // 解锁Y轴
         rb.constraints = originalConstraints;
@@ -77,6 +110,81 @@ public class LaserSkillEightWay : MonoBehaviour
         // 恢复移动
         if (moveScriptToDisable != null) moveScriptToDisable.enabled = true;
         isCasting = false;
+    }
+
+    /// <summary>
+    /// 根据鼠标位置设定激光前摇的动画
+    /// </summary>
+    /// <exception></exception>
+    private void SetPreAnim()
+    {
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 playerPos = transform.position;
+
+        if(mousePos.x < playerPos.x - AnimOffset && playerPos.y - AnimOffset < mousePos.y && mousePos.y < playerPos.y + AnimOffset)
+        {
+            //左
+            Anim.SetTrigger("Left");
+        }
+        else if(mousePos.x > playerPos.x + AnimOffset && playerPos.y - AnimOffset < mousePos.y && mousePos.y < playerPos.y + AnimOffset)
+        {
+            //右
+            Anim.SetTrigger("Right");
+        }
+        else if(mousePos.x < playerPos.x - AnimOffset && mousePos.y > playerPos.y + AnimOffset)
+        {
+            //左上
+            Anim.SetTrigger("LeftUp");
+        }
+        else if (mousePos.x > playerPos.x + AnimOffset && mousePos.y > playerPos.y + AnimOffset)
+        {
+            //右上
+            Anim.SetTrigger("RightUp");
+        }
+        else if (mousePos.x < playerPos.x - AnimOffset && mousePos.y < playerPos.y - AnimOffset)
+        {
+            //左下
+            Anim.SetTrigger("LeftDown");
+        }
+        else if (mousePos.x > playerPos.x + AnimOffset && mousePos.y < playerPos.y - AnimOffset)
+        {
+            //右下
+            Anim.SetTrigger("RightDown");
+        }
+        else if (playerPos.x - AnimOffset < mousePos.x && mousePos.x < playerPos.x + AnimOffset && mousePos.y > playerPos.y + AnimOffset)
+        {
+            //上
+            Anim.SetTrigger("Up");
+        }
+        else if(playerPos.x - AnimOffset < mousePos.x && mousePos.x < playerPos.x + AnimOffset && mousePos.y < playerPos.y - AnimOffset)
+        {
+            //下
+            Anim.SetTrigger("Down");
+        }
+        else
+        {
+            Vector2 posVector = mousePos - playerPos;
+            if(posVector.x > 0 && posVector.y > 0)
+            {
+                //右上
+                Anim.SetTrigger("RightUp");
+            }
+            else if (posVector.x > 0 && posVector.y < 0)
+            {
+                //右下
+                Anim.SetTrigger("RightDown");
+            }
+            else if (posVector.x < 0 && posVector.y > 0)
+            {
+                //左上
+                Anim.SetTrigger("LeftUp");
+            }
+            else
+            {
+                //左下
+                Anim.SetTrigger("LeftDown");
+            }
+        }
     }
 
     private Vector2 GetShootDirection()
