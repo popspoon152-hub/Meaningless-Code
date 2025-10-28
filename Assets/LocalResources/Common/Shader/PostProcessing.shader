@@ -294,11 +294,89 @@ Shader "PostProcessing"
                 float noiseY = 0.05 * randomNoise(7.0);
                 float2 offset = float2(offsetX * noiseX, offsetY* noiseY);
 
-                half4 colorR = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                half4 colorG = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + offset);
+                half4 colorR = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + offset);
+                half4 colorG = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv );
                 half4 colorB = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv - offset);
 
                 return half4(colorR.r , colorG.g, colorB.b, (colorR.a + colorG.a + colorB.a)*0.28);
+            }
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "Vignette"
+            
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl"
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float4 vertex : SV_POSITION;
+                float2 uv : TEXCOORD0;
+            };
+
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
+
+            half3 _Color;
+            float _Intensity;
+            float2 _Center;
+            float _CenterRadius;
+            float _SmoothnessRadius;
+            float _BrightnessThreshold;
+            float _SmoothnessThreshold;
+            uint _Rounded;
+
+            v2f vert (appdata v)
+            {
+                v2f o;
+                o.vertex = TransformObjectToHClip(v.vertex);
+                o.uv = v.uv;
+                return o;
+            }
+
+            half4 frag (v2f i) : SV_Target
+            {
+                float2 uv = i.uv;
+                half4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
+                half brightness = 0.2125 * mainTex.x + 0.7154 * mainTex.y + 0.0721 * mainTex.b;
+
+                float roundValue = _ScreenParams.y / _ScreenParams.x;
+                float2 roundedUV = float2(uv.x * roundValue, uv.y) * _Rounded + uv * (1.0 - _Rounded);
+                half uvRadius = length(_Center - roundedUV);
+                //half vignetteValue = smoothstep(_CenterRadius, _CenterRadius + _SmoothnessRadius, uvRadius) * step(brightness, _BrightnessThreshold) * _Intensity;
+                half vignetteValue = smoothstep(_CenterRadius, _CenterRadius + _SmoothnessRadius, uvRadius)
+                                        * (1.0 - smoothstep(_BrightnessThreshold - _SmoothnessThreshold, _BrightnessThreshold, brightness)) * _Intensity;
+
+                float2 mappingCoordinate = uv - _Center;
+                float mappingDistance = saturate(length(mappingCoordinate));
+                float theta = atan2(mappingCoordinate.y, mappingCoordinate.x);
+                float thetaValue01 = theta - _Time.y * 0.1;
+                thetaValue01 = thetaValue01 + step(thetaValue01, -PI) * 2 * PI;
+                float thetaValue02 = theta + _Time.y * 0.25;
+                thetaValue02 = thetaValue02 - step(PI, thetaValue02) * 2 * PI;
+                float thetaValue03 = theta + _Time.y * 0.4;
+                thetaValue03 = thetaValue03 - step(PI, thetaValue03) * 2 * PI;
+                float num01 = 2.0f, num02 = 4.0f, num03 = 6.0f;
+                float mappingValue01 = abs(0.5 - frac(abs(thetaValue01) * (1.0 / PI) * num01)) * 2.0;
+                float mappingValue02 = abs(0.5 - frac(abs(thetaValue02) * (1.0 / PI) * num02)) * 2.0;
+                float mappingValue03 = abs(0.5 - frac(abs(thetaValue03) * (1.0 / PI) * num03)) * 2.0;
+                vignetteValue *= (mappingValue01 + mappingValue02 + mappingValue03) * (1.0 - mappingDistance);
+
+                half3 finalColor = vignetteValue * _Color + (1.0 - vignetteValue) * mainTex.rgb;
+                
+                return half4(finalColor, mainTex.a);
             }
             ENDHLSL
         }

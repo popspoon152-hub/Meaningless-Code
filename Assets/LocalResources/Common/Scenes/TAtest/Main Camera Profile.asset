@@ -224,7 +224,7 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 0.525
   smoothness:
     m_OverrideState: 1
     m_Value: 0.391
@@ -254,6 +254,28 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0
   amount:
+    m_OverrideState: 1
+    m_Value: 0
+--- !u!114 &-6989718611522299449
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Nosie
+  m_EditorClassIdentifier: Assembly-CSharp::Nosie
+  active: 1
+  enable:
+    m_OverrideState: 1
+    m_Value: 1
+  speed:
+    m_OverrideState: 1
+    m_Value: 1
+  strength:
     m_OverrideState: 1
     m_Value: 0
 --- !u!114 &-6877477405552526951
@@ -294,6 +316,40 @@ MonoBehaviour:
   "\u50CF\u7D20\u683C\u6570":
     m_OverrideState: 1
     m_Value: 401
+--- !u!114 &-5376594629204418209
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: LineBlock
+  m_EditorClassIdentifier: Assembly-CSharp::LineBlock
+  active: 1
+  enable:
+    m_OverrideState: 1
+    m_Value: 1
+  frequency:
+    m_OverrideState: 1
+    m_Value: 0
+  timeX:
+    m_OverrideState: 1
+    m_Value: 0.86
+  lineswidth:
+    m_OverrideState: 1
+    m_Value: 25
+  amount:
+    m_OverrideState: 1
+    m_Value: 0.8
+  offset:
+    m_OverrideState: 1
+    m_Value: 0
+  alpha:
+    m_OverrideState: 1
+    m_Value: 0
 --- !u!114 &-5022436835600172139
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -679,6 +735,10 @@ MonoBehaviour:
   - {fileID: -8614612123386498905}
   - {fileID: -8186173970564298259}
   - {fileID: 1657784787357662266}
+  - {fileID: 926530582802868025}
+  - {fileID: -6989718611522299449}
+  - {fileID: -5376594629204418209}
+  - {fileID: 5118691769336880521}
 --- !u!114 &92097616096746754
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -742,6 +802,34 @@ MonoBehaviour:
   strength:
     m_OverrideState: 1
     m_Value: 0.75
+--- !u!114 &926530582802868025
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: BlockGlitch
+  m_EditorClassIdentifier: Assembly-CSharp::BlockGlitch
+  active: 1
+  enable:
+    m_OverrideState: 1
+    m_Value: 1
+  blockSize:
+    m_OverrideState: 1
+    m_Value: 120
+  speed:
+    m_OverrideState: 1
+    m_Value: 20
+  MaxRGBSplitX:
+    m_OverrideState: 1
+    m_Value: 0.38
+  MaxRGBSplitY:
+    m_OverrideState: 1
+    m_Value: 0.42
 --- !u!114 &1150854683779593371
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -979,6 +1067,46 @@ MonoBehaviour:
   "\u50CF\u7D20\u683C\u6570":
     m_OverrideState: 1
     m_Value: 250
+--- !u!114 &5118691769336880521
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Vignette02
+  m_EditorClassIdentifier: Assembly-CSharp::Vignette02
+  active: 1
+  "\u5F00\u5173":
+    m_OverrideState: 1
+    m_Value: 1
+  "\u989C\u8272":
+    m_OverrideState: 1
+    m_Value: {r: 0.81761, g: 0, b: 0, a: 1}
+  "\u5F3A\u5EA6":
+    m_OverrideState: 1
+    m_Value: 0.334
+  "\u4E2D\u5FC3\u5750\u6807":
+    m_OverrideState: 1
+    m_Value: {x: 0.5, y: 0.5}
+  "\u4E2D\u5FC3\u534A\u5F84":
+    m_OverrideState: 1
+    m_Value: 0.128
+  "\u5E73\u6ED1\u534A\u5F84":
+    m_OverrideState: 1
+    m_Value: 0.57
+  "\u4EAE\u5EA6\u9608\u503C":
+    m_OverrideState: 1
+    m_Value: 0.043
+  "\u4EAE\u5EA6\u9608\u503C\u5E73\u6ED1\u503C":
+    m_OverrideState: 1
+    m_Value: 0.145
+  "\u662F\u5426\u5C06\u4E2D\u5FC3\u8FD8\u539F\u4E3A\u5706\u5F62":
+    m_OverrideState: 1
+    m_Value: 0
 --- !u!114 &5854670645501289608
 MonoBehaviour:
   m_ObjectHideFlags: 3
