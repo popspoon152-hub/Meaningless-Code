@@ -16,14 +16,11 @@ public class StartPageVideo : MonoBehaviour
     public VideoClip GameFinishedVideo;
     public VideoClip ExitVideo;
 
-
     [Header("Audios")]
     public AudioSource StartAudio;
 
     public Image TitleImage;
     public float Speed = 0.2f;
-
-    public Slider VolumeSlider;
 
     public MyButton StartButton;
     [SerializeField] private float fadeDuration = 2.0f;
@@ -36,7 +33,6 @@ public class StartPageVideo : MonoBehaviour
     {
         TitleImage.gameObject.SetActive(false);
         StartButton.gameObject.SetActive(false);
-        VolumeSlider.gameObject.SetActive(false);
 
         StartAudio.Stop();
 
@@ -79,7 +75,6 @@ public class StartPageVideo : MonoBehaviour
 
         StartCoroutine(FadeIn());
         StartButton.gameObject.SetActive(true);
-        VolumeSlider.gameObject.SetActive(true);
     }
 
     private IEnumerator FadeIn()
@@ -143,7 +138,7 @@ public class StartPageVideo : MonoBehaviour
 
         // º”‘ÿ≥°æ∞
         StartAudio.Stop();
-        SceneManager.LoadScene("GalBeforeFirstStage");
+        SceneManager.LoadScene("FirstStagePage");
     }
 
 

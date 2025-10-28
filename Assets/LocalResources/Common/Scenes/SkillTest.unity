@@ -1196,7 +1196,7 @@ GameObject:
   - component: {fileID: 961472882}
   m_Layer: 9
   m_Name: Body
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2410,6 +2410,7 @@ GameObject:
   - component: {fileID: 2100107520}
   - component: {fileID: 2100107519}
   - component: {fileID: 2100107518}
+  - component: {fileID: 2100107526}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -2434,19 +2435,11 @@ MonoBehaviour:
   laserDuration: 0.4
   preCastTime: 0.25
   postCastTime: 0.25
-<<<<<<< HEAD
-  backStepForce: 10
-  firePoint: {fileID: 2100107525}
+  backStepForce: 6
+  firePoint: {fileID: 48043924}
   laserPrefab: {fileID: 9070066570414569370, guid: e53c59285fc8e9546a32094b9e335e64, type: 3}
   moveScriptToDisable: {fileID: 2100107522}
   directionController: {fileID: 2100107519}
-=======
-  backStepForce: 6
-  firePoint: {fileID: 0}
-  laserPrefab: {fileID: 0}
-  moveScriptToDisable: {fileID: 0}
-  directionController: {fileID: 0}
->>>>>>> parent of 56b29c5 (.)
 --- !u!114 &2100107519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2502,8 +2495,8 @@ MonoBehaviour:
   _bodyColl: {fileID: 961472882}
   Anim: {fileID: 2100107520}
   Speed: 0
-  DropPoint: {fileID: 2100107525}
-  BackPoint: {fileID: 2100107525}
+  DropPoint: {fileID: 0}
+  BackPoint: {fileID: 0}
   DropHurt: 20
   AttackPoints:
   - {fileID: 1405426966}
@@ -2619,7 +2612,6 @@ Transform:
   - {fileID: 48043924}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
-<<<<<<< HEAD
 --- !u!114 &2100107526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2629,18 +2621,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2100107517}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44dd4de0be7af524ea561ee18e9f4608, type: 3}
+  m_Script: {fileID: 11500000, guid: 4253c9b10c1d89645b0358bca1442c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerMovement: {fileID: 2100107521}
-  PlayerMaxHealth: 100
-  ExtraHealthDeclineRateByPlayer: 0.8
-  ExtraHealthDeclineRateByEnemy: 0.5
-  ExtraHealthDeclineNumDeltaTime: 5
-  _currentHealth: 0
-  _currentExtraHealth: 0
-=======
->>>>>>> parent of 56b29c5 (.)
+  directionState: {x: 0, y: 0}
+  hasInput: 1
+  facingDirection: {x: 0, y: 0}
 --- !u!1 &2104921350
 GameObject:
   m_ObjectHideFlags: 0
@@ -2652,7 +2638,7 @@ GameObject:
   - component: {fileID: 2104921351}
   m_Layer: 9
   m_Name: Colliders
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -13,7 +13,6 @@ public class Shockwave : MonoBehaviour
     private BossThirdStateMachine _boss;
     private Collider2D _collider;
     private bool _isActive = false;
-    private bool _isHurtable = true;
 
     private LayerMask _playerLayer;
     private Coroutine _damageRoutine;
@@ -59,29 +58,14 @@ public class Shockwave : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (((1 << collision.gameObject.layer) & _playerLayer) != 0 || _isHurtable == true)
+        if (((1 << collision.gameObject.layer) & _playerLayer) != 0)
         {
-            MakeDamage(collision.gameObject);
-            //// 玩家受伤逻辑
-            //var player = collision.GetComponent<PlayerHealth>();
-            //if (player != null)
-            //{
-            //    player.TakeDamageByEnemy(_damage);
-            //}
-            _isHurtable = false;
+            // 玩家受伤逻辑
+            var player = collision.GetComponent<PlayerHealth>();
+            if (player != null)
+            {
+                player.TakeDamageByEnemy(_damage);
+            }
         }
     }
-
-    private void MakeDamage(GameObject player)
-    {
-        //Debug.Log("玩家受到伤害");
-        // 假设玩家身上有 PlayerHealth 组件
-        var health = player.GetComponentInParent<PlayerHealth>();
-        if (health != null)
-        {
-            Debug.Log("玩家受到冲击波伤害");
-            health.TakeDamageByEnemy(_damage);
-        }
-    }
-
 }

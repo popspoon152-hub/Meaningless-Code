@@ -6,15 +6,14 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     public PlayerMovement PlayerMovement;
-    public PlayerSlider PlayerS;
  
     [Header("Health Num")]
     [Range(50f, 150f)] public float PlayerMaxHealth = 100f;                                     //玩家最大生命值
 
     [Header("Health Decline")]
-    [Range(0.1f, 1f)] public float ExtraHealthDeclineRateByPlayer = 0.2f;                       //被玩家自己打中虚血条占扣血的比例
+    [Range(0.1f, 1f)] public float ExtraHealthDeclineRateByPlayer = 0.8f;                       //被玩家自己打中虚血条占扣血的比例
     [Range(0.1f, 1f)] public float ExtraHealthDeclineRateByEnemy = 0.5f;                        //被敌人打中虚血条占扣血的比例
-    [Range(0f, 10f)] public float ExtraHealthDeclineNumDeltaTime = 4f;                          //虚血条每秒下降数值
+    [Range(0f, 10f)] public float ExtraHealthDeclineNumDeltaTime = 5f;                          //虚血条每秒下降数值
 
 
     [SerializeField] private float _currentHealth;                                                                        //当前生命值
@@ -44,7 +43,14 @@ public class PlayerHealth : MonoBehaviour
         get { return _currentExtraHealth; }
         set 
         {
-            _currentExtraHealth = value;
+            if (value <= CurrentHealth)
+            {
+                _currentExtraHealth = value;
+            }
+            else
+            {
+                _currentExtraHealth = CurrentHealth;
+            }
         }
     }
 
@@ -83,8 +89,6 @@ public class PlayerHealth : MonoBehaviour
         {
             PlayerMovement.PlayerIsDead = true;
         }
-
-        PlayerS.UpdateHealth(CurrentHealth, CurrentExtraHealth, PlayerMaxHealth);
     }
     #endregion
 
@@ -99,8 +103,15 @@ public class PlayerHealth : MonoBehaviour
         {
             CurrentHealth = 0;
 
+            //向player传_isDead
             _playerIsDead = true;
         }
+
+        if (!_isHealthDeclining)
+        {
+            CurrentExtraHealth -= damage * ExtraHealthDeclineRateByEnemy;
+        }
+
 
         _isHealthDeclining = true;
 
@@ -120,6 +131,10 @@ public class PlayerHealth : MonoBehaviour
             CurrentHealth -= damage;
         }
 
+        if (!_isHealthDeclining)
+        {
+            CurrentExtraHealth -= damage * ExtraHealthDeclineRateByEnemy;
+        }
         _isHealthDeclining = true;
 
         EventCenter.Ins.Dispatch(EPlayerHurt.on);

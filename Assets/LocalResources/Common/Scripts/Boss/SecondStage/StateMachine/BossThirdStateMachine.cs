@@ -297,19 +297,17 @@ public class BossThirdStateMachine : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             TryDealCollisionDamage(collision.gameObject);
-            Debug.Log(collision.gameObject);
         }
     }
 
     private void TryDealCollisionDamage(GameObject player)
     {
         if (!_canDealCollisionDamage) return;
-        //Debug.Log("玩家受到伤害");
+
         // 假设玩家身上有 PlayerHealth 组件
-        var health = player.GetComponentInParent<PlayerHealth>();
+        var health = player.GetComponent<PlayerHealth>();
         if (health != null)
         {
-            //Debug.Log("玩家受到伤害");
             health.TakeDamageByEnemy(CollisionDamage);
         }
 
