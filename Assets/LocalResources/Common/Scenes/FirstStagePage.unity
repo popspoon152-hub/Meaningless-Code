@@ -4603,7 +4603,7 @@ PrefabInstance:
     - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
       propertyPath: firePoint
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2110223242}
     - target: {fileID: 2202277504839506393, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
       propertyPath: AnimOffset
       value: 4
@@ -4696,7 +4696,8 @@ PrefabInstance:
       propertyPath: PlayerHealth
       value: 
       objectReference: {fileID: 627680426}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5597701998863985610, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -4708,13 +4709,13 @@ Animator:
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &8818559093331623856 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5597701998863985610, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5271009923950945044, guid: 9a1ea833e2c26144bb4b69c492740ce8, type: 3}
   m_PrefabInstance: {fileID: 8818559093331623854}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4253c9b10c1d89645b0358bca1442c14, type: 3}
+  m_Script: {fileID: 11500000, guid: d66daf9d270097b47861f8fbd1d8886a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807

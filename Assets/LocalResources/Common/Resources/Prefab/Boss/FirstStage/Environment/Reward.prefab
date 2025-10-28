@@ -155,6 +155,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 038bcff387691344882fd5f80e1374db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BeanHealth: 5
+  BeanHealth: 1
   _currentHealth: 0
   IsDestroy: 0
+  Anim: {fileID: 8434068539961984798}
+  transition: {fileID: 0}
+  transitionTime: 1

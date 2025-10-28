@@ -91,14 +91,14 @@ public class DialogManager : MonoBehaviour
 
     public void ReadCharacter()
     {
-        for (int i = 1; i < sprites.Count+1; i++)
+        for (int i = 1; i < sprites.Count + 1; i++)
         {
             string[] cells = dialogRows[i].Split(',');
             if (cells[8] != null && cells[8] != "")
             {
-                imageDic[cells[8]] = sprites[i-1];
+                imageDic[cells[8]] = sprites[i - 1];
             }
-              
+
         }
     }
 
