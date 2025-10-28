@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     public PlayerAttackStats AttackStats;
     public PlayerHealth PlayerHealth;
     [SerializeField] private BossFirstStateMachine _boss;
+    [SerializeField] private BossThirdStateMachine _boss3;
     [SerializeField] private Collider2D _feetColl;
     [SerializeField] private Collider2D _bodyColl;
     [SerializeField] private Animator Anim;
@@ -60,9 +61,9 @@ public class PlayerMovement : MonoBehaviour
     //����
     public bool PlayerIsDead;
 
-    private bool _isJumping;
+    public bool _isJumping;
     private bool _isFastFalling;
-    private bool _isFalling;
+    public bool _isFalling;
     private float _fastFallTime;
     private float _fastFallReleaseSpeed;
     private int _numberOfJumpsUsed;
@@ -80,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
     private float _coyoteTimer;
 
     //������
-    private bool _isDashing = false;
+    public bool _isDashing = false;
     private float _dashTime;
     private Vector2 _dashDirection;
     private float _dashSpeed;
@@ -530,6 +531,7 @@ public class PlayerMovement : MonoBehaviour
         _dashSpeed = length / MoveStats.DashDuration; // �ٶ�=����/ʱ��
         _rb.velocity = new Vector2(_dashDirection.x * _dashSpeed, 0f);
 
+        _dashCooldownTimer = MoveStats.DashCooldown;
         EventCenter.Ins.Dispatch(EPlayerDash.on);
     }
 
@@ -644,8 +646,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (enemy.CompareTag("Boss") && bossHurt)
                 {
-                    _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1]);
-                    PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum + healthUp);
+                    _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1] + healthUp);
+                    _boss3.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1] + healthUp);
+                    PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum);
                     bossHurt = false;
                 }
             }
@@ -669,8 +672,16 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (bossSegment.CompareTag("Boss") && bossHurt)
                 {
-                    _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1]);
-                    PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum + healthUp);
+                    if(_boss != null)
+                    {
+                        _boss.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1] + healthUp);
+                    }
+                    if (_boss3 != null) 
+                    {
+                        _boss3.TakeDamage(AttackStats.ComboDamage[(int)_currentCombo - 1] + healthUp);
+                    }
+
+                    PlayerHealth.Ins.TakeDamageByPlayer(AttackStats.AttackHurtPlayerNum);
                     bossHurt = false;
                 }
             }

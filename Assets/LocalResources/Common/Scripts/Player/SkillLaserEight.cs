@@ -8,12 +8,15 @@ using UnityEngine.InputSystem.iOS;
 [RequireComponent(typeof(Rigidbody2D))]
 public class LaserSkillEightWay : MonoBehaviour
 {
+    public PlayerMovement Movement;
+    public LaserSlider Slider;
+
     [Header("激光参数")]
     public float laserLength = 5f;
     public float laserWidth = 0.2f;
     public float laserDuration = 0.4f;
     [Range(1f,10f)]public float laserCollDownTime = 5f;              //激光的冷却
-    private bool CanLaser = true;
+    private float _laserTimer;
 
     [Header("前后摇与后撤")]
     public float preCastTime = 0.25f;
@@ -46,31 +49,16 @@ public class LaserSkillEightWay : MonoBehaviour
 
     private void Update()
     {
-        LaserTimer();
+        if (_laserTimer > 0f) _laserTimer -= Time.deltaTime;
+        Slider.UpdateCD(_laserTimer, laserCollDownTime);
     }
-
-    #region
-    private void LaserTimer()
-    {
-        if (!CanLaser)
-        {
-            float time = 0;
-            time += Time.deltaTime;
-            if(time >= laserCollDownTime)
-            {
-                CanLaser = true;
-            }
-        }
-
-    }
-    #endregion
 
     private void OnEnable() => PlayerInputControls.Enable();
     private void OnDisable() => PlayerInputControls.Disable();
 
     private void OnShoot(InputAction.CallbackContext ctx)
     {
-        if (!isCasting && CanLaser)
+        if (!isCasting && _laserTimer <= 0f && !Movement._isDashing && !Movement._isJumping && !Movement._isFalling)
         {
             StartCoroutine(LaserSequenceCoroutine());
         }
@@ -79,7 +67,6 @@ public class LaserSkillEightWay : MonoBehaviour
     private IEnumerator LaserSequenceCoroutine()
     {
         isCasting = true;
-        CanLaser = false;
 
         // 锁定Y轴（悬浮）
         originalConstraints = rb.constraints;
@@ -110,6 +97,8 @@ public class LaserSkillEightWay : MonoBehaviour
         // 恢复移动
         if (moveScriptToDisable != null) moveScriptToDisable.enabled = true;
         isCasting = false;
+
+        _laserTimer = laserCollDownTime;
     }
 
     /// <summary>
